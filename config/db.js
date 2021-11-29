@@ -12,7 +12,7 @@ var url
 if (process.env.NODE_ENV === 'production') {
   url = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/${MONGO_DB_NAME}?retryWrites=true&w=majority`
 }else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production-test') {
-  url = 'mongodb://localhost:27017/test'
+  url = 'mongodb://localhost:27017/e-commerce'
 }
 
 const connectDB = async () => {
