@@ -1,5 +1,7 @@
+import { Grid } from '@mui/material'
 import React from 'react'
 import MenuList from '../MenuList/MenuList'
+import Logo from './Logo'
 
 export default function Header(props) {    
     return (
@@ -14,7 +16,7 @@ export default function Header(props) {
                 signOut={props.signOut}
                 handleSelected={props.handleSelected}
             />
-            Logo
+            <Logo />
             <button
                 id="menu-list-button"
                 className="Menu-button"

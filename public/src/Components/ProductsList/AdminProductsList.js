@@ -1,11 +1,18 @@
-import React from 'react'
-import { TextField } from '@mui/material'
+import React, {useEffect} from 'react'
+import {
+    TextField,
+    Grid,
+
+} from '@mui/material'
 import AddProductDialog from '../AdminDashboard/AddProductDialog'
 import axios from 'axios'
+import AdminProductCard from './AdminProductCard'
+import EditableProductCard from './EditableProductCard'
 
 export default function AdminProductsList(props) {
     const [editProduct, setEditProduct] = React.useState(false)
     const [addProductDialog, setAddproductDialog] = React.useState(false)
+    const [categories, setCategories] = React.useState([])
     const [state, setState] = React.useState()
 
     const handleEditProduct = () => {
@@ -49,6 +56,23 @@ export default function AdminProductsList(props) {
         setState({...state, [e.target.id]: e.target.value})
     }
 
+    const getCategories = () => {
+        let result = []
+        props.productsList.forEach(product => {
+            if (result.length === 0) {
+                result.push(product.category)
+            } else if (result[result.length -1] != product .category) {
+                result.push(product.category)
+            }
+        })
+        return result
+    }
+
+    useEffect(() => {
+        let categories = getCategories()
+        setCategories(categories)
+    }, [])
+
     return (
         <div>
             <AddProductDialog
@@ -58,6 +82,36 @@ export default function AdminProductsList(props) {
                 onChange={handleChange}
             />
             Admin products list<br/>
+            <button onClick={handleAddProductDialog}>add product</button><br/>
+            {categories
+            ? categories.map(category => (
+                <div>
+                    {category}
+                    <Grid container>
+                        {props.productsList
+                        ? props.productsList.map((product) => (
+                            product.category === category
+                            ?   <div key={product._id}>
+                                {editProduct
+                                ?   <EditableProductCard
+                                        product={product}
+                                        editProductList={editProductList}
+                                        handleEditProduct={handleEditProduct}
+                                    />
+                                :   <div><AdminProductCard
+                                        product={product}
+                                        handleEditProduct={handleEditProduct}
+                                    /><br/></div>
+                                }
+                                </div>
+                            : null))
+                        : null
+                        }
+                    </Grid>
+                </div>
+            ))
+            : null
+            }
             {props.productsList
             ?  editProduct
                 ? props.productsList.map((product) => (
@@ -99,7 +153,6 @@ export default function AdminProductsList(props) {
                     <button onClick={() => deleteProductFromProductsList(product)}>delete product</button><br/>
                 </div>))
             : null}
-            <button onClick={handleAddProductDialog}>add product</button>
         </div>
     )
 }

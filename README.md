@@ -30,31 +30,41 @@
 
 * use ```foo@gmail.com``` with no password or sign up with only email to test users side
 
-# todo
+# todo - front-end
 
-* show products (admin and user) by category
+* add account section
 
-* finish AdminUsersOrders and UserOrders
+* add button to upload img
 
-* edit/delete account
-
-* write different endpoints
-
-* users set delivery time and admin accepts or changes it
-
-* users can choose between delivery or pick-up
+* at checkout add delivery options and select available slot
 
 * users have to enter postcode and address in checkout
 
-* edit /sing-up for production
+# todo - back-end
+
+* add session/cookie
+
+* change from findOne to findById in /add-item-to-products-list etc, OR write a function to retrieve user logged in to call everytime
+
+* edit /sign-up for production
 
 * edit /sign-in for production
 
 * edit /sign-out for production
 
-* change from findOne to findById in /add-item-to-products-list etc, OR write a function to retrieve user logged in to call everytime
+* add edit/delete account endpoints
 
-* add session/cookie
+* add /upload-img endpoint
+
+* delete add-item-to-cart and others endpoints about cart
+
+* add /save-cart endpoint to store cart in DB
+
+* edit /checkout with stripe
+
+* send notification to user when admin accepts or declines order
+
+* send notification to admin when user makes a new order
 
 # Endpoints
 

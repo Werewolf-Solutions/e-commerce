@@ -7,7 +7,6 @@ const User = require('../models/User')
 
 // Load ProductsList model
 const ProductsList = require('../models/ProductsList')
-const { findById, findOne } = require('../models/User')
 
 var user_logged_in
 
