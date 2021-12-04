@@ -30,6 +30,14 @@
 
 * use ```foo@gmail.com``` with no password or sign up with only email to test users side
 
+# How to contribute
+
+## new branch
+
+* if working on back-end: create new branch with b{trello feature}, ex ```git branch b001```
+
+* if working on frent-end: create new branch with f{trello feature}, ex ```git branch f001```
+
 # todo - front-end
 
 * add account section
