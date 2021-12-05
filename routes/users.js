@@ -158,6 +158,54 @@ router.get('/sign-out', (req, res, next) => {
 })
 
 /**
+ * GET
+ * 
+ * /delete-user
+ * 
+ * delete user
+ */
+router.get('/delete-user', async (req, res, next) => {
+  const { userId } = req.session
+  // TODO:
+  //      - do better validation with password and 2Step auth
+  let user_deleted = await User.findByIdAndDelete(userId)
+  req.session.destroy(err => {
+    if (err) {
+      return res.send('Error', err)
+    }
+    req.logout()
+    const { SESS_NAME } = process.env
+    res.clearCookie(SESS_NAME)    
+    res.send({ msg: 'User deleted', name: user_deleted.name, email: user_deleted.email })
+  })
+})
+
+/**
+ * POST
+ * 
+ * /edit-user
+ * 
+ * edit user
+ */
+router.post('/edit-user', async (req, res, next) => {
+  const { username } = req.body
+  const { userId } = req.session
+  if (userId) {
+    if (username) {
+      let user = await User.findById(userId)
+      user.username = username
+      console.log(user)
+      await user.save()
+      res.send({ success: 'Username edited correctly'})
+    } else {
+      res.send({ error: 'Enter your username please'})
+    }
+  } else {
+    res.send({ error: 'No user logged in'})
+  }
+})
+
+/**
  * USERS
  */
 
