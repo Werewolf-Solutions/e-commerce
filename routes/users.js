@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
+const passport = require('passport')
+const bcrypt = require('bcryptjs')
 
 // Load User model
 const User = require('../models/User')
@@ -18,6 +20,7 @@ var user_logged_in
  * get user logged in and update it
  */
 router.get('/', async (req, res, next) => {
+  console.log(req.session.userId)
   let user = await User.findOne({email : user_logged_in})
   res.send({user})
 })
@@ -28,12 +31,42 @@ router.get('/update-products-list', async (req, res, next) => {
   res.send({productsList})
 })
 
-/* POST log in user */
+/**
+ * POST
+ * 
+ * /sign-in
+ * 
+ * sign in user
+ */
+/**
+ * TODO
+ * 
+ * - don't send back what's wrong (don't let a random person know if password or email are wrong)#
+ * - instead ask for email and send registration link or login link
+ * - if the email is in use send a message that someone just tried to log in with you email
+ * - set 2 step auth
+ * - save only hash and salt instead of password
+ */
+var errors = 4
 router.post('/sign-in', async (req, res, next) => {
-  let { email, password } = req.body
-  let user = await User.findOne({email : email})
-  user_logged_in = email
-  res.send({user})
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err) }
+    if (!user) {
+      errors--
+      if (errors <= 0) {
+        return res.send({
+          msg: 'Account is locked. Enter your email to receive the instructions on how to unlock it.'
+        })
+      }
+      return res.send({msg: `User or password are wrong. Errors left: ${errors}.`})
+    }
+    req.session.userId = user.id
+    req.login(user, function(err) {
+      if (err) { return next(err) }
+      req.session.save()
+      return res.send({msg: 'You are logged in', user: user})
+    })
+  })(req, res, next)
 })
 
 /**
@@ -41,23 +74,68 @@ router.post('/sign-in', async (req, res, next) => {
  * 
  * sign-up
  * 
- * user signs up
+ * sign up user
  */
-router.post('/sign-up', async (req, res, next) => {
-  let { email, password, password2 } = req.body
-  let user = await User.findOne({email : email})
-  let new_user
-  if (user) {
-    res.send({msg: 'User already exists, try to sign in instead.'})
-  } else if (email === 'admin@gmail.com') {
-    new_user = new User({email, password, admin: true, username: 'admin'})
-    await new_user.save()
-  } else {
-    let username = email.split('@', 1)[0]
-    new_user = new User({email, password, admin: false, username})
-    await new_user.save()
+ router.post('/sign-up', (req, res) => {
+  const {email, password, password2 } = req.body
+  let errors = []
+
+  if (!email || !password || !password2) {
+    errors.push({ msg: 'Please enter all fields' })
   }
-  res.send({user:new_user})
+
+  if (password != password2) {
+    errors.push({ msg: 'Passwords do not match' })
+  }
+
+  if (password.length < 4) {
+    errors.push({ msg: 'Password must be at least 4 characters' })
+  }
+
+  if (errors.length > 0) {
+    res.send(errors)
+  } else {
+    // Validation passed
+    User.findOne({ email: email }).then(user => {
+      if (user) {
+        errors.push({ msg: 'Email already exists' })
+        console.log(errors)
+        res.send({ errors: errors })
+      } else {
+        let username = email.split('@', 1)[0]
+        let newUser
+        if (email === 'admin@gmail.com') {
+          newUser = new User({
+            email,
+            password,
+            admin: true,
+            username
+          })
+        } else {
+          newUser = new User({
+            email,
+            password,
+            admin: false,
+            username
+          })
+        }
+
+        // Hash password and save
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err
+            newUser.password = hash
+            newUser
+              .save()
+              .then(user => {                
+                res.send({ msg: 'User added!' })
+              })
+              .catch(err => res.send(err))
+          })
+        })
+      }
+    })
+  }
 })
 
 /**
@@ -65,10 +143,18 @@ router.post('/sign-up', async (req, res, next) => {
  * 
  * sign-out
  * 
- * user signs out
+ * sign out user
  */
 router.get('/sign-out', (req, res, next) => {
-  res.send({user:null})
+  req.session.destroy(err => {
+    if (err) {
+      return res.send('Error')
+    }
+    req.logout()
+    const { SESS_NAME } = process.env
+    res.clearCookie(SESS_NAME)    
+    res.json('You are logged out')
+  })
 })
 
 /**
