@@ -9,6 +9,7 @@ export default function AdminMenuList(props) {
             <MenuItem onClick={props.signOut}>Sign out</MenuItem>
             <MenuItem onClick={() => props.handleSelected('admin-products-list')}>Products list(as admin)</MenuItem>
             <MenuItem onClick={() => props.handleSelected('admin-users-orders')}>Users' orders</MenuItem>
+            <MenuItem onClick={() => props.handleSelected('account')}>Account</MenuItem>
         </div>
     )
 }

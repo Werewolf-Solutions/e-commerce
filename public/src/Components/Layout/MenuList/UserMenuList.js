@@ -10,6 +10,7 @@ export default function UserMenuList(props) {
             <MenuItem onClick={() => props.handleSelected('products-list')}>Products list(as user)</MenuItem>
             <MenuItem onClick={() => props.handleSelected('user-orders')}>Orders</MenuItem>
             <MenuItem onClick={() => props.handleSelected('cart')}>Cart</MenuItem>
+            <MenuItem onClick={() => props.handleSelected('account')}>Account</MenuItem>
         </div>
     )
 }

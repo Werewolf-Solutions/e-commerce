@@ -1,4 +1,5 @@
 import React from 'react'
+import Account from '../../Account/Account'
 import Cart from '../../Cart/Cart'
 import Checkout from '../../Checkout/Checkout'
 import SignIn from '../../Forms/SignIn'
@@ -83,6 +84,14 @@ export default function Body(props) {
             <div>
                 <Checkout
                     checkout={props.checkout}
+                />
+            </div>
+        )
+    } else if (props.selected === 'account') {
+        return(
+            <div>
+                <Account
+                    user={props.user}
                 />
             </div>
         )
