@@ -20,8 +20,7 @@ var user_logged_in
  * get user logged in and update it
  */
 router.get('/', async (req, res, next) => {
-  console.log(req.session.userId)
-  let user = await User.findOne({email : user_logged_in})
+  let user = await User.findById(req.session.userId)
   res.send({user})
 })
 
@@ -194,7 +193,6 @@ router.post('/edit-user', async (req, res, next) => {
     if (username) {
       let user = await User.findById(userId)
       user.username = username
-      console.log(user)
       await user.save()
       res.send({ success: 'Username edited correctly'})
     } else {
