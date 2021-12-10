@@ -4,6 +4,14 @@ const UserSchema = new mongoose.Schema({
     email: String,
     password: String,
     username: String,
+    customer_id: String,
+    payment_methods: [{
+        id: String,
+        fingerprint: String
+    }],
+    payment_intents: [{
+        id: String,
+    }],
     address: {
         postcode: String,
         line1: String,

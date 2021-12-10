@@ -4,6 +4,10 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
+// Stripe
+const { STRIPE_API_KEY } = process.env
+const stripe = require('stripe')(STRIPE_API_KEY)
+
 // Load User model
 const User = require('../models/User')
 
@@ -75,7 +79,7 @@ router.post('/sign-in', async (req, res, next) => {
  * 
  * sign up user
  */
- router.post('/sign-up', (req, res) => {
+ router.post('/sign-up', async (req, res) => {
   const {email, password, password2 } = req.body
   let errors = []
 
@@ -95,45 +99,48 @@ router.post('/sign-in', async (req, res, next) => {
     res.send(errors)
   } else {
     // Validation passed
-    User.findOne({ email: email }).then(user => {
-      if (user) {
-        errors.push({ msg: 'Email already exists' })
-        console.log(errors)
-        res.send({ errors: errors })
+    let user = await User.findOne({ email: email })
+    if (user) {
+      errors.push({ msg: 'Email already exists' })
+      res.send({ errors: errors })
+    } else {
+      let username = email.split('@', 1)[0]
+      let newUser
+      if (email === 'admin@gmail.com') {
+        newUser = new User({
+          email,
+          password,
+          admin: true,
+          username
+        })
       } else {
-        let username = email.split('@', 1)[0]
-        let newUser
-        if (email === 'admin@gmail.com') {
-          newUser = new User({
-            email,
-            password,
-            admin: true,
-            username
-          })
-        } else {
-          newUser = new User({
-            email,
-            password,
-            admin: false,
-            username
-          })
-        }
-
-        // Hash password and save
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err
-            newUser.password = hash
-            newUser
-              .save()
-              .then(user => {                
-                res.send({ msg: 'User added!' })
-              })
-              .catch(err => res.send(err))
-          })
+        const customer = await stripe.customers.create({
+          description: username,
+          email: email
+        })
+        newUser = new User({
+          email,
+          password,
+          admin: false,
+          username,
+          customer_id: customer.id
         })
       }
-    })
+
+      // Hash password and save
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err
+          newUser.password = hash
+          newUser
+            .save()
+            .then(user => {                
+              res.send({ msg: 'User added!' })
+            })
+            .catch(err => res.send(err))
+        })
+      })
+    }
   }
 })
 
@@ -260,37 +267,299 @@ router.post('/delete-item-from-cart', (req, res, next) => {
  * 
  * user checkout
  */
-router.post('/checkout', async (req, res, next) => {
+router.post('/stripe-info', async (req, res, next) => {
   let {cart} = req.body
-  let user = await User.findOne({email: user_logged_in})
+  const products = await stripe.products.list({
+    limit: 3,
+  })
+  const prices = await stripe.prices.list({
+    limit: 3,
+  })
+  const sessions = await stripe.checkout.sessions.list({
+    limit: 3,
+  })
+  
+  
+  const paymentMethod = await stripe.paymentMethods.retrieve(
+    'pm_1K43nwAlUKnrAXrlEHjFrPsu'
+  )
+  // const paymentMethods = await stripe.paymentMethods.list({
+  //   customer: 'cus_3fB4ABQzA6QjVL',
+  //   type: 'card',
+  // })
+  
+
+  // const { userId } = req.session
+  // let user = await User.findById(userId)
+  // if (user) {
+  //   let total_cart = 0
+  //   cart.forEach(item => total_cart = total_cart + (item.quantity * item.price))
+  //   console.log(total_cart)
+  //   let order = {
+  //     user_id: user._id,
+  //     address: {postcode: 'B169JS'},
+  //     items: cart,
+  //     total_cart
+  //   }
+  //   // save order in admin
+  //   let admin = await User.findOne({email: 'admin@gmail.com'})
+  //   admin.orders.push(order)
+  //   await admin.save()
+  //   // save order in user using the same order_id
+  //   for (let i = 0; i < admin.orders.length; i++) {
+  //     if (admin.orders[i].user_id == user._id) {
+  //       let order = {
+  //         user_id: user._id,
+  //         address: {postcode: 'B169JS'},
+  //         items: cart,
+  //         order_id: admin.orders[i]._id,
+  //         total_cart
+  //       }
+  //       user.orders.push(order)
+  //       await user.save()
+  //     }
+  //   }
+  // }
+  res.send({
+    products: products.data,
+    prices: prices.data,
+    sessions: sessions.data,
+    paymentMethod
+  })
+})
+
+// to be deleted
+router.post('/create-customer', async (req, res, next) => {
+  const customer = await stripe.customers.create({
+    description: 'My First Test Customer',
+  })
+  res.send(customer)
+})
+
+// to be deleted
+router.post('/retrieve-customer', async (req, res, next) => {
+  let {id} = req.body
+  const customer = await stripe.customers.retrieve(id)
+  res.send(customer)
+})
+
+// to be deleted
+router.get('/list-customers', async (req, res, next) => {
+  const customers = await stripe.customers.list({
+    limit: 3,
+  })
+  res.send(customers.data)
+})
+
+router.post('/create-payment-intent', async (req, res, next) => {
+  let {payment_method, total_cart} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
   if (user) {
-    let order = {
-      user_id: user._id,
-      address: {postcode: 'B169JS'},
-      items: cart
-    }
-    // save order in admin
-    let admin = await User.findOne({email: 'admin@gmail.com'})
-    admin.orders.push(order)
-    await admin.save()
-    // save order in user using the same order_id
-    for (let i = 0; i < admin.orders.length; i++) {
-      if (admin.orders[i].user_id == user._id) {
-        let order = {
-          user_id: user._id,
-          address: {postcode: 'B169JS'},
-          items: cart,
-          order_id: admin.orders[i]._id
-        }
-        console.log(order)
-        user.orders.push(order)
+    try {
+      if (user.payment_methods.length === 0) {
+        res.send({msg: 'Add a payment method first'})
+      } else {
+        // let order = {
+        //   user_id: userId,
+        //   address: {postcode: 'B169JS'},
+        //   items: cart,
+        //   total_cart
+        // }
+        // // save order in admin
+        // let admin = await User.findOne({email: 'admin@gmail.com'})
+        // admin.orders.push(order)
+        // await admin.save()
+        // // save order in user using the same order_id
+        // for (let i = 0; i < admin.orders.length; i++) {
+        //   if (admin.orders[i].user_id == userId) {
+        //     let order = {
+        //       user_id: userId,
+        //       address: {postcode: 'B169JS'},
+        //       items: cart,
+        //       order_id: admin.orders[i]._id,
+        //       total_cart
+        //     }
+        //     user.orders.push(order)
+        //     await user.save()
+        //   }
+        // }
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: total_cart,
+          currency: 'gbp',
+          payment_method: payment_method,
+          customer: user.customer_id
+        })
+        user.payment_intents.push({id: paymentIntent.id})
         await user.save()
+        res.send(user)
       }
+    } catch (error) {
+      console.log(error)
+      res.send({msg: error.raw.message})
     }
   } else {
-    // sign-in/up and send order to admin
+    res.send({msg: 'No user found, please sign in or sign up first'})
   }
-  res.send({msg: 'Order placed. Waiting for admin response'})
+})
+
+router.post('/confirm-payment-intent', async (req, res, next) => {
+  let {payment_intent} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user) {
+    try {
+      const paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+      res.send(paymentIntent)
+    } catch (error) {
+      res.send({msg: error.raw.message})
+    }
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
+router.post('/retrieve-payment-intent', async (req, res, enxt) => {
+  let {id} = req.body
+  const paymentIntent = await stripe.paymentIntents.retrieve(id)
+  res.send(paymentIntent)
+})
+
+router.post('/update-payment-intent', async (req, res, next) => {
+  const paymentIntent = await stripe.paymentIntents.update(
+    'pi_3K3n4bAlUKnrAXrl05psmwcw',
+    {payment_method: 'pm_1K43nwAlUKnrAXrlEHjFrPsu'}
+  )
+  res.send(paymentIntent)
+})
+
+router.get('/list-payment-intents', async (req, res, next) => {
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user) {
+    const paymentIntents = await stripe.paymentIntents.list({
+      limit: 10,
+    })
+    let paymentIntent
+    paymentIntents.data.forEach(payment => {
+      if (payment.customer === user.customer_id) {
+        paymentIntent = payment
+      }
+    })
+    res.send(paymentIntent)
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
+/**
+ * POST
+ * 
+ * /add-payment-method
+ * 
+ * add payment method to user
+ */
+router.post('/add-payment-method', async (req, res, next) => {
+  let {type, card} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user) {
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: user.customer_id,
+      type: type,
+    })
+    try {
+      const paymentMethod = await stripe.paymentMethods.create({
+        type: type,
+        card: card,
+      })
+      if (paymentMethods.data.length != 0) {
+        paymentMethods.data.forEach(async (payment) => {
+          if (payment.fingerprint === paymentMethod.fingerprint) {
+            res.send({msg: 'Payment method already existing, please choose another one or select existing'})
+          } else {
+            user.payment_methods.push({
+              id: paymentMethod.id,
+              fingerprint: paymentMethod.fingerprint
+            }) 
+            await user.save()
+            res.send(user)
+          }
+        })
+      } else {
+        const paymentMethod = await stripe.paymentMethods.create({
+          type: type,
+          card: card,
+        })
+        await stripe.paymentMethods.attach(paymentMethod.id, {customer: user.customer_id})
+        user.payment_methods.push({
+          id: paymentMethod.id,
+          fingerprint: paymentMethod.card.fingerprint
+        })
+        await user.save()
+        res.send(user)
+      }
+    } catch (error) {
+      res.send({msg: error.raw.message})
+    }
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
+router.post('/list-payment-methods', async (req, res, next) => {
+  let {type} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user) {
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: user.customer_id,
+      type: type,
+    })
+    res.send(paymentMethods.data)
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
+router.post('/create-checkout-session', async (req, res, next) => {
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price: 'price_1JP2GJAlUKnrAXrlqWC4Qhdb',
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `http://localhost:5000/users/success`,
+    cancel_url: `http://localhost:5000/users/cancel`,
+  })
+  res.send(session.data)
+})
+
+router.get('/list-checkout-sessions', async (req, res, next) => {
+  const sessions = await stripe.checkout.sessions.list({
+    limit: 10,
+  })
+  res.send(sessions.data)
+})
+
+router.post('/retrieve-checkout-session', async (req, res, next) => {
+  const session = await stripe.checkout.sessions.retrieve(
+    'cs_test_a1HRYjbEG8Iied3ffT17qsPkIbEm6Q4cvrwUMTWIVY3vyR8ZYUqH0Rybh9'
+  )
+  res.send(session)
+})
+
+router.get('/success', (req, res, next) => {
+  console.log('success')
+  res.send({msg:'Success'})
+})
+
+router.get('/cancel', (req, res, next) => {
+  console.log('cancel')
+  res.send({msg:'Cancel'})
 })
 
 /**
