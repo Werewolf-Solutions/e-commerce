@@ -1,22 +1,38 @@
-import { Grid } from '@mui/material'
 import React from 'react'
+import { Grid } from '@mui/material'
 import MenuList from '../MenuList/MenuList'
 import Logo from './Logo'
+import CheckoutDialog from '../../Checkout/CheckoutDialog'
 
-export default function Header(props) {    
+export default function Header(props) {
+    const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+
+    const handleCheckoutDialog = () => {
+        setCheckoutDialog(!checkoutDialog)
+    }
     return (
         <div className="Header">
+            <CheckoutDialog
+                open={checkoutDialog}
+                onClose={handleCheckoutDialog}
+                user={props.user}
+                updateUser={props.updateUser}
+                handleSignInDialog={props.handleSignInDialog}
+                cart={props.cart}
+            />
             <MenuList
                 user={props.user}
                 menuList={props.menuList}
                 handleMenuList={props.handleMenuList}
-                anchorEl="menu-list-button"
-                handleSignInDialogForm={props.handleSignInDialogForm}
-                handleSignUpDialogForm={props.handleSignUpDialogForm}
+                anchorEl={props.anchorEl}
                 signOut={props.signOut}
                 handleSelected={props.handleSelected}
+                handleSignInDialog={props.handleSignInDialog}
+                handleSignUpDialog={props.handleSignUpDialog}
             />
             <Logo />
+            Total cart: {props.cart.total_cart ? props.cart.total_cart : 0}
+            <button onClick={handleCheckoutDialog}>checkout</button>
             <button
                 id="menu-list-button"
                 className="Menu-button"

@@ -12,6 +12,7 @@
     "install": "npm install && cd public && npm install"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.2.1",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "~1.4.4",

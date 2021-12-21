@@ -106,12 +106,24 @@ router.post('/sign-in', async (req, res, next) => {
     } else {
       let username = email.split('@', 1)[0]
       let newUser
+      let address = {
+        postcode: '',
+        line1: '',
+        line2: '',
+        flat: 0,
+        number: 0,
+        city: '',
+        county: '',
+        region: '',
+        country: ''
+      }
       if (email === 'admin@gmail.com') {
         newUser = new User({
           email,
           password,
           admin: true,
-          username
+          username,
+          address
         })
       } else {
         const customer = await stripe.customers.create({
@@ -123,7 +135,8 @@ router.post('/sign-in', async (req, res, next) => {
           password,
           admin: false,
           username,
-          customer_id: customer.id
+          customer_id: customer.id,
+          address
         })
       }
 
@@ -194,17 +207,53 @@ router.get('/delete-user', async (req, res, next) => {
  * edit user
  */
 router.post('/edit-user', async (req, res, next) => {
-  const { username } = req.body
+  const {
+    username,
+    firstName,
+    lastName,
+    address1,
+    address2,
+    country,
+    region,
+    postcode,
+    city,
+    number
+  } = req.body
   const { userId } = req.session
-  if (userId) {
+  let user = await User.findById(userId)
+  if (user) {
     if (username) {
-      let user = await User.findById(userId)
       user.username = username
-      await user.save()
-      res.send({ success: 'Username edited correctly'})
-    } else {
-      res.send({ error: 'Enter your username please'})
     }
+    if (firstName) {
+      user.firstName = firstName
+    }
+    if (lastName) {
+      user.lastName = lastName
+    }
+    if (address1) {
+      user.address.line1 = address1
+    }
+    if (address2) {
+      user.address.line2 = address2
+    }
+    if (number) {
+      user.address.number = number
+    }
+    if (region) {
+      user.address.region = region
+    }
+    if (country) {
+      user.address.country = country
+    }
+    if (postcode) {
+      user.address.postcode = postcode
+    }
+    if (city) {
+      user.address.city = city
+    }
+    await user.save()
+    res.send({ success: 'User edited correctly'})
   } else {
     res.send({ error: 'No user logged in'})
   }
@@ -392,7 +441,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
         })
         user.payment_intents.push({id: paymentIntent.id})
         await user.save()
-        res.send(user)
+        res.send({user, paymentIntent: paymentIntent.id})
       }
     } catch (error) {
       console.log(error)
@@ -419,6 +468,12 @@ router.post('/confirm-payment-intent', async (req, res, next) => {
   }
 })
 
+router.post('/cancel-payment-intent', async (req, res, next) =>  {
+  let {payment_intent} = req.body
+  const paymentIntent = await stripe.paymentIntents.cancel(payment_intent)
+  res.send({paymentIntent})
+})
+
 router.post('/retrieve-payment-intent', async (req, res, enxt) => {
   let {id} = req.body
   const paymentIntent = await stripe.paymentIntents.retrieve(id)
@@ -427,8 +482,8 @@ router.post('/retrieve-payment-intent', async (req, res, enxt) => {
 
 router.post('/update-payment-intent', async (req, res, next) => {
   const paymentIntent = await stripe.paymentIntents.update(
-    'pi_3K3n4bAlUKnrAXrl05psmwcw',
-    {payment_method: 'pm_1K43nwAlUKnrAXrlEHjFrPsu'}
+    'pi_3K7M07AlUKnrAXrl0sEuLGEo',
+    {payment_method: 'pm_1K5AEdAlUKnrAXrlK1cs7jFt'}
   )
   res.send(paymentIntent)
 })
@@ -480,10 +535,14 @@ router.post('/add-payment-method', async (req, res, next) => {
           } else {
             user.payment_methods.push({
               id: paymentMethod.id,
-              fingerprint: paymentMethod.fingerprint
+              fingerprint: paymentMethod.fingerprint,
+              last4: paymentMethod.last4,
+              country: paymentMethod.country,
+              exp_month: paymentMethod.exp_month,
+              exp_year: paymentMethod.exp_year,
             }) 
             await user.save()
-            res.send(user)
+            res.send({user, paymentMethod: paymentMethod.id})
           }
         })
       } else {
@@ -494,10 +553,14 @@ router.post('/add-payment-method', async (req, res, next) => {
         await stripe.paymentMethods.attach(paymentMethod.id, {customer: user.customer_id})
         user.payment_methods.push({
           id: paymentMethod.id,
-          fingerprint: paymentMethod.card.fingerprint
+          fingerprint: paymentMethod.card.fingerprint,
+          last4: paymentMethod.last4,
+          country: paymentMethod.country,
+          exp_month: paymentMethod.exp_month,
+          exp_year: paymentMethod.exp_year,
         })
         await user.save()
-        res.send(user)
+        res.send({user, paymentMethod: paymentMethod.id})
       }
     } catch (error) {
       res.send({msg: error.raw.message})

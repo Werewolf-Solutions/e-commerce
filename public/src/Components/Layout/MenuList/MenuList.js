@@ -13,10 +13,10 @@ export default function MenuList(props) {
                 open={props.menuList}
                 onClose={props.handleMenuList}
                 anchorEl={props.anchorEl}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
+                // anchorOrigin={{
+                //     vertical: 'top',
+                //     horizontal: 'right',
+                // }}
             >
                 {props.user
                 ? props.user.admin
@@ -31,8 +31,8 @@ export default function MenuList(props) {
                             signOut={props.signOut}
                         />
                 : <div>
-                    <MenuItem onClick={() => props.handleSelected('sign-in')}>Sign in</MenuItem>
-                    <MenuItem onClick={() => props.handleSelected('sign-up')}>Sign up</MenuItem>
+                    <MenuItem onClick={props.handleSignInDialog}>Sign in</MenuItem>
+                    <MenuItem onClick={props.handleSignUpDialog}>Sign up</MenuItem>
                     <MenuItem onClick={() => props.handleSelected('products-list')}>Products list</MenuItem>
                     <MenuItem onClick={() => props.handleSelected('cart')}>Cart</MenuItem>
                 </div>

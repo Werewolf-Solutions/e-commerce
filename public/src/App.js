@@ -4,18 +4,33 @@ import './App.css'
 import Header from './Components/Layout/Header/Header'
 import Body from './Components/Layout/Body/Body'
 import Footer from './Components/Layout/Footer/Footer'
+import SignInDialog from './Components/Forms/SignInDialog'
+import SignUpDialog from './Components/Forms/SignUpDialog'
 
 function App() {
   const [state, setState] = React.useState({
     user: null,
   })
   const [productsList, setProductsList] = React.useState([])
+  const [categories, setCategories] = React.useState([])
   const [cart, setCart] = React.useState([])
   const [selected, setSelected] = React.useState('products-list')
   const [menuList, setMenuList] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [signUpDialog, setSignUpDialog] = React.useState(false)
+  const [signInDialog, setSignInDialog] = React.useState(false)
 
-  const handleMenuList = () => {
+  const handleSignInDialog = () => {
+    setSignInDialog(!signInDialog)
+  }
+
+  const handleSignUpDialog = () => {
+    setSignUpDialog(!signUpDialog)
+  }
+
+  const handleMenuList = (e) => {
     setMenuList(!menuList)
+    setAnchorEl(e.currentTarget)
   }
 
   const handleSelected = (elm) => {
@@ -25,6 +40,8 @@ function App() {
 
   const updateProductsList = async () => {
     let res = await axios.get('/users/update-products-list')
+    let categories = getCategories(res.data.productsList)
+    setCategories(categories)
     setProductsList(res.data.productsList)
   }
 
@@ -38,13 +55,11 @@ function App() {
     let { email, password } = state
     let res = await axios.post('/users/sign-in', {email, password})
     let { user } = res.data
+    console.log(user)
     if (user) {
       setState({...state, user:user})
-      if (user.admin) {
-        setSelected('admin-products-list')
-      } else {
-        setSelected('products-list')
-      }
+      handleSignInDialog()
+      setMenuList(false)
     }
   }
 
@@ -54,11 +69,8 @@ function App() {
     let { user } = res.data
     if (user) {
       setState({...state, user:user})
-      if (user.admin) {
-        setSelected('admin-products-list')
-      } else {
-        setSelected('products-list')
-      }
+      handleSignUpDialog()
+      setMenuList(false)
     }
   }
 
@@ -66,7 +78,7 @@ function App() {
     let res = await axios.get('/users/sign-out')
     setState({user:null})
     setSelected('products-list')
-    setMenuList(!menuList)
+    setMenuList(false)
   }
 
   const handleChange = (e) => {
@@ -87,6 +99,8 @@ function App() {
         }
       }
     }
+    let total_cart = totalAmountCart(a)
+    a.total_cart = total_cart
     setCart(a)
   }
 
@@ -102,57 +116,82 @@ function App() {
         }
       }
     }
+    let total_cart = totalAmountCart(a)
+    a.total_cart = total_cart
     setCart(a)
+  }
+
+  const totalAmountCart = (cart) => {
+    let total_cart = 0
+    cart.forEach(item => total_cart = total_cart + (item.quantity * item.price))
+    return total_cart
   }
 
   const emptyCart = () => {
     setCart([])
   }
 
-  const checkout = async () => {
-    console.log(cart)
-    // if user logged in
-    if (state.user) {
-      // /checkout
-      console.log('user logged in ---> /checkout')
-      let res = await axios.post('/users/checkout', {cart})
-      console.log(res.data)
-      updateUser()
-    } else {
-      // open sign in / sign up
-      console.log('user logged out or not existing -----> sign in/up')
-      setSelected('sign-in')
-    }
+  const getCategories = (productsList) => {
+    let result = []
+    productsList.forEach(product => {
+        if (result.length === 0) {
+            result.push(product.category)
+        } else if (result[result.length -1] != product .category) {
+            result.push(product.category)
+        }
+    })
+    return result
   }
 
   useEffect(() => {
     updateProductsList()
+    updateUser()
   }, [])
 
   return (
     <div className="App">
+      <SignInDialog
+        open={signInDialog}
+        handleChange={handleChange}
+        onClose={handleSignInDialog}
+        handleSignInDialog={handleSignInDialog}
+        handleSignUpDialog={handleSignUpDialog}
+        signIn={signIn}
+      />
+      <SignUpDialog
+        open={signUpDialog}
+        handleChange={handleChange}
+        onClose={handleSignUpDialog}
+        handleSignInDialog={handleSignInDialog}
+        handleSignUpDialog={handleSignUpDialog}
+        signUp={signUp}
+      />
       <Header
         user={state.user}
         signOut={signOut}
         handleSelected={handleSelected}
         handleMenuList={handleMenuList}
+        anchorEl={anchorEl}
         menuList={menuList}
+        handleSignInDialog={handleSignInDialog}
+        handleSignUpDialog={handleSignUpDialog}
+        updateUser={updateUser}
+        cart={cart}
       />
       <div className="Body">
         <Body
           productsList={productsList}
+          categories={categories}
           selected={selected}
-          handleChange={handleChange}
-          signIn={signIn}
-          signUp={signUp}
+          handleChange={handleChange}          
           user={state.user}
           cart={cart}
           addToCart={addToCart}
           deleteFromCart={deleteFromCart}
           handleSelected={handleSelected}
-          checkout={checkout}
           updateUser={updateUser}
           updateProductsList={updateProductsList}
+          handleSignInDialog={handleSignInDialog}
         />
       </div>
       <Footer

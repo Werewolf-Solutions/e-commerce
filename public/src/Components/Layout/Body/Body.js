@@ -2,41 +2,21 @@ import React from 'react'
 import Account from '../../Account/Account'
 import Cart from '../../Cart/Cart'
 import Checkout from '../../Checkout/Checkout'
-import SignIn from '../../Forms/SignIn'
-import SignUp from '../../Forms/SignUp'
 import AdminUsersOrders from '../../Orders/AdminUsersOrders'
 import UserOrders from '../../Orders/UserOrders'
 import AdminProductsList from '../../ProductsList/AdminProductsList'
 import ProductsList from '../../ProductsList/ProductsList'
 
 export default function Body(props) {
-    if (props.selected === 'sign-in') {
-        return(
-            <div>
-                <SignIn
-                    handleChange={props.handleChange}
-                    handleSelected={props.handleSelected}
-                    signIn={props.signIn}
-                />
-            </div>
-        )
-    }else if (props.selected === 'sign-up') {
-        return(
-            <div>
-                <SignUp
-                    handleChange={props.handleChange}
-                    handleSelected={props.handleSelected}
-                    signUp={props.signUp}
-                />
-            </div>
-        )
-    } else if (props.selected === 'products-list') {
+    if (props.selected === 'products-list') {
         return(
             <div>
                 {props.user ? `Hello ${props.user.username}` : null}
                 <ProductsList
                     addToCart={props.addToCart}
                     productsList={props.productsList}
+                    updateProductsList={props.updateProductsList}
+                    categories={props.categories}
                 />
             </div>
         )
@@ -83,7 +63,11 @@ export default function Body(props) {
         return(
             <div>
                 <Checkout
-                    checkout={props.checkout}
+                    cart={props.cart}
+                    user={props.user}
+                    updateUser={props.updateUser}
+                    handleSelected={props.handleSelected}
+                    handleSignInDialog={props.handleSignInDialog}
                 />
             </div>
         )

@@ -5,9 +5,15 @@ const UserSchema = new mongoose.Schema({
     password: String,
     username: String,
     customer_id: String,
+    firstName: String,
+    lastName: String,
     payment_methods: [{
         id: String,
-        fingerprint: String
+        fingerprint: String,
+        last4: Number,
+        country: String,
+        exp_month: Number,
+        exp_year: Number,
     }],
     payment_intents: [{
         id: String,
