@@ -31,7 +31,10 @@ router.get('/', async (req, res, next) => {
 /* GET update Products List */
 router.get('/update-products-list', async (req, res, next) => {
   let productsList = await ProductsList.find()
-  res.send({productsList})
+  const products = await stripe.products.list({
+    limit: 10,
+  })  
+  res.send({products, productsList})
 })
 
 /**
@@ -217,7 +220,7 @@ router.post('/edit-user', async (req, res, next) => {
     region,
     postcode,
     city,
-    number
+    number,
   } = req.body
   const { userId } = req.session
   let user = await User.findById(userId)
@@ -401,45 +404,64 @@ router.get('/list-customers', async (req, res, next) => {
 })
 
 router.post('/create-payment-intent', async (req, res, next) => {
-  let {payment_method, total_cart} = req.body
+  let {payment_method, total_cart, cart} = req.body
   const { userId } = req.session
   let user = await User.findById(userId)
-  if (user) {
+  // check total_cart is correct
+  let t_c = 0
+  cart.forEach(item => t_c = t_c + item.price*item.quantity*100)
+  console.log(t_c)
+  if (user && t_c === total_cart) {
     try {
       if (user.payment_methods.length === 0) {
         res.send({msg: 'Add a payment method first'})
       } else {
-        // let order = {
-        //   user_id: userId,
-        //   address: {postcode: 'B169JS'},
-        //   items: cart,
-        //   total_cart
-        // }
-        // // save order in admin
-        // let admin = await User.findOne({email: 'admin@gmail.com'})
-        // admin.orders.push(order)
-        // await admin.save()
-        // // save order in user using the same order_id
-        // for (let i = 0; i < admin.orders.length; i++) {
-        //   if (admin.orders[i].user_id == userId) {
-        //     let order = {
-        //       user_id: userId,
-        //       address: {postcode: 'B169JS'},
-        //       items: cart,
-        //       order_id: admin.orders[i]._id,
-        //       total_cart
-        //     }
-        //     user.orders.push(order)
-        //     await user.save()
-        //   }
-        // }
+        // create payment intent
         const paymentIntent = await stripe.paymentIntents.create({
           amount: total_cart,
           currency: 'gbp',
           payment_method: payment_method,
           customer: user.customer_id
         })
+        // add payment intent to user's payment intents
+        // TODO: add payment intent details in order and delete payment_intents array from User model
+        // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
         user.payment_intents.push({id: paymentIntent.id})
+        let order = {
+          user_id: userId,
+          address: user.address,
+          items: cart,
+          total_cart,
+          payment_intent: {
+            id: paymentIntent.id,
+            status: paymentIntent.status,
+            payment_method: paymentIntent.payment_method
+          },
+          total_amount: total_cart
+        }
+        // save order in admin
+        let admin = await User.findOne({email: 'admin@gmail.com'})
+        admin.orders.push(order)
+        await admin.save()
+        // save order in user using the same order_id
+        for (let i = 0; i < admin.orders.length; i++) {
+          if (admin.orders[i].user_id == userId) {
+            let order = {
+              address: user.address,
+              items: cart,
+              order_id: admin.orders[i]._id,
+              total_cart,
+              payment_intent: {
+                id: paymentIntent.id,
+                status: paymentIntent.status,
+                payment_method: paymentIntent.payment_method
+              },
+              total_amount: total_cart
+            }
+            user.orders.push(order)
+            await user.save()
+          }
+        }
         await user.save()
         res.send({user, paymentIntent: paymentIntent.id})
       }
@@ -456,9 +478,23 @@ router.post('/confirm-payment-intent', async (req, res, next) => {
   let {payment_intent} = req.body
   const { userId } = req.session
   let user = await User.findById(userId)
+  let admin = await User.findOne({email: 'admin@gmail.com'})
   if (user) {
     try {
       const paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+      for (let i = 0; i < user.orders.length; i++) {
+        if (user.orders[i].order_id == order._id) {
+          user.orders[i].accepted = true
+        }
+      }
+      await user.save()
+      for (let i = 0; i < admin.orders.length; i++) {
+        if (admin.orders[i]._id == order._id) {
+          admin.orders[i].accepted = true
+          admin.orders[i].payment_intent = paymentIntent
+        }
+      }
+      await admin.save()
       res.send(paymentIntent)
     } catch (error) {
       res.send({msg: error.raw.message})
@@ -528,6 +564,7 @@ router.post('/add-payment-method', async (req, res, next) => {
         type: type,
         card: card,
       })
+      console.log(paymentMethod)
       if (paymentMethods.data.length != 0) {
         paymentMethods.data.forEach(async (payment) => {
           if (payment.fingerprint === paymentMethod.fingerprint) {
@@ -535,11 +572,12 @@ router.post('/add-payment-method', async (req, res, next) => {
           } else {
             user.payment_methods.push({
               id: paymentMethod.id,
-              fingerprint: paymentMethod.fingerprint,
-              last4: paymentMethod.last4,
-              country: paymentMethod.country,
-              exp_month: paymentMethod.exp_month,
-              exp_year: paymentMethod.exp_year,
+              fingerprint: paymentMethod.card.fingerprint,
+              last4: paymentMethod.card.last4,
+              country: paymentMethod.card.country,
+              exp_month: paymentMethod.card.exp_month,
+              exp_year: paymentMethod.card.exp_year,
+              brand: paymentMethod.card.brand,
             }) 
             await user.save()
             res.send({user, paymentMethod: paymentMethod.id})
@@ -554,10 +592,11 @@ router.post('/add-payment-method', async (req, res, next) => {
         user.payment_methods.push({
           id: paymentMethod.id,
           fingerprint: paymentMethod.card.fingerprint,
-          last4: paymentMethod.last4,
-          country: paymentMethod.country,
-          exp_month: paymentMethod.exp_month,
-          exp_year: paymentMethod.exp_year,
+          last4: paymentMethod.card.last4,
+          country: paymentMethod.card.country,
+          exp_month: paymentMethod.card.exp_month,
+          exp_year: paymentMethod.card.exp_year,
+          brand: paymentMethod.card.brand,
         })
         await user.save()
         res.send({user, paymentMethod: paymentMethod.id})
@@ -567,6 +606,22 @@ router.post('/add-payment-method', async (req, res, next) => {
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
+router.post('/detach-payment-method', async (req, res, next) => {
+  let {payment_method} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user) {
+    const paymentMethod = await stripe.paymentMethods.detach(payment_method)
+    for (let i = 0; i < user.payment_methods.length; i++) {
+      if (user.payment_methods[i].id === payment_method) {
+        user.payment_methods.splice(i, 1)
+      }
+    }
+    await user.save()
+    res.send({msg: 'Payment detached'})
   }
 })
 
@@ -585,77 +640,46 @@ router.post('/list-payment-methods', async (req, res, next) => {
   }
 })
 
-router.post('/create-checkout-session', async (req, res, next) => {
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: 'price_1JP2GJAlUKnrAXrlqWC4Qhdb',
-        quantity: 1,
-      },
-    ],
-    mode: 'payment',
-    success_url: `http://localhost:5000/users/success`,
-    cancel_url: `http://localhost:5000/users/cancel`,
-  })
-  res.send(session.data)
-})
-
-router.get('/list-checkout-sessions', async (req, res, next) => {
-  const sessions = await stripe.checkout.sessions.list({
-    limit: 10,
-  })
-  res.send(sessions.data)
-})
-
-router.post('/retrieve-checkout-session', async (req, res, next) => {
-  const session = await stripe.checkout.sessions.retrieve(
-    'cs_test_a1HRYjbEG8Iied3ffT17qsPkIbEm6Q4cvrwUMTWIVY3vyR8ZYUqH0Rybh9'
-  )
-  res.send(session)
-})
-
-router.get('/success', (req, res, next) => {
-  console.log('success')
-  res.send({msg:'Success'})
-})
-
-router.get('/cancel', (req, res, next) => {
-  console.log('cancel')
-  res.send({msg:'Cancel'})
-})
-
 /**
  * ADMIN
  */
 
-/* POST add item to products list */
+/**
+ * POST
+ * 
+ * /add-item-to-products-list
+ * 
+ * admin can add item to products list
+ */
 router.post('/add-item-to-products-list', async (req, res, next) => {
   let {product} = req.body
   let {name, price, description, category} = product
-  let user = await User.findOne({email: user_logged_in})
-  if (user.admin) {
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user && user.admin) {
     let new_item = new ProductsList({name, price, description, category, quantity: 0})
     await new_item.save()
+    res.send({msg: 'New item added!', user})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account'})
   }
-  res.send({msg: 'New item added!'})
 })
 
-/* POST edit item in products list */
 /**
  * POST
  * 
  * edit-item-in-products-list
  * 
- * edit item in products list
+ * admin can edit item in products list
  */
 router.post('/edit-item-in-products-list', async (req, res, next) => {
   let {product} = req.body
   let {_id, name, price, description, category} = product
   let item = await ProductsList.findById({_id: _id})
   console.log(item)
-  let user = await User.findOne({email: user_logged_in})
-  if (user.admin) {
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user && user.admin) {
     if (name && name != item.name) {
       item.name = name
     }
@@ -669,15 +693,29 @@ router.post('/edit-item-in-products-list', async (req, res, next) => {
       item.category = category
     }
     await item.save()
+    res.send({msg: 'Item edited!', item})
+  } else {
+    res.send({msg: "Please sign in as admin or make an account or missing product"})
   }
-  res.send({msg: 'Item edited!'})
 })
 
-/* POST delete item from products list */
+/**
+ * POST
+ * 
+ * /delete-item-from-products-list
+ * 
+ * admin can delete item from products list
+ */
 router.post('/delete-item-from-products-list', async (req, res, next) => {
   let {product} = req.body
-  await ProductsList.findByIdAndDelete({_id:product._id})
-  res.send({msg: 'Item deleted!'})
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  if (user && user.admin && product) {
+    await ProductsList.findByIdAndDelete(product._id)
+    res.send({msg: 'Item deleted!'})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account or missing product'})
+  }
 })
 
 /**
@@ -685,29 +723,58 @@ router.post('/delete-item-from-products-list', async (req, res, next) => {
  */
 
 /**
+ * GET
+ * 
+ * /orders-to-accept
+ * 
+ * retrieve orders to be accepted
+ */
+router.get('/orders-to-accept', async (req, res, next) => {
+  let {userId} = req.session
+  let user = await User.findById(userId)
+  let orders_active = []
+  if (user) {
+    user.orders.forEach(order => {
+      if (!order.accepted) {
+        orders_active.push(order)
+      }
+    })
+    res.send(orders_active)
+  } else {
+    res.send({msg: 'Please sign in'})
+  }
+})
+
+/**
  * POST
  * 
  * delete-order
  * 
- * delete user's order
+ * delete user's order & cancel payment intent
  */
 router.post('/delete-order', async (req, res, next) => {
   let {order} = req.body
+  let {userId} = req.session
   let user = await User.findById({_id: order.user_id})
-  let admin = await User.findOne({email: 'admin@gmail.com'})
-  for (let i = 0; i < admin.orders.length; i++) {
-    if (admin.orders[i]._id.toString() == order._id) {
-      admin.orders.splice(i, 1)
-      await admin.save()
+  let admin = await User.findById(userId)
+  if (admin && admin.admin && user) {
+    for (let i = 0; i < admin.orders.length; i++) {
+      if (admin.orders[i]._id.toString() == order._id) {        
+        admin.orders.splice(i, 1)
+        await admin.save()
+      }
     }
-  }
-  for (let i = 0; i < user.orders.length; i++) {
-    if (user.orders[i].order_id.toString() == order._id) {
-      user.orders.splice(i, 1)
-      await user.save()
+    for (let i = 0; i < user.orders.length; i++) {
+      if (user.orders[i].order_id.toString() == order._id) {
+        await stripe.paymentIntents.cancel(order.payment_intent.id)
+        user.orders.splice(i, 1)
+        await user.save()
+      }
     }
+    res.send({msg: 'Order deleted successfully.'})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
-  res.send({msg: 'Order deleted successfully.'})
 })
 
 /**
@@ -715,25 +782,31 @@ router.post('/delete-order', async (req, res, next) => {
  * 
  * accept-order
  * 
- * accept user's order
+ * accept user's order & confirm payment intent
  */
 router.post('/accept-order', async (req, res, next) => {
   let {order} = req.body
+  let {userId} = req.session
   let user = await User.findById(order.user_id)
-  let admin = await User.findOne({email: 'admin@gmail.com'})
-  for (let i = 0; i < user.orders.length; i++) {
-    if (user.orders[i].order_id == order._id) {
-      user.orders[i].accepted = true
+  let admin = await User.findById(userId)
+  if (admin && admin.admin && user) {
+    for (let i = 0; i < user.orders.length; i++) {
+      if (user.orders[i].order_id == order._id) {
+        await stripe.paymentIntents.confirm(order.payment_intent.id)
+        user.orders[i].accepted = true
+      }
     }
-  }
-  await user.save()
-  for (let i = 0; i < admin.orders.length; i++) {
-    if (admin.orders[i]._id == order._id) {
-      admin.orders[i].accepted = true
+    await user.save()
+    for (let i = 0; i < admin.orders.length; i++) {
+      if (admin.orders[i]._id == order._id) {
+        admin.orders[i].accepted = true
+      }
     }
+    await admin.save()
+    res.send({msg: 'Order accepted.'})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
-  await admin.save()
-  res.send({msg: 'Order accepted.'})
 })
 
 /**
@@ -741,25 +814,146 @@ router.post('/accept-order', async (req, res, next) => {
  * 
  * decline-order
  * 
- * decline user's order
+ * decline user's order & send back reason or modifications to order
  */
  router.post('/decline-order', async (req, res, next) => {
   let {order} = req.body
+  let {userId} = req.session
   let user = await User.findById(order.user_id)
+  let admin = await User.findById(userId)
+  let order_modified
+  if (admin && admin.admin && user) {
+    for (let i = 0; i < user.orders.length; i++) {
+      if (user.orders[i].order_id == order._id) {
+        user.orders[i].accepted = false
+        if (user._id != admin._id && !admin.admin) {
+          console.log('add modification as user')
+          let mod = {
+            username: user.username,
+            modifications: order.modifications
+          }
+          user.orders[i].modifications.push(mod)
+        }
+      }
+    }
+    await user.save()
+    for (let i = 0; i < admin.orders.length; i++) {
+      if (admin.orders[i]._id == order._id) {
+        admin.orders[i].accepted = false
+        if (user._id === admin._id && admin.admin) {
+          console.log('add modification as admin')
+          let mod = {
+            username: user.username,
+            modifications: order.modifications
+          }
+          user.orders[i].modifications.push(mod)
+          order_modified = user.orders[i]
+        }
+      }
+    }
+    await admin.save()
+    res.send({msg: 'Order declined.', order_modified})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account or missing product'})
+  }
+})
+
+/**
+ * POST
+ * 
+ * edit-order
+ * 
+ * user can edit order and sand notification to admin
+ */
+ router.post('/edit-order', async (req, res, next) => {
+  let {order} = req.body
+  let {userId} = req.session
+  let user = await User.findById(userId)
   let admin = await User.findOne({email: 'admin@gmail.com'})
-  for (let i = 0; i < user.orders.length; i++) {
-    if (user.orders[i].order_id == order._id) {
-      user.orders[i].accepted = false
+  let mod
+
+  if (user) {
+    if (user.admin) {
+      console.log(`admin is changing the order. Username: ${user.username}`)
+      mod = {
+        username: user.username,
+        text: order.modifications
+      }
+      console.log(`add to admin ${user.email}`)
+      for (let i = 0; i < user.orders.length; i++) {
+        if (user.orders[i]._id == order._id) {
+          user.orders[i].accepted = false
+          user.orders[i].modifications.push(mod)
+        }
+      }
+      await user.save()
+      console.log(`add to user ${order.user_id}`)
+      let recepient = await User.findById(order.user_id)
+      for (let i = 0; i < recepient.orders.length; i++) {
+        if (recepient.orders[i].order_id == order._id) {
+          recepient.orders[i].accepted = false
+          recepient.orders[i].modifications.push(mod)
+        }
+      }
+      await recepient.save()
+    } else {
+      console.log(`user is changing the order. Username: ${user.username}`)
+      mod = {
+        username: user.username,
+        text: order.modifications
+      } 
+      console.log(`add to admin ${admin.email}`)
+      for (let i = 0; i < admin.orders.length; i++) {
+        if (admin.orders[i]._id == order.order_id) {
+          admin.orders[i].accepted = false
+          admin.orders[i].modifications.push(mod)
+        }
+      }
+      await admin.save()
+      console.log(`add to user ${user.email}`)
+      for (let i = 0; i < user.orders.length; i++) {
+        if (user.orders[i].order_id == order.order_id) {
+          user.orders[i].accepted = false
+          user.orders[i].modifications.push(mod)
+        }
+      }
+      await user.save()
     }
+    res.send({msg: 'Order modified.', mod})
+  } else {
+    res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
-  await user.save()
-  for (let i = 0; i < admin.orders.length; i++) {
-    if (admin.orders[i]._id == order._id) {
-      admin.orders[i].accepted = false
-    }
-  }
-  await admin.save()
-  res.send({msg: 'Order declined.'})
+
+  // if (admin && admin.admin && user) {
+  //   for (let i = 0; i < user.orders.length; i++) {
+  //     if (user.orders[i].order_id == order.order_id) {
+  //       user.orders[i].accepted = false
+  //       console.log(`user._id != admin._id && !admin.admin, ${user._id != admin._id} && ${!admin.admin}`)
+  //       if (user._id != admin._id && admin.admin) {
+  //         console.log('add modification to user')
+  //         mod = {
+  //           username: user.username,
+  //           text: order.modifications
+  //         }
+  //         user.orders[i].modifications.push(mod)
+  //       }
+  //     }
+  //   }
+  //   await user.save()
+  //   for (let i = 0; i < admin.orders.length; i++) {
+  //     if (admin.orders[i]._id == order.order_id) {
+  //       admin.orders[i].accepted = false
+  //       console.log(`user._id === admin._id && admin.admin, ${user._id === admin._id} && ${admin.admin}`)
+  //       console.log('add modification to admin')
+  //       admin.orders[i].modifications.push(mod)
+  //       order_modified = admin.orders[i]
+  //     }
+  //   }
+  //   await admin.save()
+  //   res.send({msg: 'Order modified.', user})
+  // } else {
+  //   res.send({msg: 'Please sign in as admin or make an account or missing product'})
+  // }
 })
 
 module.exports = router

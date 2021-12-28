@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
         country: String,
         exp_month: Number,
         exp_year: Number,
+        brand: String
     }],
     payment_intents: [{
         id: String,
@@ -33,6 +34,12 @@ const UserSchema = new mongoose.Schema({
     orders: [{
         user_id: String,
         order_id: String,
+        payment_intent: {
+            id: String,
+            status: String, //change to enum?
+            payment_method: String
+        },
+        total_amount: Number,
         address: {
             postcode: String,
             line1: String,
@@ -49,7 +56,11 @@ const UserSchema = new mongoose.Schema({
             type: Boolean,
             enum: [true, false],
             default: false
-        }
+        },
+        modifications: [{
+            username: String,
+            text: String
+        }]
     }],
     admin: {
         type: Boolean,
