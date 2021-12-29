@@ -57,6 +57,11 @@ const UserSchema = new mongoose.Schema({
             enum: [true, false],
             default: false
         },
+        delivered: {
+            type: Boolean,
+            enum: [true, false],
+            default: false
+        },
         modifications: [{
             username: String,
             text: String

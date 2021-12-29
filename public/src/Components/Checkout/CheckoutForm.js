@@ -151,7 +151,12 @@ export default function CheckoutForm(props) {
         console.log('create payment intent')
         console.log(card)
         console.log(props.cart.total_cart)
-        let res = await axios.post('/users/create-payment-intent', {payment_method: card, total_cart: props.cart.total_cart*100})
+        let res = await axios.post('/users/create-payment-intent',
+            {
+                payment_method: card,
+                total_cart: props.cart.total_cart*100,
+                cart: props.cart
+            })
         console.log(res.data)
         if (res.data.paymentIntent) {
             setPaymentIntent(res.data.paymentIntent)

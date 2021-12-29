@@ -410,7 +410,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
   // check total_cart is correct
   let t_c = 0
   cart.forEach(item => t_c = t_c + item.price*item.quantity*100)
-  console.log(t_c)
+  console.log(t_c, total_cart)
   if (user && t_c === total_cart) {
     try {
       if (user.payment_methods.length === 0) {
