@@ -14,6 +14,8 @@ export default function CheckoutDialog(props) {
                     updateUser={props.updateUser}
                     handleSignInDialog={props.handleSignInDialog}
                     cart={props.cart}
+                    onClose={props.onClose}
+                    emptyCart={props.emptyCart}
                 />
             </Dialog>
         </div>

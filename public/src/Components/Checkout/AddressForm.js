@@ -41,7 +41,7 @@ export default function AddressForm(props) {
                 ?
                 <div>
                     <Grid item>
-                        <Grid container spacing={3}>            
+                        <Grid container spacing={3}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -156,12 +156,6 @@ export default function AddressForm(props) {
                                     onChange={props.handleChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-                                    label="Use this address for payment details"
-                                />
-                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
@@ -175,7 +169,48 @@ export default function AddressForm(props) {
             ?
             <div>
                 <Grid item>
-                    <Grid container spacing={3}>            
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                id="email"
+                                name="email"
+                                label="Email"
+                                fullWidth
+                                autoComplete="email"
+                                variant="standard"
+                                value={props.state.email}
+                                onChange={props.handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                id="password"
+                                name="password"
+                                label="Password"
+                                type="password"
+                                fullWidth
+                                autoComplete="password"
+                                variant="standard"
+                                value={props.state.password}
+                                onChange={props.handleChange}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                id="password2"
+                                name="password2"
+                                label="Password2"
+                                type="password"
+                                fullWidth
+                                autoComplete="password2"
+                                variant="standard"
+                                value={props.state.password2}
+                                onChange={props.handleChange}
+                            />
+                        </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
@@ -290,16 +325,55 @@ export default function AddressForm(props) {
                                 onChange={props.handleChange}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-                                label="Use this address for payment details"
-                            />
-                        </Grid>
                     </Grid>
                 </Grid>
             </div>
-            : null
+            : !props.user && props.shippingMethod === 'pick-up'
+                ?
+                <div>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            id="email"
+                            name="email"
+                            label="Email"
+                            fullWidth
+                            autoComplete="email"
+                            variant="standard"
+                            value={props.state.email}
+                            onChange={props.handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            id="password"
+                            name="password"
+                            label="Password"
+                            type="password"
+                            fullWidth
+                            autoComplete="password"
+                            variant="standard"
+                            value={props.state.password}
+                            onChange={props.handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            required
+                            id="password2"
+                            name="password2"
+                            label="Password2"
+                            type="password"
+                            fullWidth
+                            autoComplete="password2"
+                            variant="standard"
+                            value={props.state.password2}
+                            onChange={props.handleChange}
+                        />
+                    </Grid>
+                </div>
+                : null
             }
             {/* </React.Fragment> */}
         </div>

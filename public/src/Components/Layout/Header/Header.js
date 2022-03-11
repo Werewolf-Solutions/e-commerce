@@ -8,7 +8,12 @@ export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
 
     const handleCheckoutDialog = () => {
-        setCheckoutDialog(!checkoutDialog)
+        if (props.cart.length === 0) {
+            console.log("Cart is empty. Don't open checkout dialog")
+            // TODO: message pop up
+        } else {
+            setCheckoutDialog(!checkoutDialog)
+        }
     }
     return (
         <div className="Header">
@@ -19,6 +24,7 @@ export default function Header(props) {
                 updateUser={props.updateUser}
                 handleSignInDialog={props.handleSignInDialog}
                 cart={props.cart}
+                emptyCart={props.emptyCart}
             />
             <MenuList
                 user={props.user}

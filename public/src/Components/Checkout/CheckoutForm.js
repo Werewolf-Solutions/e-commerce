@@ -17,27 +17,12 @@ import axios from 'axios'
 
 const steps = ['Shipping address', 'Payment details', 'Review your order']
 
-// function getStepContent(step) {
-//     switch (step) {
-//         case 0:
-//         return (
-//             <AddressForm
-//                 user={props.user}
-//             />)
-//         case 1:
-//         return (<PaymentForm />)
-//         case 2:
-//         return (<Review />)
-//         default:
-//         throw new Error('Unknown step')
-//     }
-// }
-
 const theme = createTheme()
 
 export default function CheckoutForm(props) {
     const [activeStep, setActiveStep] = React.useState(0)
     const [state, setState] = React.useState({
+        email: props.user ? props.user.email : '',
         firstName: props.user ? props.user.firstName : '',
         lastName: props.user ? props.user.lastName : '',
         address1: props.user ? props.user.address.line1 : '',
@@ -53,7 +38,7 @@ export default function CheckoutForm(props) {
         expYear: '',
         cvc: '',
     })
-    const [card, setCard] = React.useState('')
+    const [card, setCard] = React.useState({})
     const [paymentIntent, setPaymentIntent] = React.useState('')
     const [addPaymentMethod, setAddPaymentMethod] = React.useState(false)
     const [paymentMethod, setPaymentMethod] = React.useState('')
@@ -69,9 +54,11 @@ export default function CheckoutForm(props) {
 
     const handleAddPaymentMethod = () => {
         setAddPaymentMethod(!addPaymentMethod)
+        setPaymentMethod('card')
     }
 
     const handleCardSelected = (e) => {
+        console.log(e.target.value)
         setCard(e.target.value)
     }
 
@@ -79,24 +66,155 @@ export default function CheckoutForm(props) {
         setState({...state, [e.target.id]: e.target.value})
     }
 
-    const handleNext = () => {
+    const handleNext = async () => {
+        // Address form
+
+        // if there's not a shipping method don't go next
         if (!shippingMethod && activeStep === 0) {
+            // TODO: error pop up
             console.log('Select a shipping method first')
-        } else {
+            // if shipping method is delivery & there's no user signed in
+        } else if (shippingMethod === 'delivery' && !props.user && activeStep === 0) {
+            // TODO: if user exists sign in
+            // TODO: if user doesn't exist sign up and sign in
+            // TODO: handle errors
+            // TODO: if required fields are empty send error
+            // sign up user
+            if (state.email != '' && state.password != '' && state.password2 != '') {
+                // TODO: sign up with user's details or call /users/edit-user
+                console.log('Try sign in and if not existing sign up')
+                console.log(state)
+                let {
+                    email,
+                    password,
+                    password2,
+                    firstName,
+                    lastName,
+                    address1,
+                    address2,
+                    city,
+                    region,
+                    postcode,
+                    country
+                } = state
+
+                // sign up
+                axios.post('/users/sign-up', {email, password, password2}).then(async (res) => {
+                    // FIXME: talk to back end to change errors handling or wait for new update. b007 && f011
+                    if (res.data.errors) {
+                        console.log(res.data.errors[0].msg)
+                        // If user email already exists
+                        if (res.data.errors[0].msg === 'Email already exists') {
+                            let r = await axios.post('/users/sign-in', {email, password}).then(() => editUser())
+                            setActiveStep(activeStep + 1)
+                        }
+                    } else {
+                        console.log(res.data)
+                        if (res.data.msg === 'User added!') {
+                            let r = await axios.post('/users/sign-in', {email, password}).then(() => editUser())
+                            setActiveStep(activeStep + 1)
+                        }
+                    }
+                })
+            } else {
+                console.log('Fill all fields')
+            }
+            // if shipping method is delivery & user signed in
+        } else if (shippingMethod === 'delivery' && props.user && activeStep === 0) {
+            // edit user signed in
+            // TODO: edit only if user's details are different from DB ones
+            editUser()
+            setActiveStep(activeStep + 1)
+            // if shipping method is pick-up & there's no user signed in
+        } else if (shippingMethod === 'pick-up' && !props.user && activeStep === 0) {
+            // sign up user
+            if (state.email != '' && state.password != '' && state.password2 != '') {
+                console.log('Try sign in and if not existing sign up')
+                console.log(state)
+                let {email, password, password2} = state
+
+                // sign up
+                axios.post('/users/sign-up', {email, password, password2}).then(async (res) => {
+                    // FIXME: talk to back end to change errors handling or wait for new update. b007 && f011
+                    if (res.data.errors) {
+                        console.log(res.data.errors[0].msg)
+                        // If user email already exists
+                        if (res.data.errors[0].msg === 'Email already exists') {
+                            let r = await axios.post('/users/sign-in', {email, password})
+                            props.updateUser()
+                            setActiveStep(activeStep + 1)
+                        }
+                    } else {
+                        console.log(res.data)
+                        if (res.data.msg === 'User added!') {
+                            let r = await axios.post('/users/sign-in', {email, password})
+                            props.updateUser()
+                            setActiveStep(activeStep + 1)
+                        }
+                    }
+                })
+            } else {
+                console.log('Fill all fields')
+            }
+            // if shipping method is pick-up & user signed in
+        } else if (shippingMethod === 'pick-up' && props.user && activeStep === 0) {
+            // edit user signed in
+            // TODO: edit only if user's details are different from DB ones
+            // editUser()
             setActiveStep(activeStep + 1)
         }
-        if (activeStep === 0 && props.user) {
-            editUser()
-        }
+        // Payment form
+        // FIXME: handle better create payment intent / method and go next step
         if (activeStep === 1 && props.user) {
-            if (addPaymentMethod) {
-                createPaymentMethod().then(() => createPaymentIntent())
+            console.log(addPaymentMethod)
+            console.log(paymentMethod)
+            console.log(card)
+
+            // if a payment method is selected
+            if (paymentMethod) {
+                // if payment method === cash
+                if (paymentMethod === 'cash') {
+                    console.log('Payment selected = cash. Go next.')
+                    setActiveStep(activeStep + 1)
+                }
+                // if payment method === card
+                if (paymentMethod === 'card') {
+                    // if there's no card selected
+                    if (!card && !addPaymentMethod) {
+                        // TODO: pop up message
+                        console.log('Please choose an existing payment method or add new one.')
+                    }
+                    // if there's a card selected
+                    if (card) {
+                        console.log('Card selected. Create payment intent. Go next.')
+                        // TODO: create payment intent
+                        createPaymentIntent()
+                        setActiveStep(activeStep + 1)
+                    }
+                    // if using a new card create new payment method
+                    // then create payment intent
+                    if (addPaymentMethod) {
+                        console.log('Create payment method')
+                        createPaymentMethod()
+                        .then(() => createPaymentIntent()
+                        .then(() => setActiveStep(activeStep + 1)))
+                    }
+                }
             } else {
-                createPaymentIntent()
+                console.log('Please select a payment method')
             }
         }
+
         if (activeStep === steps.length - 1 && props.user) {
-            confirmPaymentIntent()
+            console.log(`active step === steps.length -1 = ${steps.length - 1}`)
+            if (paymentMethod === 'card') {
+                confirmPaymentIntent()
+            } else if (paymentMethod === 'cash') {
+                console.log('Add order to admin and user')
+            }
+            props.emptyCart()
+            props.onClose()
+
         }
     }
 
@@ -145,18 +263,15 @@ export default function CheckoutForm(props) {
         let res = await axios.post('/users/add-payment-method', {type: paymentMethod, card: new_card})
         console.log(res.data)
         setCard(res.data.paymentMethod)
+        handleAddPaymentMethod()
+        props.updateUser()
     }
 
     const createPaymentIntent = async () => {
         console.log('create payment intent')
         console.log(card)
         console.log(props.cart.total_cart)
-        let res = await axios.post('/users/create-payment-intent',
-            {
-                payment_method: card,
-                total_cart: props.cart.total_cart*100,
-                cart: props.cart
-            })
+        let res = await axios.post('/users/create-payment-intent', {payment_method: card.id, total_cart: props.cart.total_cart*100, cart: props.cart})
         console.log(res.data)
         if (res.data.paymentIntent) {
             setPaymentIntent(res.data.paymentIntent)
@@ -194,13 +309,17 @@ export default function CheckoutForm(props) {
                     addPaymentMethod={addPaymentMethod}
                     paymentMethod={paymentMethod}
                     handlePaymentMethodSelected={handlePaymentMethodSelected}
+                    createPaymentMethod={createPaymentMethod}
                 />)
             case 2:
             return (
                 <Review
                     state={state}
                     handleChange={handleChange}
-                    cart={props.cart}                    
+                    cart={props.cart}
+                    card={card}
+                    paymentMethod={paymentMethod}
+                    shippingMethod={shippingMethod}
                 />)
             default:
             throw new Error('Unknown step')
