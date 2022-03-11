@@ -177,6 +177,7 @@ function App() {
         handleSignUpDialog={handleSignUpDialog}
         updateUser={updateUser}
         cart={cart}
+        emptyCart={emptyCart}
       />
       <div className="Body">
         <Body

@@ -17,22 +17,6 @@ import axios from 'axios'
 
 const steps = ['Shipping address', 'Payment details', 'Review your order']
 
-// function getStepContent(step) {
-//     switch (step) {
-//         case 0:
-//         return (
-//             <AddressForm
-//                 user={props.user}
-//             />)
-//         case 1:
-//         return (<PaymentForm />)
-//         case 2:
-//         return (<Review />)
-//         default:
-//         throw new Error('Unknown step')
-//     }
-// }
-
 const theme = createTheme()
 
 export default function CheckoutForm(props) {
@@ -54,7 +38,7 @@ export default function CheckoutForm(props) {
         expYear: '',
         cvc: '',
     })
-    const [card, setCard] = React.useState('')
+    const [card, setCard] = React.useState({})
     const [paymentIntent, setPaymentIntent] = React.useState('')
     const [addPaymentMethod, setAddPaymentMethod] = React.useState(false)
     const [paymentMethod, setPaymentMethod] = React.useState('')
@@ -70,9 +54,11 @@ export default function CheckoutForm(props) {
 
     const handleAddPaymentMethod = () => {
         setAddPaymentMethod(!addPaymentMethod)
+        setPaymentMethod('card')
     }
 
     const handleCardSelected = (e) => {
+        console.log(e.target.value)
         setCard(e.target.value)
     }
 
@@ -113,23 +99,23 @@ export default function CheckoutForm(props) {
                 } = state
 
                 // sign up
-                let response = axios.post('/users/sign-up', {email, password, password2}).then((res) => {
-                    console.log(res)
-                    axios.post('/users/sign-in', {email, password}).then((r) => {
-                        console.log(r)
-                        editUser()
-                        return {msg: 'Done'}
-                    })
+                axios.post('/users/sign-up', {email, password, password2}).then(async (res) => {
+                    // FIXME: talk to back end to change errors handling or wait for new update. b007 && f011
+                    if (res.data.errors) {
+                        console.log(res.data.errors[0].msg)
+                        // If user email already exists
+                        if (res.data.errors[0].msg === 'Email already exists') {
+                            let r = await axios.post('/users/sign-in', {email, password}).then(() => editUser())
+                            setActiveStep(activeStep + 1)
+                        }
+                    } else {
+                        console.log(res.data)
+                        if (res.data.msg === 'User added!') {
+                            let r = await axios.post('/users/sign-in', {email, password}).then(() => editUser())
+                            setActiveStep(activeStep + 1)
+                        }
+                    }
                 })
-                console.log(response)
-
-                // sign in
-
-
-                // edit user
-
-
-                // setActiveStep(activeStep + 1)
             } else {
                 console.log('Fill all fields')
             }
@@ -181,14 +167,7 @@ export default function CheckoutForm(props) {
         // FIXME: handle better create payment intent / method and go next step
         if (activeStep === 1 && props.user) {
             console.log(addPaymentMethod)
-            let new_card = {
-                number: state.cardNumber,
-                exp_month: state.expMonth,
-                exp_year: state.expYear,
-                cvc: state.cvc
-            }
             console.log(paymentMethod)
-            console.log(new_card)
             console.log(card)
 
             // if a payment method is selected
@@ -201,7 +180,7 @@ export default function CheckoutForm(props) {
                 // if payment method === card
                 if (paymentMethod === 'card') {
                     // if there's no card selected
-                    if (!card && !new_card) {
+                    if (!card && !addPaymentMethod) {
                         // TODO: pop up message
                         console.log('Please choose an existing payment method or add new one.')
                     }
@@ -214,7 +193,7 @@ export default function CheckoutForm(props) {
                     }
                     // if using a new card create new payment method
                     // then create payment intent
-                    if (new_card) {
+                    if (addPaymentMethod) {
                         console.log('Create payment method')
                         createPaymentMethod()
                         .then(() => createPaymentIntent()
@@ -228,8 +207,14 @@ export default function CheckoutForm(props) {
 
         if (activeStep === steps.length - 1 && props.user) {
             console.log(`active step === steps.length -1 = ${steps.length - 1}`)
-            confirmPaymentIntent()
+            if (paymentMethod === 'card') {
+                confirmPaymentIntent()
+            } else if (paymentMethod === 'cash') {
+                console.log('Add order to admin and user')
+            }
+            props.emptyCart()
             props.onClose()
+
         }
     }
 
@@ -286,7 +271,7 @@ export default function CheckoutForm(props) {
         console.log('create payment intent')
         console.log(card)
         console.log(props.cart.total_cart)
-        let res = await axios.post('/users/create-payment-intent', {payment_method: card, total_cart: props.cart.total_cart*100, cart: props.cart})
+        let res = await axios.post('/users/create-payment-intent', {payment_method: card.id, total_cart: props.cart.total_cart*100, cart: props.cart})
         console.log(res.data)
         if (res.data.paymentIntent) {
             setPaymentIntent(res.data.paymentIntent)
@@ -331,7 +316,10 @@ export default function CheckoutForm(props) {
                 <Review
                     state={state}
                     handleChange={handleChange}
-                    cart={props.cart}                    
+                    cart={props.cart}
+                    card={card}
+                    paymentMethod={paymentMethod}
+                    shippingMethod={shippingMethod}
                 />)
             default:
             throw new Error('Unknown step')

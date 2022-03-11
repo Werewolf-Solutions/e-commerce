@@ -189,6 +189,7 @@ export default function AddressForm(props) {
                                 id="password"
                                 name="password"
                                 label="Password"
+                                type="password"
                                 fullWidth
                                 autoComplete="password"
                                 variant="standard"
@@ -202,6 +203,7 @@ export default function AddressForm(props) {
                                 id="password2"
                                 name="password2"
                                 label="Password2"
+                                type="password"
                                 fullWidth
                                 autoComplete="password2"
                                 variant="standard"
@@ -326,7 +328,7 @@ export default function AddressForm(props) {
                     </Grid>
                 </Grid>
             </div>
-            : props.shippingMethod === 'pick-up'
+            : !props.user && props.shippingMethod === 'pick-up'
                 ?
                 <div>
                     <Grid item xs={12}>
@@ -348,6 +350,7 @@ export default function AddressForm(props) {
                             id="password"
                             name="password"
                             label="Password"
+                            type="password"
                             fullWidth
                             autoComplete="password"
                             variant="standard"
@@ -361,6 +364,7 @@ export default function AddressForm(props) {
                             id="password2"
                             name="password2"
                             label="Password2"
+                            type="password"
                             fullWidth
                             autoComplete="password2"
                             variant="standard"

@@ -24,6 +24,7 @@ export default function Header(props) {
                 updateUser={props.updateUser}
                 handleSignInDialog={props.handleSignInDialog}
                 cart={props.cart}
+                emptyCart={props.emptyCart}
             />
             <MenuList
                 user={props.user}

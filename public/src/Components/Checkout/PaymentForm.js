@@ -35,19 +35,6 @@ export default function PaymentForm(props) {
         ? 
             <div>
                 <button onClick={props.handleAddPaymentMethod}>close payment form</button><br/><br/>
-                <FormControl fullWidth>
-                    <InputLabel id="select-payment-method">Payment method</InputLabel>
-                    <Select
-                        labelId="select-payment-method"
-                        id="dselect-payment-method"
-                        value={props.paymentMethod}
-                        label="Payment method"
-                        onChange={props.handlePaymentMethodSelected}
-                    >
-                        <MenuItem value={'cash'}>Cash</MenuItem>
-                        <MenuItem value={'card'}>Card</MenuItem>
-                    </Select>
-                </FormControl>
                 {props.paymentMethod === 'card'
                 ?
                     <div>
@@ -124,7 +111,7 @@ export default function PaymentForm(props) {
             </div>
         : <button onClick={props.handleAddPaymentMethod}>add payment method</button>
         }
-        {props.user
+        {props.user && props.paymentMethod === 'card' && !props.addPaymentMethod
         ?
             props.user.payment_methods.length != 0
             ?
@@ -134,12 +121,12 @@ export default function PaymentForm(props) {
                         <Select
                             labelId="select-card"
                             id="dselect-card"
-                            value={props.card}
+                            value={props.card.id}
                             label="Card"
                             onChange={props.handleCardSelected}
                         >
                             {props.user.payment_methods.map(pm => (
-                                <MenuItem key={pm.id} value={pm.id}>xxxx-xxxx-4242</MenuItem>
+                                <MenuItem key={pm.id} value={pm}>{`xxxx-xxxx-${pm.last4}`}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
