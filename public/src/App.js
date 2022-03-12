@@ -7,9 +7,12 @@ import Footer from './Components/Layout/Footer/Footer'
 import SignInDialog from './Components/Forms/SignInDialog'
 import SignUpDialog from './Components/Forms/SignUpDialog'
 
+import {user_demo} from './js/user_demo'
+
 function App() {
   const [state, setState] = React.useState({
     user: null,
+    demo: true
   })
   const [productsList, setProductsList] = React.useState([])
   const [categories, setCategories] = React.useState([])
@@ -46,9 +49,13 @@ function App() {
   }
 
   const updateUser = async () => {
-    let res = await axios.get('/users/')
-    console.log(res.data)
-    setState({...state, user: res.data.user})
+    if (state.demo) {
+      setState({...state, user: user_demo})
+    } else {
+      let res = await axios.get('/users/')
+      console.log(res.data)
+      setState({...state, user: res.data.user})
+    }
   }
 
   const signIn = async () => {

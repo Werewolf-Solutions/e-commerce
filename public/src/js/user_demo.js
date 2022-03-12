@@ -1,4 +1,4 @@
-const user = {
+export const user_demo = {
     _id: "1",
     email: "foo@gmail.com",
     username: "foo",
@@ -54,11 +54,13 @@ const user = {
             quantity: 1
         }],
         accepted: true,
-        _id: ObjectId("61caf8ce6dc16e80fdd427db"),
+        _id: "61caf8ce6dc16e80fdd427db",
         modifications: [{
             username: "foo",
             text: "I'm allergic to mushrooms",
-            _id: ObjectId("61caf8ec6dc16e80fdd4280a")
+            _id: "61caf8ec6dc16e80fdd4280a"
         }]
     }]
 }
+
+export default user_demo
