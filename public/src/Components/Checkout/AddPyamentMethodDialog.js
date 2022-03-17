@@ -20,13 +20,18 @@ export default function AddPyamentMethodDialog(props) {
                     <Select
                         labelId="select-payment-type"
                         id="select-payment-type"
-                        value={props.paymentTypeSelected}
+                        value={props.card ? props.card.type : ''}
                         label="Payment type"
                         onChange={props.handlePaymentTypeSelection}
                     >
                         <MenuItem value={'card'}>Card</MenuItem>
                     </Select>
                 </FormControl><br/>
+                <TextField
+                    id='card_name'
+                    label='Card name'
+                    onChange={props.handleChange}
+                /><br/>
                 <TextField
                     id='card_number'
                     name='Card number'

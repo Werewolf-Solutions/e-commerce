@@ -76,6 +76,7 @@ export default function Body(props) {
             <div>
                 <Account
                     user={props.user}
+                    updateUser={props.updateUser}
                 />
             </div>
         )
