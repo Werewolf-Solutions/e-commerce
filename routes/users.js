@@ -94,7 +94,7 @@ router.post('/sign-in', async (req, res, next) => {
     errors.push({ msg: 'Passwords do not match' })
   }
 
-  if (password.length < 4) {
+  if (password && password.length < 4) {
     errors.push({ msg: 'Password must be at least 4 characters' })
   }
 
