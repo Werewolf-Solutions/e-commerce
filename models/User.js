@@ -34,6 +34,7 @@ const UserSchema = new mongoose.Schema({
     orders: [{
         user_id: String,
         order_id: String,
+        delivery_time: Date,
         payment_intent: {
             id: String,
             status: String, //change to enum?
