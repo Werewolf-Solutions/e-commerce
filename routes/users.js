@@ -188,9 +188,11 @@ router.get('/sign-out', (req, res, next) => {
  */
 router.get('/delete-user', async (req, res, next) => {
   const { userId } = req.session
+  let user = await User.findById(userId)
   // TODO:
   //      - do better validation with password and 2Step auth
   let user_deleted = await User.findByIdAndDelete(userId)
+  await stripe.customers.del(user.customer_id)
   req.session.destroy(err => {
     if (err) {
       return res.send('Error', err)
