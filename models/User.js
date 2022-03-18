@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+const AddressSchema = require('./Address')
+
 const UserSchema = new mongoose.Schema({
     email: String,
     password: String,
@@ -19,17 +21,7 @@ const UserSchema = new mongoose.Schema({
     payment_intents: [{
         id: String,
     }],
-    address: {
-        postcode: String,
-        line1: String,
-        line2: String,
-        flat: Number,
-        number: Number,
-        city: String,
-        county: String,
-        region: String,
-        country: String
-    },
+    address: AddressSchema,
     cart: [],
     orders: [{
         user_id: String,
@@ -41,17 +33,7 @@ const UserSchema = new mongoose.Schema({
             payment_method: String
         },
         total_amount: Number,
-        address: {
-            postcode: String,
-            line1: String,
-            line2: String,
-            flat: Number,
-            number: Number,
-            city: String,
-            county: String,
-            region: String,
-            country: String
-        },
+        address: AddressSchema,
         items: [],
         accepted: {
             type: Boolean,
