@@ -582,10 +582,9 @@ router.post('/add-payment-method', async (req, res, next) => {
         type: type,
         card: card,
       })
-      console.log(paymentMethod)
       if (paymentMethods.data.length != 0) {
         paymentMethods.data.forEach(async (payment) => {
-          if (payment.fingerprint === paymentMethod.fingerprint) {
+          if (payment.fingerprint == paymentMethod.fingerprint) {
             res.send({msg: 'Payment method already existing, please choose another one or select existing'})
           } else {
             user.payment_methods.push({
@@ -634,14 +633,20 @@ router.post('/detach-payment-method', async (req, res, next) => {
   const { userId } = req.session
   let user = await User.findById(userId)
   if (user) {
-    const paymentMethod = await stripe.paymentMethods.detach(payment_method)
-    for (let i = 0; i < user.payment_methods.length; i++) {
-      if (user.payment_methods[i].id === payment_method) {
-        user.payment_methods.splice(i, 1)
+    try {
+      const paymentMethod = await stripe.paymentMethods.detach(payment_method)
+      for (let i = 0; i < user.payment_methods.length; i++) {
+        if (user.payment_methods[i].id == payment_method) {
+          user.payment_methods.splice(i, 1)
+        }
       }
+      await user.save()
+      res.send({user, paymentMethod})
+    } catch (error) {
+      res.send({msg: error.raw.message ? error.raw.message : error})
     }
-    await user.save()
-    res.send({msg: 'Payment detached'})
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
   }
 })
 
