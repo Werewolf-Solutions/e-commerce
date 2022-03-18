@@ -426,7 +426,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
         // add payment intent to user's payment intents
         // TODO: add payment intent details in order and delete payment_intents array from User model
         // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
-        user.payment_intents.push({id: paymentIntent.id})
+        user.payment_intents.push(paymentIntent)
         let order = {
           user_id: userId,
           address: user.address,
@@ -445,7 +445,8 @@ router.post('/create-payment-intent', async (req, res, next) => {
         await admin.save()
         // save order in user using the same order_id
         for (let i = 0; i < admin.orders.length; i++) {
-          if (admin.orders[i].user_id == userId) {
+          if (admin.orders[i].user_id == userId
+            && admin.orders[i].payment_intent.id == paymentIntent.id) {
             let order = {
               address: user.address,
               items: cart,
@@ -467,7 +468,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
       }
     } catch (error) {
       console.log(error)
-      res.send({msg: error.raw.message})
+      res.send({msg: error.raw.message ? error.raw.message : error})
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
@@ -482,22 +483,37 @@ router.post('/confirm-payment-intent', async (req, res, next) => {
   if (user) {
     try {
       const paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+      // TODO: update order and payment intent for user and admin
+      // update user's payment intent
+      console.log(paymentIntent)
+      for (let i = 0; i < user.payment_intents.length; i++) {
+        if (user.payment_intents[i].id == paymentIntent.id) {
+          console.log(`\nUser's payment intent`)
+          console.log(user.payment_intents[i])
+          user.payment_intents[i] = paymentIntent
+        }
+      }
+      // update user's order payment intent reference
       for (let i = 0; i < user.orders.length; i++) {
-        if (user.orders[i].order_id == order._id) {
-          user.orders[i].accepted = true
+        if (user.orders[i].payment_intent.id == paymentIntent.id) {
+          console.log(`\nUser's order payment intent reference`)
+          console.log(user.orders[i].payment_intent)
+          user.orders[i].payment_intent = paymentIntent
         }
       }
       await user.save()
+      // update admin's order payment intent reference
       for (let i = 0; i < admin.orders.length; i++) {
-        if (admin.orders[i]._id == order._id) {
-          admin.orders[i].accepted = true
+        if (admin.orders[i].payment_intent.id == paymentIntent.id) {
+          console.log(`\Admin's order payment intent reference`)
+          console.log(admin.orders[i].payment_intent)
           admin.orders[i].payment_intent = paymentIntent
         }
       }
       await admin.save()
-      res.send(paymentIntent)
+      res.send({user, paymentIntent})
     } catch (error) {
-      res.send({msg: error.raw.message})
+      res.send({msg: error.raw.message ? error.raw.message : error})
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
