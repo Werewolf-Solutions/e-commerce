@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const AddressSchema = require('./Address')
 const PaymentMethodSchema = require('./PaymentMethod')
+const PaymentIntentSchema = require('./PaymentIntent')
 
 const UserSchema = new mongoose.Schema({
     email: String,
@@ -11,21 +12,15 @@ const UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     payment_methods: [PaymentMethodSchema],
-    payment_intents: [{
-        id: String,
-    }],
+    payment_intents: [PaymentIntentSchema],
     address: AddressSchema,
     cart: [],
     orders: [{
         user_id: String,
         order_id: String,
         delivery_time: Date,
-        payment_intent: {
-            id: String,
-            status: String, //change to enum?
-            payment_method: String
-        },
         total_amount: Number,
+        payment_intent: PaymentIntentSchema,
         address: AddressSchema,
         items: [],
         accepted: {
