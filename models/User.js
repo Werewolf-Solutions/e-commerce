@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const AddressSchema = require('./Address')
+const PaymentMethodSchema = require('./PaymentMethod')
 
 const UserSchema = new mongoose.Schema({
     email: String,
@@ -9,15 +10,7 @@ const UserSchema = new mongoose.Schema({
     customer_id: String,
     firstName: String,
     lastName: String,
-    payment_methods: [{
-        id: String,
-        fingerprint: String,
-        last4: Number,
-        country: String,
-        exp_month: Number,
-        exp_year: Number,
-        brand: String
-    }],
+    payment_methods: [PaymentMethodSchema],
     payment_intents: [{
         id: String,
     }],
