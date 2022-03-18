@@ -7,7 +7,8 @@ const PaymentMethodSchema = new mongoose.Schema({
     country: String,
     exp_month: Number,
     exp_year: Number,
-    brand: String
+    brand: String,
+    card_name: String
 })
 
 module.exports = PaymentMethodSchema

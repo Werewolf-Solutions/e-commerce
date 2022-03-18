@@ -594,6 +594,7 @@ router.post('/add-payment-method', async (req, res, next) => {
               exp_month: paymentMethod.card.exp_month,
               exp_year: paymentMethod.card.exp_year,
               brand: paymentMethod.card.brand,
+              card_name: card.card_name
             }) 
             await user.save()
             res.send({user, paymentMethod: paymentMethod.id})
@@ -613,12 +614,13 @@ router.post('/add-payment-method', async (req, res, next) => {
           exp_month: paymentMethod.card.exp_month,
           exp_year: paymentMethod.card.exp_year,
           brand: paymentMethod.card.brand,
+          card_name: card.card_name
         })
         await user.save()
         res.send({user, paymentMethod: paymentMethod.id})
       }
     } catch (error) {
-      res.send({msg: error.raw.message})
+      res.send({msg: error.raw.message ? error.raw.message : error})
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
