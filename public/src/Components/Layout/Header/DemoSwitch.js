@@ -14,7 +14,7 @@ export default function DemoSwitch(props) {
                                 checked={props.demo}
                                 onChange={props.handleDemoOnOff}
                             />}
-                    label={props.demo ? 'Demo' : 'Live'}
+                    label={props.demo ? 'Demo on' : 'Demo off'}
                 />
             </FormGroup>
         </div>
