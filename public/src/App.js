@@ -13,6 +13,7 @@ function App() {
   const [state, setState] = React.useState({
     user: null
   })
+  const [theme, setTheme] = React.useState('dark')
   const [currency, setCurrency] = React.useState('GBP')
   const [demo, setDemo] = React.useState(false)
   const [productsList, setProductsList] = React.useState([])
@@ -159,6 +160,10 @@ function App() {
     setCurrency(e.target.value)
   }
 
+  const handleTheme = (e) => {
+    setTheme(e.target.value)
+  }
+
   useEffect(() => {
     updateProductsList()
     updateUser()
@@ -198,6 +203,8 @@ function App() {
         demo={demo}
         currency={currency}
         handleCurrency={handleCurrency}
+        theme={theme}
+        handleTheme={handleTheme}
       />
       <div className="Body">
         <Body

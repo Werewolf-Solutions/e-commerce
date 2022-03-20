@@ -6,11 +6,7 @@ import {
     MenuItem
 } from '@mui/material'
 
-export default function ThemeSelect() {
-    const [theme, setTheme] = React.useState('dark')
-    const handleChange = (e) => {
-        setTheme(e.target.value)
-    }
+export default function ThemeSelect(props) {
     return (
         <div>
             <FormControl>
@@ -18,9 +14,9 @@ export default function ThemeSelect() {
                 <Select
                     labelId="select-theme-label"
                     id="select-theme"
-                    value={theme}
+                    value={props.theme}
                     label="Theme"
-                    onChange={handleChange}
+                    onChange={props.handleTheme}
                 >
                     <MenuItem value={'dark'}>Dark</MenuItem>
                     <MenuItem value={'light'}>Light</MenuItem>
