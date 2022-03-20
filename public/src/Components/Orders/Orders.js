@@ -9,9 +9,12 @@ import {
 import UserOrders from './UserOrders'
 import AdminUsersOrders from './AdminUsersOrders'
 import ItemsDialog from './ItemsDialog'
+import MessagesDialog from './MessagesDialog'
 
 export default function Orders(props) {
     const [itemsDialog, setItemsDialog] = React.useState(false)
+    const [messagesDialog, setMessagesDialog] = React.useState(false)
+    const [messages, setMessages] = React.useState([])
     const [items, setItems] = React.useState([])
 
     const handleItemsDialog = (items) => {
@@ -21,12 +24,24 @@ export default function Orders(props) {
         setItemsDialog(!itemsDialog)
     }
 
+    const handleMessagesDialog = (messages) => {
+        if (!messagesDialog) {
+            setMessages(messages)
+        }
+        setMessagesDialog(!messagesDialog)
+    }
+
     return (
         <div>
             <ItemsDialog
                 open={itemsDialog}
                 onClose={handleItemsDialog}
                 items={items}
+            />
+            <MessagesDialog
+                open={messagesDialog}
+                onClose={handleMessagesDialog}
+                messages={messages}
             />
             {props.user
             ? props.user.admin
@@ -40,24 +55,44 @@ export default function Orders(props) {
                     <Grid item xs={6}>
                         <Card>
                             <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Order id: {order.order_id}<br/>
-                                </Typography>
+                                {props.user.admin
+                                ?
+                                <div>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        User id: {order.user_id}
+                                    </Typography>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        Order id: {order._id}
+                                    </Typography>
+                                </div>
+                                :
+                                <div>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        Order id: {order.order_id}
+                                    </Typography>
+                                </div>
+                                }
                                 <Typography variant="h5" component="div">
                                     Address details
                                 </Typography>
                                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    Postcode: {order.address.postcode}
+                                    {order.address.postcode}, {order.address.number}, {order.address.line1}, {order.address.city}, {order.address.region}, {order.address.country}
                                 </Typography>
                                 <Typography variant="h5" component="div">
                                     Payment details
                                 </Typography>
+                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    {order.payment_intent.status}, {'payment method'},
+                                </Typography>
                                 <Typography variant="h5" component="div">
-                                    Accepted: {order.accepted ? 'yes' : 'not'}<br/>
+                                    Accepted: {order.accepted ? 'yes' : 'not'}
                                 </Typography>
                                 <Button
                                     onClick={() => handleItemsDialog(order.items)}
                                 >items</Button>
+                                <Button
+                                    onClick={() => handleMessagesDialog(order.modifications)}
+                                >Messages</Button>
                             </CardContent>
                         </Card>
                     </Grid>
