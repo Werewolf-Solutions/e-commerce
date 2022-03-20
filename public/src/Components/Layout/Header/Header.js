@@ -11,6 +11,7 @@ import CheckoutDialog from '../../Checkout/CheckoutDialog'
 import CurrencySelect from './CurrencySelect'
 import ThemeSelect from './ThemeSelect'
 import DemoSwitch from './DemoSwitch'
+import { Typography } from '@mui/material'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
@@ -45,26 +46,44 @@ export default function Header(props) {
                 handleSignInDialog={props.handleSignInDialog}
                 handleSignUpDialog={props.handleSignUpDialog}
             />
-            <Logo />
-            Total cart: {props.cart.total_cart ? props.cart.total_cart : 0}
-            <button onClick={handleCheckoutDialog}>checkout</button>
-            <button
-                id="menu-list-button"
-                className="Menu-button"
-                onClick={props.handleMenuList}
-            >menu</button>
-            <DemoSwitch
-                demo={props.demo}
-                handleDemoOnOff={props.handleDemoOnOff}
-            />
-            <CurrencySelect
-                currency={props.currency}
-                handleCurrency={props.handleCurrency}
-            />
-            <ThemeSelect
-                theme={props.theme}
-                handleTheme={props.handleTheme}
-            />
+            <Grid container>
+                <Grid item xs>
+                    <Logo />
+                </Grid>
+                <Grid item xs>
+                    <Typography>
+                        Total cart: {props.cart.total_cart ? props.cart.total_cart : 0}
+                    </Typography>
+                </Grid>
+                <Grid item xs>
+                    <button onClick={handleCheckoutDialog}>checkout</button>
+                </Grid>
+                <Grid item xs>
+                    <DemoSwitch
+                        demo={props.demo}
+                        handleDemoOnOff={props.handleDemoOnOff}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <CurrencySelect
+                        currency={props.currency}
+                        handleCurrency={props.handleCurrency}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <ThemeSelect
+                        theme={props.theme}
+                        handleTheme={props.handleTheme}
+                    />
+                </Grid>
+                <Grid item xs>
+                    <button
+                        id="menu-list-button"
+                        className="Menu-button"
+                        onClick={props.handleMenuList}
+                    >menu</button>
+                </Grid>
+            </Grid>
         </div>
     )
 }
