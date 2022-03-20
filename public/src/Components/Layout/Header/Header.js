@@ -10,6 +10,7 @@ import Logo from './Logo'
 import CheckoutDialog from '../../Checkout/CheckoutDialog'
 import CurrencySelect from './CurrencySelect'
 import ThemeSelect from './ThemeSelect'
+import DemoSwitch from './DemoSwitch'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
@@ -52,15 +53,10 @@ export default function Header(props) {
                 className="Menu-button"
                 onClick={props.handleMenuList}
             >menu</button>
-            <FormGroup>
-                <FormControlLabel
-                    control={<Switch
-                                checked={props.demo}
-                                onChange={props.handleDemoOnOff}
-                            />}
-                    label={props.demo ? 'Demo' : 'Live'}
-                />
-            </FormGroup>
+            <DemoSwitch
+                demo={props.demo}
+                handleDemoOnOff={props.handleDemoOnOff}
+            />
             <CurrencySelect />
             <ThemeSelect />
         </div>
