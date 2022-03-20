@@ -11,9 +11,9 @@ import {user_demo} from './js/user_demo'
 
 function App() {
   const [state, setState] = React.useState({
-    user: null,
-    demo: true
+    user: null
   })
+  const [demo, setDemo] = React.useState(false)
   const [productsList, setProductsList] = React.useState([])
   const [categories, setCategories] = React.useState([])
   const [cart, setCart] = React.useState([])
@@ -49,7 +49,7 @@ function App() {
   }
 
   const updateUser = async () => {
-    if (state.demo) {
+    if (demo) {
       setState({...state, user: user_demo})
     } else {
       let res = await axios.get('/users/')
@@ -150,10 +150,14 @@ function App() {
     return result
   }
 
+  const handleDemoOnOff = () => {
+    setDemo(!demo)
+  }
+
   useEffect(() => {
     updateProductsList()
     updateUser()
-  }, [])
+  }, [demo])
 
   return (
     <div className="App">
@@ -185,6 +189,8 @@ function App() {
         updateUser={updateUser}
         cart={cart}
         emptyCart={emptyCart}
+        handleDemoOnOff={handleDemoOnOff}
+        demo={demo}
       />
       <div className="Body">
         <Body

@@ -11,7 +11,6 @@ import CheckoutDialog from '../../Checkout/CheckoutDialog'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
-    const [demo, setDemo] = React.useState(false)
 
     const handleCheckoutDialog = () => {
         if (props.cart.length === 0) {
@@ -20,10 +19,6 @@ export default function Header(props) {
         } else {
             setCheckoutDialog(!checkoutDialog)
         }
-    }
-
-    const handleDemoOnOff = () => {
-        setDemo(!demo)
     }
 
     return (
@@ -58,10 +53,10 @@ export default function Header(props) {
             <FormGroup>
                 <FormControlLabel
                     control={<Switch
-                                checked={demo}
-                                onChange={handleDemoOnOff}
+                                checked={props.demo}
+                                onChange={props.handleDemoOnOff}
                             />}
-                    label={demo ? 'Demo' : 'Live'}
+                    label={props.demo ? 'Demo' : 'Live'}
                 />
             </FormGroup>
         </div>
