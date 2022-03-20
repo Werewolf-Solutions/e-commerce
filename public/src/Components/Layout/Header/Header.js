@@ -1,11 +1,17 @@
 import React from 'react'
-import { Grid } from '@mui/material'
+import {
+    Grid,
+    Switch,
+    FormControlLabel,
+    FormGroup
+} from '@mui/material'
 import MenuList from '../MenuList/MenuList'
 import Logo from './Logo'
 import CheckoutDialog from '../../Checkout/CheckoutDialog'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+    const [demo, setDemo] = React.useState(false)
 
     const handleCheckoutDialog = () => {
         if (props.cart.length === 0) {
@@ -15,6 +21,11 @@ export default function Header(props) {
             setCheckoutDialog(!checkoutDialog)
         }
     }
+
+    const handleDemoOnOff = () => {
+        setDemo(!demo)
+    }
+
     return (
         <div className="Header">
             <CheckoutDialog
@@ -44,6 +55,15 @@ export default function Header(props) {
                 className="Menu-button"
                 onClick={props.handleMenuList}
             >menu</button>
+            <FormGroup>
+                <FormControlLabel
+                    control={<Switch
+                                checked={demo}
+                                onChange={handleDemoOnOff}
+                            />}
+                    label={demo ? 'Demo' : 'Live'}
+                />
+            </FormGroup>
         </div>
     )
 }
