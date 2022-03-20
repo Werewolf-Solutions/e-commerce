@@ -57,7 +57,10 @@ export default function Header(props) {
                 demo={props.demo}
                 handleDemoOnOff={props.handleDemoOnOff}
             />
-            <CurrencySelect />
+            <CurrencySelect
+                currency={props.currency}
+                handleCurrency={props.handleCurrency}
+            />
             <ThemeSelect />
         </div>
     )

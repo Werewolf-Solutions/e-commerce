@@ -6,11 +6,7 @@ import {
     MenuItem
 } from '@mui/material'
 
-export default function CurrencySelect() {
-    const [currency, setCurrency] = React.useState('GBP')
-    const handleChange = (e) => {
-        setCurrency(e.target.value)
-    }
+export default function CurrencySelect(props) {
     return (
         <div>
             <FormControl>
@@ -18,9 +14,9 @@ export default function CurrencySelect() {
                 <Select
                     labelId="select-currency-label"
                     id="select-currency"
-                    value={currency}
+                    value={props.currency}
                     label="Currency"
-                    onChange={handleChange}
+                    onChange={props.handleCurrency}
                 >
                     <MenuItem value={'GBP'}>GBP</MenuItem>
                     <MenuItem value={'USD'}>USD</MenuItem>

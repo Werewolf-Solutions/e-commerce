@@ -13,6 +13,7 @@ function App() {
   const [state, setState] = React.useState({
     user: null
   })
+  const [currency, setCurrency] = React.useState('GBP')
   const [demo, setDemo] = React.useState(false)
   const [productsList, setProductsList] = React.useState([])
   const [categories, setCategories] = React.useState([])
@@ -154,6 +155,10 @@ function App() {
     setDemo(!demo)
   }
 
+  const handleCurrency = (e) => {
+    setCurrency(e.target.value)
+  }
+
   useEffect(() => {
     updateProductsList()
     updateUser()
@@ -191,6 +196,8 @@ function App() {
         emptyCart={emptyCart}
         handleDemoOnOff={handleDemoOnOff}
         demo={demo}
+        currency={currency}
+        handleCurrency={handleCurrency}
       />
       <div className="Body">
         <Body
