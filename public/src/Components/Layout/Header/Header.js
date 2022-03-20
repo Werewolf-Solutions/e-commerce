@@ -8,6 +8,7 @@ import {
 import MenuList from '../MenuList/MenuList'
 import Logo from './Logo'
 import CheckoutDialog from '../../Checkout/CheckoutDialog'
+import ThemeSelect from './ThemeSelect'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
@@ -59,6 +60,7 @@ export default function Header(props) {
                     label={props.demo ? 'Demo' : 'Live'}
                 />
             </FormGroup>
+            <ThemeSelect />
         </div>
     )
 }
