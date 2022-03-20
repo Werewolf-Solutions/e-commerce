@@ -6,7 +6,7 @@ import {
     MenuItem
 } from '@mui/material'
 
-export default function ThemeSelect() {
+export default function CurrencySelect() {
     const [currency, setCurrency] = React.useState('GBP')
     const handleChange = (e) => {
         setCurrency(e.target.value)
