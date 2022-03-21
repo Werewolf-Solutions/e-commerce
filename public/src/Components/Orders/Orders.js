@@ -4,16 +4,21 @@ import {
     Button,
     Card,
     CardContent,
-    Typography
+    Typography,
+    Checkbox,
+    FormGroup,
+    FormControlLabel
 } from '@mui/material'
 import UserOrders from './UserOrders'
 import AdminUsersOrders from './AdminUsersOrders'
 import ItemsDialog from './ItemsDialog'
 import MessagesDialog from './MessagesDialog'
+import OrderCard from './OrderCard'
 
 export default function Orders(props) {
     const [itemsDialog, setItemsDialog] = React.useState(false)
     const [messagesDialog, setMessagesDialog] = React.useState(false)
+    const [onlyActive, setOnlyActive] = React.useState(false)
     const [messages, setMessages] = React.useState([])
     const [items, setItems] = React.useState([])
 
@@ -29,6 +34,10 @@ export default function Orders(props) {
             setMessages(messages)
         }
         setMessagesDialog(!messagesDialog)
+    }
+
+    const handleOnlyActive = () => {
+        setOnlyActive(!onlyActive)
     }
 
     return (
@@ -49,52 +58,37 @@ export default function Orders(props) {
                 : '<UserOrders orders={props.user.orders}/>'
             : 'Loading'
             }
+            <FormGroup>
+                <FormControlLabel
+                    control={<Checkbox
+                                checked={onlyActive}
+                                onChange={handleOnlyActive}
+                            />}
+                    label='Show only active'
+                />
+            </FormGroup>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 {props.user
-                ? props.user.orders.map(order => (
+                ? props.user.orders.map(order => (                    
                     <Grid item xs={6}>
-                        <Card>
-                            <CardContent>
-                                {props.user.admin
-                                ?
-                                <div>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        User id: {order.user_id}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Order id: {order._id}
-                                    </Typography>
-                                </div>
-                                :
-                                <div>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Order id: {order.order_id}
-                                    </Typography>
-                                </div>
-                                }
-                                <Typography variant="h5" component="div">
-                                    Address details
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {order.address.postcode}, {order.address.number}, {order.address.line1}, {order.address.city}, {order.address.region}, {order.address.country}
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    Payment details
-                                </Typography>
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    {order.payment_intent.status}, {'payment method'},
-                                </Typography>
-                                <Typography variant="h5" component="div">
-                                    Accepted: {order.accepted ? 'yes' : 'not'}
-                                </Typography>
-                                <Button
-                                    onClick={() => handleItemsDialog(order.items)}
-                                >items</Button>
-                                <Button
-                                    onClick={() => handleMessagesDialog(order.modifications)}
-                                >Messages</Button>
-                            </CardContent>
-                        </Card>
+                        {onlyActive
+                        ? !order.accepted
+                            ? 
+                            <OrderCard
+                                user={props.user}
+                                order={order}
+                                handleItemsDialog={handleItemsDialog}
+                                handleMessagesDialog={handleMessagesDialog}
+                            />
+                            : null
+                        :
+                        <OrderCard
+                            user={props.user}
+                            order={order}
+                            handleItemsDialog={handleItemsDialog}
+                            handleMessagesDialog={handleMessagesDialog}
+                        />
+                        }
                     </Grid>
                 ))
                 : null}
