@@ -17,6 +17,7 @@ export default function Body(props) {
                     productsList={props.productsList}
                     updateProductsList={props.updateProductsList}
                     categories={props.categories}
+                    user={props.user}
                 />
             </div>
         )
