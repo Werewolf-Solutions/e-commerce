@@ -1,19 +1,24 @@
+import { Grid } from '@mui/material'
 import React from 'react'
+import ItemCard from './ItemCard'
 
 export default function Cart(props) {
     return (
         <div>
-            {props.cart ? props.cart.map(item => 
-            <div key={item._id}>
-                Category: {item.category}<br/>
-                Name: {item.name}<br/>
-                Price: {item.price}<br/>
-                Description: {item.description}<br/>
-                Quantity: {item.quantity}<br/>
-                <button onClick={() => props.deleteFromCart(item)}>delete from cart</button>
-            </div>) : null}
-            <button onClick={() => props.handleSelected('products-list')}>products list</button><br/>
-            <button onClick={() => props.handleSelected('checkout')}>confirm checkout</button>
+            {props.cart
+            ?
+            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                {props.cart.map(item => (
+                    <Grid item xs={2}>
+                        <ItemCard
+                            item={item}
+                            deleteFromCart={props.deleteFromCart}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
+            : null
+            }
         </div>
     )
 }
