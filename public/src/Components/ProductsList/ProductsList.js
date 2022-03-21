@@ -6,11 +6,17 @@ import { Typography } from '@mui/material'
 import { Button } from '@mui/material'
 import EditableProductCard from './EditableProductCard'
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material'
+import AddProductDialog from '../AdminDashboard/AddProductDialog'
 
 export default function ProductsList(props) {
     const [editable, setEditable] = React.useState(false)
+    const [addProductDialog, setAddproductDialog] = React.useState(false)
     const [list, setList] = React.useState([])
     const [state, setState] = React.useState()
+
+    const handleAddProductDialog = () => {
+        setAddproductDialog(!addProductDialog)
+    }
 
     const handleEditable = () => {
         setEditable(!editable)
@@ -23,6 +29,20 @@ export default function ProductsList(props) {
 
     const handleChange = (e) => {
         setState({...state, [e.target.id]: e.target.value})
+    }
+
+    const addProductToProductsList = async () => {
+        console.log('add product')
+        let product = {
+            name: state.name,
+            category: state.category,
+            description: state.description,
+            price: state.price
+        }
+        let res = await axios.post('/users/add-item-to-products-list', {product})
+        console.log(res.data)
+        props.updateProductsList()
+        handleAddProductDialog()
     }
 
     const createList = () => {
@@ -50,11 +70,22 @@ export default function ProductsList(props) {
 
     return (
         <div>
+            <AddProductDialog
+                open={addProductDialog}
+                onClose={handleAddProductDialog}
+                addProductToProductsList={addProductToProductsList}
+                onChange={handleChange}
+            />
             {props.user && props.user.admin
             ?
-            <Button
-                onClick={handleEditable}
-            >Edit</Button>
+            <div>
+                <Button
+                    onClick={handleEditable}
+                >Edit</Button>
+                <Button
+                    onClick={handleAddProductDialog}
+                >Add product</Button>
+            </div>
             : null
             }
             <Grid container direction='column' spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
