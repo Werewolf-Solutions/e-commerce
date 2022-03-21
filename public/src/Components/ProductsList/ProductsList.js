@@ -3,13 +3,26 @@ import axios from 'axios'
 import ProductCard from './ProductCard'
 import { Grid } from '@mui/material'
 import { Typography } from '@mui/material'
+import { Button } from '@mui/material'
+import EditableProductCard from './EditableProductCard'
+import { SettingsInputAntennaTwoTone } from '@mui/icons-material'
 
 export default function ProductsList(props) {
     const [editable, setEditable] = React.useState(false)
     const [list, setList] = React.useState([])
+    const [state, setState] = React.useState()
 
     const handleEditable = () => {
+        setEditable(!editable)
+    }
 
+    const editProductList = () => {
+        console.log('edit')
+        console.log(state)
+    }
+
+    const handleChange = (e) => {
+        setState({...state, [e.target.id]: e.target.value})
     }
 
     const createList = () => {
@@ -37,13 +50,12 @@ export default function ProductsList(props) {
 
     return (
         <div>
-            {props.user.admin
-            ? 'admin editable button'
-            : 'user'
-            }
-            {editable
-            ? 'editable for admin'
-            : 'user'
+            {props.user && props.user.admin
+            ?
+            <Button
+                onClick={handleEditable}
+            >Edit</Button>
+            : null
             }
             <Grid container direction='column' spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
             {list.map((item, index) => (
@@ -52,10 +64,19 @@ export default function ProductsList(props) {
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                         {item.products.map((product, i) => (
                         <Grid item xs={2}>
+                            {editable
+                            ?
+                            <EditableProductCard
+                                handleChange={handleChange}
+                                handleEditable={handleEditable}
+                                editProductList={editProductList}
+                            />
+                            :
                             <ProductCard
                                 product={product}
                                 addToCart={props.addToCart}
                             />
+                            }
                         </Grid>
                         ))}
                     </Grid>
