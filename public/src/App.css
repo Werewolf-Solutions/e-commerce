@@ -6,6 +6,22 @@
   color: white;
 }
 
+.Dark-theme {
+  background-color: #282c34;
+  min-height: 100vh;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Light-theme {
+  background-color: #282c34;
+  min-height: 100vh;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
 .Header {
   background-color: #3b4457;
   color: white;

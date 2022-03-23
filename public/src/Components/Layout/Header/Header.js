@@ -12,6 +12,7 @@ import CheckoutDialog from '../../Checkout/CheckoutDialog'
 import CurrencySelect from './CurrencySelect'
 import ThemeSelect from './ThemeSelect'
 import DemoSelect from './DemoSelect'
+import { Paper } from '@mui/material'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
@@ -26,7 +27,7 @@ export default function Header(props) {
     }
 
     return (
-        <div className="Header">
+        <div>
             <CheckoutDialog
                 open={checkoutDialog}
                 onClose={handleCheckoutDialog}

@@ -1,4 +1,6 @@
 import React, {useEffect} from 'react'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { Grid } from '@mui/material'
 import axios from 'axios'
 import './App.css'
 import Header from './Components/Layout/Header/Header'
@@ -9,6 +11,7 @@ import SignUpDialog from './Components/Forms/SignUpDialog'
 
 import {user_demo} from './js/user_demo'
 import {admin_demo} from './js/admin_demo'
+import { Paper } from '@mui/material'
 
 function App() {
   const [state, setState] = React.useState({
@@ -25,6 +28,14 @@ function App() {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [signUpDialog, setSignUpDialog] = React.useState(false)
   const [signInDialog, setSignInDialog] = React.useState(false)
+
+  const myTheme = createTheme({
+    palette: {
+      mode: theme === 'dark'
+      ? 'dark'
+      : 'light'
+    },
+  })
 
   const handleSignInDialog = () => {
     setSignInDialog(!signInDialog)
@@ -188,67 +199,80 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('it is not working')
     updateProductsList()
     updateUser()
   }, [demo, selected])
 
   return (
-    <div className="App">
-      <SignInDialog
-        open={signInDialog}
-        handleChange={handleChange}
-        onClose={handleSignInDialog}
-        handleSignInDialog={handleSignInDialog}
-        handleSignUpDialog={handleSignUpDialog}
-        signIn={signIn}
-      />
-      <SignUpDialog
-        open={signUpDialog}
-        handleChange={handleChange}
-        onClose={handleSignUpDialog}
-        handleSignInDialog={handleSignInDialog}
-        handleSignUpDialog={handleSignUpDialog}
-        signUp={signUp}
-      />
-      <Header
-        user={state.user}
-        signOut={signOut}
-        handleSelected={handleSelected}
-        handleMenuList={handleMenuList}
-        anchorEl={anchorEl}
-        menuList={menuList}
-        handleSignInDialog={handleSignInDialog}
-        handleSignUpDialog={handleSignUpDialog}
-        updateUser={updateUser}
-        cart={cart}
-        emptyCart={emptyCart}
-        handleDemo={handleDemo}
-        demo={demo}
-        currency={currency}
-        handleCurrency={handleCurrency}
-        theme={theme}
-        handleTheme={handleTheme}
-      />
-      <div className="Body">
-        <Body
-          productsList={productsList}
-          categories={categories}
-          selected={selected}
-          handleChange={handleChange}          
-          user={state.user}
-          cart={cart}
-          addToCart={addToCart}
-          deleteFromCart={deleteFromCart}
-          handleSelected={handleSelected}
-          updateUser={updateUser}
-          updateProductsList={updateProductsList}
+    <div >
+      <ThemeProvider theme={myTheme}>
+
+        <SignInDialog
+          open={signInDialog}
+          handleChange={handleChange}
+          onClose={handleSignInDialog}
           handleSignInDialog={handleSignInDialog}
+          handleSignUpDialog={handleSignUpDialog}
+          signIn={signIn}
         />
-      </div>
-      <Footer
-        handleSelected={handleSelected}
-      />
+        <SignUpDialog
+          open={signUpDialog}
+          handleChange={handleChange}
+          onClose={handleSignUpDialog}
+          handleSignInDialog={handleSignInDialog}
+          handleSignUpDialog={handleSignUpDialog}
+          signUp={signUp}
+        />
+        <Paper>
+          <Grid container direction='column'>
+            <Grid item>
+              <Header
+                user={state.user}
+                signOut={signOut}
+                handleSelected={handleSelected}
+                handleMenuList={handleMenuList}
+                anchorEl={anchorEl}
+                menuList={menuList}
+                handleSignInDialog={handleSignInDialog}
+                handleSignUpDialog={handleSignUpDialog}
+                updateUser={updateUser}
+                cart={cart}
+                emptyCart={emptyCart}
+                handleDemo={handleDemo}
+                demo={demo}
+                currency={currency}
+                handleCurrency={handleCurrency}
+                theme={theme}
+                handleTheme={handleTheme}
+              />
+
+            </Grid>
+            <Grid item>
+              <Body
+                productsList={productsList}
+                categories={categories}
+                selected={selected}
+                handleChange={handleChange}          
+                user={state.user}
+                cart={cart}
+                addToCart={addToCart}
+                deleteFromCart={deleteFromCart}
+                handleSelected={handleSelected}
+                updateUser={updateUser}
+                updateProductsList={updateProductsList}
+                handleSignInDialog={handleSignInDialog}
+              />
+              
+            </Grid>
+            <Grid item>
+              <Footer
+                handleSelected={handleSelected}
+              />
+              
+            </Grid>
+          </Grid>
+        </Paper>
+      </ThemeProvider>
     </div>
   )
 }
