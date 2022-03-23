@@ -43,11 +43,31 @@ function App() {
     setMenuList(false)
   }
 
+  const createList = (productsList) => {
+    let result = productsList.reduce((acc, d) => {
+      const found = acc.find(a => a.category === d.category)
+      //const value = { category: d.category, val: d.value }
+      const value = d // the element in data property
+      if (!found) {
+        //acc.push(...value)
+        acc.push({category:d.category, products: [value]}) // not found, so need to add products property
+      }
+      else {
+        //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
+        found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
+      }
+      return acc
+    }, [])
+    return result
+  }
+
   const updateProductsList = async () => {
     let res = await axios.get('/users/update-products-list')
     let categories = getCategories(res.data.productsList)
+    let list = createList(res.data.productsList)
+    console.log(list)
     setCategories(categories)
-    setProductsList(res.data.productsList)
+    setProductsList(list)
   }
 
   const updateUser = async () => {
@@ -165,9 +185,10 @@ function App() {
   }
 
   useEffect(() => {
+    console.log('it is not working')
     updateProductsList()
     updateUser()
-  }, [demo])
+  }, [demo, selected])
 
   return (
     <div className="App">
