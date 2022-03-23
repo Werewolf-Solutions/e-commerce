@@ -3,15 +3,15 @@ import {
     Grid,
     Switch,
     FormControlLabel,
-    FormGroup
+    FormGroup,
+    Typography
 } from '@mui/material'
 import MenuList from '../MenuList/MenuList'
 import Logo from './Logo'
 import CheckoutDialog from '../../Checkout/CheckoutDialog'
 import CurrencySelect from './CurrencySelect'
 import ThemeSelect from './ThemeSelect'
-import DemoSwitch from './DemoSwitch'
-import { Typography } from '@mui/material'
+import DemoSelect from './DemoSelect'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
@@ -59,9 +59,9 @@ export default function Header(props) {
                     <button onClick={handleCheckoutDialog}>checkout</button>
                 </Grid>
                 <Grid item xs>
-                    <DemoSwitch
+                    <DemoSelect
                         demo={props.demo}
-                        handleDemoOnOff={props.handleDemoOnOff}
+                        handleDemo={props.handleDemo}
                     />
                 </Grid>
                 <Grid item xs>

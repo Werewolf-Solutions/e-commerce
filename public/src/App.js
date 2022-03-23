@@ -8,6 +8,7 @@ import SignInDialog from './Components/Forms/SignInDialog'
 import SignUpDialog from './Components/Forms/SignUpDialog'
 
 import {user_demo} from './js/user_demo'
+import {admin_demo} from './js/admin_demo'
 
 function App() {
   const [state, setState] = React.useState({
@@ -15,7 +16,7 @@ function App() {
   })
   const [theme, setTheme] = React.useState('dark')
   const [currency, setCurrency] = React.useState('GBP')
-  const [demo, setDemo] = React.useState(false)
+  const [demo, setDemo] = React.useState('live-account')
   const [productsList, setProductsList] = React.useState([])
   const [categories, setCategories] = React.useState([])
   const [cart, setCart] = React.useState([])
@@ -71,8 +72,10 @@ function App() {
   }
 
   const updateUser = async () => {
-    if (demo) {
+    if (demo === 'user-demo') {
       setState({...state, user: user_demo})
+    } else if (demo === 'admin-demo') {
+      setState({...state, user: admin_demo})
     } else {
       let res = await axios.get('/users/')
       console.log(res.data)
@@ -172,8 +175,8 @@ function App() {
     return result
   }
 
-  const handleDemoOnOff = () => {
-    setDemo(!demo)
+  const handleDemo = (e) => {
+    setDemo(e.target.value)
   }
 
   const handleCurrency = (e) => {
@@ -220,7 +223,7 @@ function App() {
         updateUser={updateUser}
         cart={cart}
         emptyCart={emptyCart}
-        handleDemoOnOff={handleDemoOnOff}
+        handleDemo={handleDemo}
         demo={demo}
         currency={currency}
         handleCurrency={handleCurrency}
