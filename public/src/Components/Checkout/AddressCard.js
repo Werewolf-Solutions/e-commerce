@@ -31,7 +31,7 @@ export default function OutlinedCard(props) {
                         {props.user.address.city}{bull}
                         {props.user.address.region}{bull}
                         {props.user.address.country}{bull}
-                        {props.user.address.postcode}{bull}
+                        {props.user.address.postcode}
                     </Typography><br/><br/>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         First and Last name
@@ -41,7 +41,7 @@ export default function OutlinedCard(props) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" onClick={props.handleAddressFormDialog}>Use another address</Button>
+                    <Button size="small" onClick={props.handleDeliveryFormDialog}>Use another address</Button>
                 </CardActions>
             </Card>
         </Box>

@@ -12,14 +12,13 @@ import {
     Grid
 } from '@mui/material'
 import DeliveryForm from './DeliveryForm'
-import DeliveryDetails from './DeliveryDetails'
 import AddressCard from './AddressCard'
 
 export default function AddressForm(props) {
-    const [addressFormDialog, setAddressFormDialog] = React.useState(false)
+    const [deliveryFormDialog, setDeliveryFormDialog] = React.useState(false)
 
-    const handleAddressFormDialog = () => {
-        setAddressFormDialog(!addressFormDialog)
+    const handleDeliveryFormDialog = () => {
+        setDeliveryFormDialog(!deliveryFormDialog)
     }
 
     useEffect(() => {
@@ -29,8 +28,8 @@ export default function AddressForm(props) {
     return (
         <div>
             <DeliveryForm
-                open={addressFormDialog}
-                onClose={handleAddressFormDialog}
+                open={deliveryFormDialog}
+                onClose={handleDeliveryFormDialog}
                 handleChange={props.handleChange}
                 state={props.state}
                 user={props.user}
@@ -55,17 +54,10 @@ export default function AddressForm(props) {
             ?
                 props.shippingMethod === 'delivery'
                 ?
-                <div>
-                    <DeliveryDetails
-                        user={props.user}
-                        handleChange={props.handleChange}
-                        state={props.state}
-                    />
                     <AddressCard
                         user={props.user}
-                        handleAddressFormDialog={handleAddressFormDialog}
+                        handleDeliveryFormDialog={handleDeliveryFormDialog}
                     />
-                </div>
                 : null
             : 
                 <div>
