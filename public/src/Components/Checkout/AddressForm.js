@@ -33,6 +33,7 @@ export default function AddressForm(props) {
                 handleChange={props.handleChange}
                 state={props.state}
                 user={props.user}
+                editUser={props.editUser}
             />
             <Typography variant="h6" gutterBottom>
                 Shipping address

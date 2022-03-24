@@ -4,6 +4,7 @@ import {
     TextField,
     Dialog
 } from '@mui/material'
+import { Button } from '@mui/material'
 
 export default function DeliveryForm(props) {
     return (
@@ -14,32 +15,6 @@ export default function DeliveryForm(props) {
             >
                 <Grid item>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="firstName"
-                                name="firstName"
-                                label="First name"
-                                fullWidth
-                                autoComplete="first-name"
-                                variant="standard"
-                                value={props.state.firstName}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                required
-                                id="lastName"
-                                name="lastName"
-                                label="Last name"
-                                fullWidth
-                                autoComplete="last-name"
-                                variant="standard"
-                                value={props.state.lastName}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
                         <Grid item xs={2}>
                             <TextField
                                 required
@@ -127,6 +102,13 @@ export default function DeliveryForm(props) {
                                 value={props.state.country}
                                 onChange={props.handleChange}
                             />
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                onClick={props.editUser}
+                            >
+                                add address
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>

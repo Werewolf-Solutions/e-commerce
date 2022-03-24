@@ -39,7 +39,7 @@ export default function CheckoutForm(props) {
         cvc: '',
     })
     const [card, setCard] = React.useState({})
-    const [paymentIntent, setPaymentIntent] = React.useState('')
+    const [paymentIntent, setPaymentIntent] = React.useState()
     const [addPaymentMethod, setAddPaymentMethod] = React.useState(false)
     const [paymentMethod, setPaymentMethod] = React.useState('')
     const [shippingMethod, setShippingMethod] = React.useState('')
@@ -188,12 +188,14 @@ export default function CheckoutForm(props) {
                     if (card) {
                         console.log('Card selected. Create payment intent. Go next.')
                         // TODO: create payment intent
-                        createPaymentIntent()
+                        if (!paymentIntent) {
+                            createPaymentIntent()
+                        }
                         setActiveStep(activeStep + 1)
                     }
                     // if using a new card create new payment method
                     // then create payment intent
-                    if (addPaymentMethod) {
+                    if (addPaymentMethod && !paymentIntent) {
                         console.log('Create payment method')
                         createPaymentMethod()
                         .then(() => createPaymentIntent()
@@ -212,8 +214,17 @@ export default function CheckoutForm(props) {
             } else if (paymentMethod === 'cash') {
                 console.log('Add order to admin and user')
                 // TODO: save order to user and admin
+                let order = {
+                    address: props.user.address,
+                    items: props.cart,
+                    total_cart: props.cart.total_cart
+                }
+                console.log(order)
+                let res = await axios.post('/users/add-order', {order})
+                console.log(res.data)
             }
             props.emptyCart()
+            // props.updateProductsList()
             props.onClose()
 
         }
