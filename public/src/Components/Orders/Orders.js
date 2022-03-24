@@ -46,6 +46,7 @@ export default function Orders(props) {
                 open={itemsDialog}
                 onClose={handleItemsDialog}
                 items={items}
+                currency={props.currency}
             />
             <MessagesDialog
                 open={messagesDialog}
@@ -79,6 +80,7 @@ export default function Orders(props) {
                                 order={order}
                                 handleItemsDialog={handleItemsDialog}
                                 handleMessagesDialog={handleMessagesDialog}
+                                currency={props.currency}
                             />
                             : null
                         :
@@ -87,6 +89,7 @@ export default function Orders(props) {
                             order={order}
                             handleItemsDialog={handleItemsDialog}
                             handleMessagesDialog={handleMessagesDialog}
+                            currency={props.currency}
                         />
                         }
                     </Grid>

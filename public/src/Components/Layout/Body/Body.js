@@ -18,6 +18,7 @@ export default function Body(props) {
                     updateProductsList={props.updateProductsList}
                     categories={props.categories}
                     user={props.user}
+                    currency={props.currency}
                 />
             </div>
         )
@@ -29,6 +30,7 @@ export default function Body(props) {
                     deleteFromCart={props.deleteFromCart}
                     handleSelected={props.handleSelected}
                     checkout={props.checkout}
+                    currency={props.currency}
                 />
             </div>
         )
@@ -37,6 +39,7 @@ export default function Body(props) {
             <div>
                 <UserOrders
                     user={props.user}
+                    currency={props.currency}
                 />
             </div>
         )
@@ -69,6 +72,7 @@ export default function Body(props) {
                     updateUser={props.updateUser}
                     handleSelected={props.handleSelected}
                     handleSignInDialog={props.handleSignInDialog}
+                    currency={props.currency}
                 />
             </div>
         )
@@ -78,6 +82,7 @@ export default function Body(props) {
                 <Account
                     user={props.user}
                     updateUser={props.updateUser}
+                    currency={props.currency}
                 />
             </div>
         )

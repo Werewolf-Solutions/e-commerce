@@ -21,14 +21,14 @@ export default function Review(props) {
             {props.cart.map((product) => (
             <ListItem key={product._id} sx={{ py: 1, px: 0 }}>
                 <ListItemText primary={product.name} secondary={product.description} />
-                <Typography variant="body2">{product.price}</Typography>
+                <Typography variant="body2">{product.price} {props.currency}</Typography>
             </ListItem>
             ))}
 
             <ListItem sx={{ py: 1, px: 0 }}>
             <ListItemText primary="Total" />
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                {props.cart.total_cart}
+                {props.cart.total_cart} {props.currency}
             </Typography>
             </ListItem>
         </List>

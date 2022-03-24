@@ -36,6 +36,7 @@ export default function Header(props) {
                 handleSignInDialog={props.handleSignInDialog}
                 cart={props.cart}
                 emptyCart={props.emptyCart}
+                currency={props.currency}
             />
             <MenuList
                 user={props.user}
@@ -53,7 +54,7 @@ export default function Header(props) {
                 </Grid>
                 <Grid item xs>
                     <Typography>
-                        Total cart: {props.cart.total_cart ? props.cart.total_cart : 0}
+                        Total cart: {props.cart.total_cart ? props.cart.total_cart : 0} {props.currency}
                     </Typography>
                 </Grid>
                 <Grid item xs>

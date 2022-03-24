@@ -14,7 +14,7 @@ export default function ProductCard(props) {
             <Card sx={{ maxWidth: 345 }}>
                 <CardHeader
                     title={`Name: ${props.product.name}`}
-                    subheader={`Price: ${props.product.price}`}
+                    subheader={`Price: ${props.product.price} ${props.currency}`}
                 />
                 <CardMedia
                     component="img"

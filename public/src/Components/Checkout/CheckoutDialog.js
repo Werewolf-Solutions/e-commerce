@@ -16,6 +16,7 @@ export default function CheckoutDialog(props) {
                     cart={props.cart}
                     onClose={props.onClose}
                     emptyCart={props.emptyCart}
+                    currency={props.currency}
                 />
             </Dialog>
         </div>

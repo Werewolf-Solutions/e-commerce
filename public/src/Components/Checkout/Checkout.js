@@ -91,7 +91,7 @@ export default function Checkout(props) {
                 handlePaymentTypeSelection={handlePaymentTypeSelection}
             />
             Checkout<br/>
-            Total cart: {props.cart.total_cart}<br/>
+            Total cart: {props.cart.total_cart} {props.currency}<br/>
             {props.user
             ? 
                 <div>

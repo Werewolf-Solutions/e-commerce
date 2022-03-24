@@ -13,6 +13,7 @@ export default function Cart(props) {
                         <ItemCard
                             item={item}
                             deleteFromCart={props.deleteFromCart}
+                            currency={props.currency}
                         />
                     </Grid>
                 ))}

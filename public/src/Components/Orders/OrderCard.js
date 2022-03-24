@@ -62,7 +62,7 @@ export default function OrderCard(props) {
                         Delivered: {props.order.delivered ? 'yes' : 'not'}
                     </Typography>
                     <Typography variant="h5" component="div">
-                        Total amount: {props.order.total_amount/100}
+                        Total amount: {props.order.total_amount/100} {props.currency}
                     </Typography>
                     <Button
                         onClick={() => props.handleItemsDialog(props.order.items)}

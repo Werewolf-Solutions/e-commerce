@@ -77,11 +77,13 @@ export default function ProductsList(props) {
                                 handleChange={handleChange}
                                 handleEditable={handleEditable}
                                 editProductList={editProductList}
+                                currency={props.currency}
                             />
                             :
                             <ProductCard
                                 product={product}
                                 addToCart={props.addToCart}
+                                currency={props.currency}
                             />
                             }
                         </Grid>

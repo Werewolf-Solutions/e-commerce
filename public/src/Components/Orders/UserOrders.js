@@ -7,6 +7,7 @@ export default function UserOrders(props) {
             User's orders<br/><br/>
             <Orders
                 user={props.user}
+                currency={props.currency}
             />
         </div>
     )

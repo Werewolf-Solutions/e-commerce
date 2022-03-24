@@ -21,7 +21,7 @@ export default function ItemsDialog(props) {
                                 Name: {item.name}<br/>
                             </Typography>
                             <Typography variant="body2">
-                                Price: {item.price}<br/>
+                                Price: {item.price} {props.currency}<br/>
                             </Typography>
                             <Typography variant="body2">
                                 Description: {item.description}<br/>

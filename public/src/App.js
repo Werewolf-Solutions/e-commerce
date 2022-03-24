@@ -191,6 +191,7 @@ function App() {
   }
 
   const handleCurrency = (e) => {
+    // TODO: change amount based on currency, ex: GBP -> USD
     setCurrency(e.target.value)
   }
 
@@ -261,6 +262,7 @@ function App() {
                 updateUser={updateUser}
                 updateProductsList={updateProductsList}
                 handleSignInDialog={handleSignInDialog}
+                currency={currency}
               />
               
             </Grid>
