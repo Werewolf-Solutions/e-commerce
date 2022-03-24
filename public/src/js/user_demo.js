@@ -5,7 +5,7 @@ export const user_demo = {
     customer_id: "cus_Kkb5hYEUsySlpA",
     cart: [],
     admin: false,
-    firtsName: 'foo',
+    firstName: 'foo',
     lastName: 'the first',
     address: {
         postcode: "b1",
