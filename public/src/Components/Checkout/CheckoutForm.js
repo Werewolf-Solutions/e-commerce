@@ -322,6 +322,7 @@ export default function CheckoutForm(props) {
                     paymentMethod={paymentMethod}
                     shippingMethod={shippingMethod}
                     currency={props.currency}
+                    user={props.user}
                 />)
             default:
             throw new Error('Unknown step')

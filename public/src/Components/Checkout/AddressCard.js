@@ -40,9 +40,6 @@ export default function OutlinedCard(props) {
                         {props.user.firstName}{bull}{props.user.lastName}
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="small" onClick={props.handleDeliveryFormDialog}>Use another address</Button>
-                </CardActions>
             </Card>
         </Box>
     )

@@ -54,10 +54,13 @@ export default function AddressForm(props) {
             ?
                 props.shippingMethod === 'delivery'
                 ?
+                <div>
                     <AddressCard
                         user={props.user}
                         handleDeliveryFormDialog={handleDeliveryFormDialog}
                     />
+                    <Button size="small" onClick={handleDeliveryFormDialog}>Use another address</Button>
+                </div>
                 : null
             : 
                 <div>

@@ -8,6 +8,7 @@ import {
     Checkbox,
     FormControlLabel
 } from '@mui/material'
+import AddressCard from './AddressCard'
 
 export default function Review(props) {
     // console.log(props.cart)
@@ -39,15 +40,13 @@ export default function Review(props) {
             </Typography>
             {props.shippingMethod === 'delivery'
             ? 
-                <div>
-                    <Typography gutterBottom>
-                        Name: {props.state.firstName} {props.state.lastName}
-                    </Typography>
-                    <Typography gutterBottom>
-                        Address: {props.state.number}, {props.state.address1}, {props.state.address2}, {props.state.city}, {props.state.state}, {props.state.country}, {props.state.postcode}
-                    </Typography>
-                </div>
-            : 'Pick up'
+                <AddressCard 
+                    user={props.user}
+                />
+            :
+                <Typography variant="h7" gutterBottom sx={{ mt: 2 }}>
+                    Pick up
+                </Typography>
             }
             </Grid>
             <Grid item container direction="column" xs={12} sm={6}>
@@ -59,7 +58,7 @@ export default function Review(props) {
                 <div>
                     <Grid item>
                         <Typography gutterBottom>
-                            {/* Card name: {props.card.cardName} */}
+                            Card name: {props.card.cardName}
                         </Typography>
                     </Grid>
                     <Grid item>
