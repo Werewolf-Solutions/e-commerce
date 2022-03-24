@@ -211,6 +211,7 @@ export default function CheckoutForm(props) {
                 confirmPaymentIntent()
             } else if (paymentMethod === 'cash') {
                 console.log('Add order to admin and user')
+                // TODO: save order to user and admin
             }
             props.emptyCart()
             props.onClose()
@@ -332,8 +333,6 @@ export default function CheckoutForm(props) {
     }, [])
 
     return (
-        <ThemeProvider theme={theme}>
-        <CssBaseline />
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Typography component="h1" variant="h4" align="center">
@@ -381,6 +380,5 @@ export default function CheckoutForm(props) {
             </React.Fragment>
             </Paper>
         </Container>
-        </ThemeProvider>
     )
 }

@@ -121,7 +121,7 @@ export default function PaymentForm(props) {
                         <Select
                             labelId="select-card"
                             id="dselect-card"
-                            value={props.card.id}
+                            value={props.card}
                             label="Card"
                             onChange={props.handleCardSelected}
                         >
