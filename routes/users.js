@@ -428,17 +428,17 @@ router.post('/create-payment-intent', async (req, res, next) => {
         // add payment intent to user's payment intents
         // TODO: add payment intent details in order and delete payment_intents array from User model
         // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
+        // TODO: save card in payment intent
+        let card = await stripe.paymentMethods.retrieve(payment_method)
         user.payment_intents.push(paymentIntent)
+        paymentIntent.card = card.card
+        paymentIntent.card.id = card.id
         let order = {
           user_id: userId,
           address: user.address,
           items: cart,
           total_cart,
-          payment_intent: {
-            id: paymentIntent.id,
-            status: paymentIntent.status,
-            payment_method: paymentIntent.payment_method
-          },
+          payment_intent: paymentIntent,
           total_amount: total_cart
         }
         // save order in admin
@@ -454,11 +454,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
               items: cart,
               order_id: admin.orders[i]._id,
               total_cart,
-              payment_intent: {
-                id: paymentIntent.id,
-                status: paymentIntent.status,
-                payment_method: paymentIntent.payment_method
-              },
+              payment_intent: paymentIntent,
               total_amount: total_cart
             }
             user.orders.push(order)
