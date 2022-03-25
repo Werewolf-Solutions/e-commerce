@@ -3,10 +3,15 @@ const mongoose = require('mongoose')
 const AddressSchema = require('./Address')
 const PaymentMethodSchema = require('./PaymentMethod')
 const PaymentIntentSchema = require('./PaymentIntent')
-const UserSchema = require('./User')
 
 const OrderSchema = new mongoose.Schema({
-    user: UserSchema,
+    user: {
+        id: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        username: String,
+    },
     order_id: String,
     delivery_time: Date,
     total_amount: Number,
