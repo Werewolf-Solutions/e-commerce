@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         enum: [true, false],
         default: false
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 
