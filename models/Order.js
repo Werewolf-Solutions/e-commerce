@@ -5,14 +5,10 @@ const PaymentMethodSchema = require('./PaymentMethod')
 const PaymentIntentSchema = require('./PaymentIntent')
 
 const OrderSchema = new mongoose.Schema({
-    user: {
-        id: String,
-        firstName: String,
-        lastName: String,
-        email: String,
-        username: String,
+    orderedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
-    order_id: String,
     delivery_time: Date,
     total_amount: Number,
     payment_intent: PaymentIntentSchema,
@@ -29,8 +25,11 @@ const OrderSchema = new mongoose.Schema({
         default: false
     },
     messages: [{
-        username: String,
-        text: String
+        text: String,
+        sentBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }],
     date: {
         type: Date,
@@ -38,4 +37,6 @@ const OrderSchema = new mongoose.Schema({
     }
 })
 
-module.exports = OrderSchema
+const Order = mongoose.model('Order', OrderSchema)
+
+module.exports = Order

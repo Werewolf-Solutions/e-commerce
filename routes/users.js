@@ -11,6 +11,9 @@ const stripe = require('stripe')(STRIPE_API_KEY)
 // Load User model
 const User = require('../models/User')
 
+// Load Order model
+const Order = require('../models/Order')
+
 // Load ProductsList model
 const ProductsList = require('../models/ProductsList')
 
@@ -25,7 +28,22 @@ var user_logged_in
  */
 router.get('/', async (req, res, next) => {
   let user = await User.findById(req.session.userId)
-  res.send({user})
+  let orders = []
+  console.log(typeof user)
+  let b = {
+    c: ''
+  }
+  let a = [{test: 'test'}]
+  b.a = a
+  b['c'] = a
+  console.log(b)
+  if (user) {
+    orders = await Order.find({orderedBy: user._id})
+    console.log(orders)
+    user['orders'] = orders
+    console.log(user)
+  }
+  res.send({user, orders})
 })
 
 /* GET update Products List */
@@ -264,6 +282,72 @@ router.post('/edit-user', async (req, res, next) => {
   }
 })
 
+router.post('/add-order', async (req, res, next) => {
+  let {order} = req.body
+  const { userId } = req.session
+  let user = await User.findById(userId)
+  // check total_cart is correct
+  let t_c = 0
+  order.items.forEach(item => t_c = t_c + item.price*item.quantity)
+  console.log(t_c, order.total_cart)
+  if (user && t_c === order.total_cart) {
+    try {
+      order.orderedBy = user._id
+      order.total_amount = order.total_cart
+      let new_order = new Order(order)
+      await new_order.save()
+      let orders = await Order.find({orderedBy: user._id})
+      res.send(orders)
+      // res.send(orders, user)
+      // let new_order = {
+      //   user: {
+      //     id: user._id,
+      //     firstName: user.firstName,
+      //     lastName: user.lastName,
+      //     email: user.email,
+      //     username: user.username,
+      //   },
+      //   address: user.address,
+      //   payment_intent: {
+      //     status: 'requires confirmation',
+      //     payment_method: 'cash'
+      //   },
+      //   items: order.items,
+      //   total_amount: order.total_cart
+      // }
+      // // save order in admin
+      // let admin = await User.findOne({email: 'admin@gmail.com'})
+      // admin.orders.push(new_order)
+      // await admin.save()
+      // // save order in user using the same order_id
+      // for (let i = 0; i < admin.orders.length; i++) {
+      //   if (admin.orders[i].user.id == userId) {
+      //     console.log(admin.orders[i]._id)
+      //     let new_order = {
+      //       address: user.address,
+      //       items: order.items,
+      //       order_id: admin.orders[i]._id,
+      //       payment_intent: {
+      //         status: 'requires confirmation',
+      //         payment_method: 'cash'
+      //       },
+      //       total_amount: order.total_cart
+      //     }
+      //     user.orders.push(new_order)
+      //     await user.save()
+      //   }
+      // }
+      // await user.save()
+      // res.send({user, new_order})
+    } catch (error) {
+      console.log(error)
+      res.send({msg: error.raw ? error.raw.message : error})
+    }
+  } else {
+    res.send({msg: 'No user found, please sign in or sign up first'})
+  }
+})
+
 /**
  * USERS
  */
@@ -433,7 +517,13 @@ router.post('/create-payment-intent', async (req, res, next) => {
         paymentIntent.card = card.card
         paymentIntent.card.id = card.id
         let order = {
-          user,
+          user: {
+              id: user._id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              username: user.username,
+          },
           address: user.address,
           items: cart,
           total_cart,
@@ -446,13 +536,12 @@ router.post('/create-payment-intent', async (req, res, next) => {
         await admin.save()
         // save order in user using the same order_id
         for (let i = 0; i < admin.orders.length; i++) {
-          if (admin.orders[i].user_id == userId
+          if (admin.orders[i].user.id == userId
             && admin.orders[i].payment_intent.id == paymentIntent.id) {
             let order = {
               address: user.address,
               items: cart,
               order_id: admin.orders[i]._id,
-              total_cart,
               payment_intent: paymentIntent,
               total_amount: total_cart
             }
@@ -465,7 +554,7 @@ router.post('/create-payment-intent', async (req, res, next) => {
       }
     } catch (error) {
       console.log(error)
-      res.send({msg: error.raw.message ? error.raw.message : error})
+      res.send({msg: error.raw ? error.raw.message : error})
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
@@ -745,24 +834,15 @@ router.post('/delete-item-from-products-list', async (req, res, next) => {
 /**
  * GET
  * 
- * /orders-to-accept
+ * /orders
  * 
- * retrieve orders to be accepted
+ * retrieve all users' orders
  */
-router.get('/orders-to-accept', async (req, res, next) => {
-  let {userId} = req.session
-  let user = await User.findById(userId)
-  let orders_active = []
-  if (user) {
-    user.orders.forEach(order => {
-      if (!order.accepted) {
-        orders_active.push(order)
-      }
-    })
-    res.send(orders_active)
-  } else {
-    res.send({msg: 'Please sign in'})
-  }
+router.get('/orders', async (req, res, next) => {
+  // let {userId} = req.session
+  // let user = await User.findById(userId)
+  let orders = await Order.find()
+  res.send({orders})
 })
 
 /**

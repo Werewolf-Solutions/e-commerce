@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const AddressSchema = require('./Address')
 const PaymentMethodSchema = require('./PaymentMethod')
 const PaymentIntentSchema = require('./PaymentIntent')
-const OrderSchema = require('./Order')
 
 const UserSchema = new mongoose.Schema({
     email: String,
@@ -16,7 +15,6 @@ const UserSchema = new mongoose.Schema({
     payment_intents: [PaymentIntentSchema],
     address: AddressSchema,
     cart: [],
-    orders: [OrderSchema],
     admin: {
         type: Boolean,
         enum: [true, false],
