@@ -6,6 +6,10 @@ const ProductsListSchema = mongoose.Schema({
     description: String,
     category: String,
     quantity: Number,
+    img: {
+        data: Buffer,
+        contentType: String
+    }
 })
 
 const ProductsList = mongoose.model('ProductsList', ProductsListSchema)

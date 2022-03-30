@@ -3,6 +3,9 @@ const router = express.Router()
 const mongoose = require('mongoose')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
+const fs = require('fs')
+
+const imgPath = '/home/lorenzo/projects/e-commerce/files/admin-dashboard.png'
 
 // Stripe
 const { STRIPE_API_KEY } = process.env
@@ -772,6 +775,36 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
   } else {
     res.send({msg: 'Please sign in as admin or make an account'})
   }
+})
+
+/**
+ * POST
+ * 
+ * /upload-img
+ * 
+ * admin can add img to product
+ */
+ router.post('/upload-img', async (req, res, next) => {
+  let {product, img} = req.body
+  let buffer = fs.readFileSync(imgPath)
+  console.log(buffer)
+  let new_product = await ProductsList.findById(product._id)
+  new_product.img.data = buffer
+  new_product.img.contentType = 'image/png'
+  // await new_product.save()
+  res.send({new_product, buffer})
+})
+
+/**
+ * POST
+ * 
+ * /products
+ * 
+ * retrieve products
+ */
+ router.get('/products', async (req, res, next) => {
+  let products = await ProductsList.find()
+  res.send(products)
 })
 
 /**
