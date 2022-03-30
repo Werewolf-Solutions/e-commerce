@@ -915,28 +915,17 @@ router.post('/delete-order', async (req, res, next) => {
  * 
  * accept-order
  * 
- * accept user's order & confirm payment intent
+ * accept user's order
  */
 router.post('/accept-order', async (req, res, next) => {
   let {order} = req.body
   let {userId} = req.session
-  let user = await User.findById(order.user_id)
-  let admin = await User.findById(userId)
-  if (admin && admin.admin && user) {
-    for (let i = 0; i < user.orders.length; i++) {
-      if (user.orders[i].order_id == order._id) {
-        await stripe.paymentIntents.confirm(order.payment_intent.id)
-        user.orders[i].accepted = true
-      }
-    }
-    await user.save()
-    for (let i = 0; i < admin.orders.length; i++) {
-      if (admin.orders[i]._id == order._id) {
-        admin.orders[i].accepted = true
-      }
-    }
-    await admin.save()
-    res.send({msg: 'Order accepted.'})
+  let user = await User.findById(userId)
+  let order_accepted = await Order.findById(order._id)
+  if (user && user.admin) {
+    order_accepted.accepted = true
+    await order_accepted.save()
+    res.send({msg: 'Order accepted.', order_accepted})
   } else {
     res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
@@ -952,40 +941,16 @@ router.post('/accept-order', async (req, res, next) => {
  router.post('/decline-order', async (req, res, next) => {
   let {order} = req.body
   let {userId} = req.session
-  let user = await User.findById(order.user_id)
-  let admin = await User.findById(userId)
-  let order_modified
-  if (admin && admin.admin && user) {
-    for (let i = 0; i < user.orders.length; i++) {
-      if (user.orders[i].order_id == order._id) {
-        user.orders[i].accepted = false
-        if (user._id != admin._id && !admin.admin) {
-          console.log('add modification as user')
-          let mod = {
-            username: user.username,
-            modifications: order.modifications
-          }
-          user.orders[i].modifications.push(mod)
-        }
-      }
+  let user = await User.findById(userId)
+  let order_declined = await Order.findById(order._id)
+  if (user && user.admin) {
+    order_declined.accepted = false
+    // TODO: refund if payment intent
+    if (order_declined.payment_intent) {
+      console.log('Refund user payment')
     }
-    await user.save()
-    for (let i = 0; i < admin.orders.length; i++) {
-      if (admin.orders[i]._id == order._id) {
-        admin.orders[i].accepted = false
-        if (user._id === admin._id && admin.admin) {
-          console.log('add modification as admin')
-          let mod = {
-            username: user.username,
-            modifications: order.modifications
-          }
-          user.orders[i].modifications.push(mod)
-          order_modified = user.orders[i]
-        }
-      }
-    }
-    await admin.save()
-    res.send({msg: 'Order declined.', order_modified})
+    await order_declined.save()
+    res.send({msg: 'Order declined.', order_declined})
   } else {
     res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
