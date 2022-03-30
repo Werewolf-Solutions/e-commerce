@@ -547,6 +547,8 @@ router.post('/confirm-payment-intent', async (req, res, next) => {
   if (user) {
     try {
       const paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+      console.log(paymentIntent.charges.data[0].id)
+      paymentIntent.charges.id = paymentIntent.charges.data[0].id
       // update user's payment intent
       for (let i = 0; i < user.payment_intents.length; i++) {
         if (user.payment_intents[i].id == paymentIntent.id) {
@@ -904,8 +906,11 @@ router.post('/accept-order', async (req, res, next) => {
   if (user && user.admin) {
     order_declined.accepted = false
     // TODO: refund if payment intent
-    if (order_declined.payment_intent) {
+    if (order_declined.payment_intent && order_declined.payment_intent.status === 'succeeded') {
       console.log('Refund user payment')
+      let refund = await stripe.refunds.create({
+        charge: order_declined.payment_intent.charges.id,
+      })
     }
     await order_declined.save()
     res.send({msg: 'Order declined.', order_declined})
