@@ -519,41 +519,16 @@ router.post('/create-payment-intent', async (req, res, next) => {
         user.payment_intents.push(paymentIntent)
         paymentIntent.card = card.card
         paymentIntent.card.id = card.id
-        let order = {
-          user: {
-              id: user._id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              username: user.username,
-          },
+        let order = new Order({
+          orderedBy: user._id,
           address: user.address,
           items: cart,
-          total_cart,
           payment_intent: paymentIntent,
           total_amount: total_cart
-        }
-        // save order in admin
-        let admin = await User.findOne({email: 'admin@gmail.com'})
-        admin.orders.push(order)
-        await admin.save()
-        // save order in user using the same order_id
-        for (let i = 0; i < admin.orders.length; i++) {
-          if (admin.orders[i].user.id == userId
-            && admin.orders[i].payment_intent.id == paymentIntent.id) {
-            let order = {
-              address: user.address,
-              items: cart,
-              order_id: admin.orders[i]._id,
-              payment_intent: paymentIntent,
-              total_amount: total_cart
-            }
-            user.orders.push(order)
-            await user.save()
-          }
-        }
+        })
         await user.save()
-        res.send({user, paymentIntent: paymentIntent.id})
+        await order.save()
+        res.send({user, paymentIntent: paymentIntent.id, order})
       }
     } catch (error) {
       console.log(error)
@@ -568,41 +543,24 @@ router.post('/confirm-payment-intent', async (req, res, next) => {
   let {payment_intent} = req.body
   const { userId } = req.session
   let user = await User.findById(userId)
-  let admin = await User.findOne({email: 'admin@gmail.com'})
+  let order = await Order.findOne({'payment_intent.id': payment_intent})
   if (user) {
     try {
       const paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
-      // TODO: update order and payment intent for user and admin
       // update user's payment intent
-      console.log(paymentIntent)
       for (let i = 0; i < user.payment_intents.length; i++) {
         if (user.payment_intents[i].id == paymentIntent.id) {
-          console.log(`\nUser's payment intent`)
-          console.log(user.payment_intents[i])
           user.payment_intents[i] = paymentIntent
         }
       }
-      // update user's order payment intent reference
-      for (let i = 0; i < user.orders.length; i++) {
-        if (user.orders[i].payment_intent.id == paymentIntent.id) {
-          console.log(`\nUser's order payment intent reference`)
-          console.log(user.orders[i].payment_intent)
-          user.orders[i].payment_intent = paymentIntent
-        }
-      }
+      // update order payment intent status
+      order.payment_intent = paymentIntent
       await user.save()
-      // update admin's order payment intent reference
-      for (let i = 0; i < admin.orders.length; i++) {
-        if (admin.orders[i].payment_intent.id == paymentIntent.id) {
-          console.log(`\Admin's order payment intent reference`)
-          console.log(admin.orders[i].payment_intent)
-          admin.orders[i].payment_intent = paymentIntent
-        }
-      }
-      await admin.save()
-      res.send({user, paymentIntent})
+      await order.save()
+      res.send({user, paymentIntent, order})
     } catch (error) {
-      res.send({msg: error.raw.message ? error.raw.message : error})
+      console.log(error)
+      res.send({msg: error.raw ? error.raw.message : error})
     }
   } else {
     res.send({msg: 'No user found, please sign in or sign up first'})
