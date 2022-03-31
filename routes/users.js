@@ -811,23 +811,10 @@ router.get('/orders', async (req, res, next) => {
 router.post('/delete-order', async (req, res, next) => {
   let {order} = req.body
   let {userId} = req.session
-  let user = await User.findById({_id: order.user_id})
-  let admin = await User.findById(userId)
-  if (admin && admin.admin && user) {
-    for (let i = 0; i < admin.orders.length; i++) {
-      if (admin.orders[i]._id.toString() == order._id) {        
-        admin.orders.splice(i, 1)
-        await admin.save()
-      }
-    }
-    for (let i = 0; i < user.orders.length; i++) {
-      if (user.orders[i].order_id.toString() == order._id) {
-        await stripe.paymentIntents.cancel(order.payment_intent.id)
-        user.orders.splice(i, 1)
-        await user.save()
-      }
-    }
-    res.send({msg: 'Order deleted successfully.'})
+  let user = await User.findById(userId)
+  let order_deleted = await Order.findByIdAndDelete(order._id)
+  if (order_deleted && user) {
+    res.send({msg: 'Order deleted successfully.', order_deleted})
   } else {
     res.send({msg: 'Please sign in as admin or make an account or missing product'})
   }
