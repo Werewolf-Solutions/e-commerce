@@ -17,8 +17,8 @@ const User = require('../models/User')
 // Load Order model
 const Order = require('../models/Order')
 
-// Load ProductsList model
-const ProductsList = require('../models/ProductsList')
+// Load Product model
+const Product = require('../models/Product')
 
 var user_logged_in
 
@@ -51,11 +51,8 @@ router.get('/', async (req, res, next) => {
 
 /* GET update Products List */
 router.get('/update-products-list', async (req, res, next) => {
-  let productsList = await ProductsList.find()
-  const products = await stripe.products.list({
-    limit: 10,
-  })  
-  res.send({products, productsList})
+  let products = await Product.find() 
+  res.send({products})
 })
 
 /**
@@ -710,7 +707,7 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
   const { userId } = req.session
   let user = await User.findById(userId)
   if (user && user.admin) {
-    let new_item = new ProductsList({name, price, description, category, quantity: 0})
+    let new_item = new Product({name, price, description, category, quantity: 0})
     await new_item.save()
     res.send({msg: 'New item added!', user})
   } else {
@@ -729,7 +726,7 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
   let {product, img} = req.body
   let buffer = fs.readFileSync(imgPath)
   console.log(buffer)
-  let new_product = await ProductsList.findById(product._id)
+  let new_product = await Product.findById(product._id)
   new_product.img.data = buffer
   new_product.img.contentType = 'image/png'
   // await new_product.save()
@@ -744,7 +741,7 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
  * retrieve products
  */
  router.get('/products', async (req, res, next) => {
-  let products = await ProductsList.find()
+  let products = await Product.find()
   res.send(products)
 })
 
@@ -758,7 +755,7 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
 router.post('/edit-item-in-products-list', async (req, res, next) => {
   let {product} = req.body
   let {_id, name, price, description, category} = product
-  let item = await ProductsList.findById({_id: _id})
+  let item = await Product.findById({_id: _id})
   console.log(item)
   const { userId } = req.session
   let user = await User.findById(userId)
@@ -794,7 +791,7 @@ router.post('/delete-item-from-products-list', async (req, res, next) => {
   const { userId } = req.session
   let user = await User.findById(userId)
   if (user && user.admin && product) {
-    await ProductsList.findByIdAndDelete(product._id)
+    await Product.findByIdAndDelete(product._id)
     res.send({msg: 'Item deleted!'})
   } else {
     res.send({msg: 'Please sign in as admin or make an account or missing product'})
