@@ -61,6 +61,24 @@ router.get('/update-products-list', async (req, res, next) => {
 /**
  * POST
  * 
+ * /send-msg
+ * 
+ * user-admin and admin-user messages
+ */
+
+router.post('/send-msg', async (req, res, next) => {
+  let {message, order_id} = req.body
+  let {userId} = req.session
+  let user_from = await User.findById(userId)
+  let order = await Order.findById(order_id)
+  order.messages.push({text: message, sentBy: user_from._id})
+  await order.save()
+  res.send(order)
+})
+
+/**
+ * POST
+ * 
  * /sign-in
  * 
  * sign in user
