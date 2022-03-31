@@ -56,6 +56,18 @@ router.get('/update-products-list', async (req, res, next) => {
 })
 
 /**
+ * GET
+ * 
+ * /products
+ * 
+ * retrieve products
+ */
+ router.get('/products', async (req, res, next) => {
+  let products = await Product.find()
+  res.send(products)
+})
+
+/**
  * POST
  * 
  * /send-msg
@@ -697,19 +709,19 @@ router.post('/list-payment-methods', async (req, res, next) => {
 /**
  * POST
  * 
- * /add-item-to-products-list
+ * /add-product
  * 
- * admin can add item to products list
+ * admin can add product
  */
-router.post('/add-item-to-products-list', async (req, res, next) => {
+router.post('/add-product', async (req, res, next) => {
   let {product} = req.body
   let {name, price, description, category} = product
   const { userId } = req.session
   let user = await User.findById(userId)
   if (user && user.admin) {
-    let new_item = new Product({name, price, description, category, quantity: 0})
-    await new_item.save()
-    res.send({msg: 'New item added!', user})
+    let new_product = new Product({name, price, description, category, quantity: 0})
+    await new_product.save()
+    res.send({msg: 'New product added!', user})
   } else {
     res.send({msg: 'Please sign in as admin or make an account'})
   }
@@ -736,23 +748,11 @@ router.post('/add-item-to-products-list', async (req, res, next) => {
 /**
  * POST
  * 
- * /products
+ * edit-product
  * 
- * retrieve products
+ * admin can edit product
  */
- router.get('/products', async (req, res, next) => {
-  let products = await Product.find()
-  res.send(products)
-})
-
-/**
- * POST
- * 
- * edit-item-in-products-list
- * 
- * admin can edit item in products list
- */
-router.post('/edit-item-in-products-list', async (req, res, next) => {
+router.post('/edit-product', async (req, res, next) => {
   let {product} = req.body
   let {_id, name, price, description, category} = product
   let item = await Product.findById({_id: _id})
@@ -782,11 +782,11 @@ router.post('/edit-item-in-products-list', async (req, res, next) => {
 /**
  * POST
  * 
- * /delete-item-from-products-list
+ * /delete-product
  * 
- * admin can delete item from products list
+ * admin can delete product
  */
-router.post('/delete-item-from-products-list', async (req, res, next) => {
+router.post('/delete-product', async (req, res, next) => {
   let {product} = req.body
   const { userId } = req.session
   let user = await User.findById(userId)
