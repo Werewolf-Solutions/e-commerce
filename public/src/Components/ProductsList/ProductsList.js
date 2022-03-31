@@ -38,6 +38,12 @@ export default function ProductsList(props) {
         handleEditable()
     }
 
+    const deleteProduct = async (product) => {
+        let res = await axios.post('/users/delete-product', {product})
+        console.log(res.data)
+        props.updateProductsList()
+    }
+
     const handleChange = (e) => {
         setState({...state, [e.target.id]: e.target.value})
     }
@@ -88,6 +94,7 @@ export default function ProductsList(props) {
                             <EditableProductCard
                                 handleChange={handleChange}
                                 handleEditable={handleEditable}
+                                deleteProduct={deleteProduct}
                                 editProductList={editProductList}
                                 currency={props.currency}
                                 product={product}

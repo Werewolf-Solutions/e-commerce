@@ -45,6 +45,7 @@ export default function EditableProductCard(props) {
                 </CardContent>
                 <CardActions>
                     <button onClick={() => props.editProductList(props.product)}>confirm</button>
+                    <button onClick={() => props.deleteProduct(props.product)}>delete</button>
                     <button onClick={props.handleEditable}>cancel</button>
                     <button>upload new image</button>
                 </CardActions>
