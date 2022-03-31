@@ -11,6 +11,7 @@ const OrderSchema = new mongoose.Schema({
     },
     delivery_time: Date,
     total_amount: Number,
+    status: String,
     payment_intent: PaymentIntentSchema,
     address: AddressSchema,
     items: [],
