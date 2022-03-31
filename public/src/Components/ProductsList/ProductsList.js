@@ -21,9 +21,21 @@ export default function ProductsList(props) {
         setEditable(!editable)
     }
 
-    const editProductList = () => {
+    const editProductList = async (product) => {
         console.log('edit')
         console.log(state)
+        console.log(product)
+        let new_product = {
+            _id: product._id,
+            name: state.name,
+            category: state.category,
+            description: state.description,
+            price: state.price
+        }
+        let res = await axios.post('/users/edit-product', {product: new_product})
+        console.log(res.data)
+        props.updateProductsList()
+        handleEditable()
     }
 
     const handleChange = (e) => {
@@ -38,7 +50,7 @@ export default function ProductsList(props) {
             description: state.description,
             price: state.price
         }
-        let res = await axios.post('/users/add-item-to-products-list', {product})
+        let res = await axios.post('/users/add-product', {product})
         console.log(res.data)
         props.updateProductsList()
         handleAddProductDialog()
@@ -78,6 +90,7 @@ export default function ProductsList(props) {
                                 handleEditable={handleEditable}
                                 editProductList={editProductList}
                                 currency={props.currency}
+                                product={product}
                             />
                             :
                             <ProductCard

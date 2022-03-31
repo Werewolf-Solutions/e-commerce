@@ -75,8 +75,8 @@ function App() {
 
   const updateProductsList = async () => {
     let res = await axios.get('/users/update-products-list')
-    let categories = getCategories(res.data.productsList)
-    let list = createList(res.data.productsList)
+    let categories = getCategories(res.data.products)
+    let list = createList(res.data.products)
     console.log(list)
     setCategories(categories)
     setProductsList(list)
