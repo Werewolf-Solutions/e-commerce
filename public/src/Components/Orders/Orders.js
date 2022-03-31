@@ -21,6 +21,7 @@ export default function Orders(props) {
     const [onlyActive, setOnlyActive] = React.useState(false)
     const [messages, setMessages] = React.useState([])
     const [items, setItems] = React.useState([])
+    const [order, setOrder] = React.useState()
 
     const handleItemsDialog = (items) => {
         if (!itemsDialog) {
@@ -29,9 +30,10 @@ export default function Orders(props) {
         setItemsDialog(!itemsDialog)
     }
 
-    const handleMessagesDialog = (messages) => {
+    const handleMessagesDialog = (order) => {
         if (!messagesDialog) {
-            setMessages(messages)
+            setOrder(order)
+            setMessages(order.messages)
         }
         setMessagesDialog(!messagesDialog)
     }
@@ -52,6 +54,8 @@ export default function Orders(props) {
                 open={messagesDialog}
                 onClose={handleMessagesDialog}
                 messages={messages}
+                order={order}
+                updateUser={props.updateUser}
             />
             {props.user
             ? props.user.admin
@@ -69,8 +73,8 @@ export default function Orders(props) {
                 />
             </FormGroup>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                {props.user
-                ? props.user.orders.map(order => (                    
+                {props.user && props.orders
+                ? props.orders.map(order => (                    
                     <Grid item xs={6}>
                         {onlyActive
                         ? !order.accepted
@@ -81,6 +85,7 @@ export default function Orders(props) {
                                 handleItemsDialog={handleItemsDialog}
                                 handleMessagesDialog={handleMessagesDialog}
                                 currency={props.currency}
+                                updateUser={props.updateUser}
                             />
                             : null
                         :
@@ -90,6 +95,7 @@ export default function Orders(props) {
                             handleItemsDialog={handleItemsDialog}
                             handleMessagesDialog={handleMessagesDialog}
                             currency={props.currency}
+                            updateUser={props.updateUser}
                         />
                         }
                     </Grid>

@@ -5,26 +5,37 @@ import {
     Typography,
     Button
 } from '@mui/material'
+import axios from 'axios'
 
 export default function OrderCard(props) {
-    const acceptOrder = () => {
+    const acceptOrder = async () => {
         console.log(props.order)
-        // TODO: call endpoint
+        let res = await axios.post('/users/accept-order', {order: props.order})
+        console.log(res.data)
+        props.updateUser()
     }
 
-    const declineAndRefundOrder = () => {
+    const declineAndRefundOrder = async () => {
         console.log(props.order)
-        // TODO: call endpoint
+        let res = await axios.post('/users/decline-order', {order: props.order})
+        console.log(res.data)
+        props.updateUser()
     }
     return (
         <div>
             <Card>
                 <CardContent>
+                    <Typography variant="h5" component="div">
+                        Date
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                        {props.order.date}
+                    </Typography>
                     {props.user.admin
                     ?
                     <div>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            User id: {props.order.user_id}
+                            User id: {props.order.orderedBy}
                         </Typography>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                             Order id: {props.order._id}
@@ -39,7 +50,7 @@ export default function OrderCard(props) {
                     :
                     <div>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Order id: {props.order.order_id}
+                            Order id: {props.order._id}
                         </Typography>
                     </div>
                     }
@@ -53,7 +64,8 @@ export default function OrderCard(props) {
                         Payment details
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {props.order.payment_intent.status}, {'payment method'},
+                        {props.order.payment_intent.status},
+                        {props.order.payment_intent.card ? props.order.payment_intent.card.last4 : props.order.payment_intent.payment_method}
                     </Typography>
                     <Typography variant="h5" component="div">
                         Accepted: {props.order.accepted ? 'yes' : 'not'}
@@ -62,13 +74,16 @@ export default function OrderCard(props) {
                         Delivered: {props.order.delivered ? 'yes' : 'not'}
                     </Typography>
                     <Typography variant="h5" component="div">
+                        Status: {props.order.status ? props.order.status : 'to be accepted'}
+                    </Typography>
+                    <Typography variant="h5" component="div">
                         Total amount: {props.order.total_amount/100} {props.currency}
                     </Typography>
                     <Button
                         onClick={() => props.handleItemsDialog(props.order.items)}
                     >items</Button>
                     <Button
-                        onClick={() => props.handleMessagesDialog(props.order.modifications)}
+                        onClick={() => props.handleMessagesDialog(props.order)}
                     >Messages</Button>
                 </CardContent>
             </Card>

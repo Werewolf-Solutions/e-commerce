@@ -3,6 +3,7 @@ import { Dialog } from '@mui/material'
 import { Typography } from '@mui/material'
 import { TextField } from '@mui/material'
 import { Button } from '@mui/material'
+import axios from 'axios'
 
 export default function MessagesDialog(props) {
     const [message, setMessage] = React.useState()
@@ -12,7 +13,11 @@ export default function MessagesDialog(props) {
 
     const sendMessage = async () => {
         console.log(message)
+        console.log(props.order)
         // TODO: call endpoint
+        let res = await axios.post('/users/send-msg', {message, order_id: props.order._id})
+        console.log(res.data)
+        props.updateUser()
         setMessage('')
     }
     return (

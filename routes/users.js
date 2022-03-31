@@ -40,18 +40,23 @@ router.get('/', async (req, res, next) => {
   b.a = a
   b['c'] = a
   console.log(b)
-  if (user) {
-    orders = await Order.find({orderedBy: user._id})
-    console.log(orders)
-    user['orders'] = orders
-    console.log(user)
+  if (user && user.admin) {
+    orders = await Order.find()
+  } else if (user && !user.admin) {
+    orders = await Order.find({orderedBy: req.session.userId})
   }
+  // if (user) {
+  //   orders = await Order.find({orderedBy: user._id})
+  //   console.log(orders)
+  //   user['orders'] = orders
+  //   console.log(user)
+  // }
   res.send({user, orders})
 })
 
 /* GET update Products List */
 router.get('/update-products-list', async (req, res, next) => {
-  let products = await Product.find() 
+  let products = await Product.find()
   res.send({products})
 })
 
@@ -323,7 +328,7 @@ router.post('/add-order', async (req, res, next) => {
   if (user && t_c === order.total_cart) {
     try {
       order.orderedBy = user._id
-      order.total_amount = order.total_cart
+      order.total_amount = order.total_cart*100
       order.payment_intent = {
         status: 'succeeded',
         payment_method: 'cash'
@@ -810,9 +815,14 @@ router.post('/delete-product', async (req, res, next) => {
  * retrieve all users' orders
  */
 router.get('/orders', async (req, res, next) => {
-  // let {userId} = req.session
-  // let user = await User.findById(userId)
-  let orders = await Order.find()
+  let {userId} = req.session
+  let user = await User.findById(userId)
+  let orders = []
+  if (user && user.admin) {
+    orders = await Order.find()
+  } else if (user && !user.admin) {
+    orders = await Order.find({orderedBy: userId})
+  }
   res.send({orders})
 })
 
@@ -871,12 +881,17 @@ router.post('/accept-order', async (req, res, next) => {
   let order_declined = await Order.findById(order._id)
   if (user && user.admin) {
     order_declined.accepted = false
-    // TODO: refund if payment intent
-    if (order_declined.payment_intent && order_declined.payment_intent.status === 'succeeded') {
+    order_declined.status = 'declined'
+    if (order_declined.payment_intent
+      && order_declined.payment_intent.status === 'succeeded'
+      && order_declined.payment_intent.card) {
       console.log('Refund user payment')
       let refund = await stripe.refunds.create({
         charge: order_declined.payment_intent.charges.id,
       })
+    } else {
+      order_declined.accepted = false
+      order_declined.status = 'declined'
     }
     await order_declined.save()
     res.send({msg: 'Order declined.', order_declined})

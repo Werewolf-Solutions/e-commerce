@@ -17,13 +17,14 @@ function App() {
   const [state, setState] = React.useState({
     user: null
   })
+  const [orders, setOrders] = React.useState()
   const [theme, setTheme] = React.useState('dark')
   const [currency, setCurrency] = React.useState('GBP')
   const [demo, setDemo] = React.useState('live-account')
   const [productsList, setProductsList] = React.useState([])
   const [categories, setCategories] = React.useState([])
   const [cart, setCart] = React.useState([])
-  const [selected, setSelected] = React.useState('products-list')
+  const [selected, setSelected] = React.useState('products')
   const [menuList, setMenuList] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [signUpDialog, setSignUpDialog] = React.useState(false)
@@ -82,6 +83,12 @@ function App() {
     setProductsList(list)
   }
 
+  const updateUserOrders = async () => {
+    let res = await axios.get('/user/orders')
+    console.log(res.data)
+    setOrders(res.data.orders)
+  }
+
   const updateUser = async () => {
     if (demo === 'user-demo') {
       setState({...state, user: user_demo})
@@ -90,6 +97,8 @@ function App() {
     } else {
       let res = await axios.get('/users/')
       console.log(res.data)
+      // updateUserOrders()
+      setOrders(res.data.orders)
       setState({...state, user: res.data.user})
     }
   }
@@ -263,6 +272,7 @@ function App() {
                 updateProductsList={updateProductsList}
                 handleSignInDialog={handleSignInDialog}
                 currency={currency}
+                orders={orders}
               />
               
             </Grid>

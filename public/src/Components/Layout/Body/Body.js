@@ -3,12 +3,13 @@ import Account from '../../Account/Account'
 import Cart from '../../Cart/Cart'
 import Checkout from '../../Checkout/Checkout'
 import AdminUsersOrders from '../../Orders/AdminUsersOrders'
+import Orders from '../../Orders/Orders'
 import UserOrders from '../../Orders/UserOrders'
 import AdminProductsList from '../../ProductsList/AdminProductsList'
 import ProductsList from '../../ProductsList/ProductsList'
 
 export default function Body(props) {
-    if (props.selected === 'products-list') {
+    if (props.selected === 'products') {
         return(
             <div>
                 {props.user ? `Hello ${props.user.username}` : null}
@@ -83,6 +84,16 @@ export default function Body(props) {
                     user={props.user}
                     updateUser={props.updateUser}
                     currency={props.currency}
+                />
+            </div>
+        )
+    } else if (props.selected === 'orders') {
+        return(
+            <div>
+                <Orders
+                    user={props.user}
+                    orders={props.orders}
+                    updateUser={props.updateUser}
                 />
             </div>
         )
