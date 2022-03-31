@@ -849,6 +849,7 @@ router.post('/accept-order', async (req, res, next) => {
   let order_accepted = await Order.findById(order._id)
   if (user && user.admin) {
     order_accepted.accepted = true
+    order_accepted.status = 'preparing-order'
     await order_accepted.save()
     res.send({msg: 'Order accepted.', order_accepted})
   } else {
@@ -980,6 +981,46 @@ router.post('/accept-order', async (req, res, next) => {
   // } else {
   //   res.send({msg: 'Please sign in as admin or make an account or missing product'})
   // }
+})
+
+/**
+ * POST
+ * 
+ * /start-delivery
+ * 
+ * admin can start delivery
+ */
+
+router.post('/start-delivery', async (req, res, next) => {
+  let {order} = req.body
+  let {userId} = req.session
+  let user = await User.findById(userId)
+  let order_updated = await Order.findById(order._id)
+  if (user && user.admin) {
+    order_updated.status = 'delivering'
+    await order_updated.save()
+  }
+  res.send(order_updated)
+})
+
+/**
+ * POST
+ * 
+ * /end-delivery
+ * 
+ * user and delivery driver can end delivery
+ */
+
+router.post('/end-delivery', async (req, res, next) => {
+  let {order} = req.body
+  let {userId} = req.session
+  let user = await User.findById(userId)
+  let order_updated = await Order.findById(order._id)
+  if (user) {
+    order_updated.status = 'delivered'
+    await order_updated.save()
+  }
+  res.send(order_updated)
 })
 
 module.exports = router
