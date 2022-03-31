@@ -297,51 +297,14 @@ router.post('/add-order', async (req, res, next) => {
     try {
       order.orderedBy = user._id
       order.total_amount = order.total_cart
+      order.payment_intent = {
+        status: 'succeeded',
+        payment_method: 'cash'
+      }
       let new_order = new Order(order)
       await new_order.save()
       let orders = await Order.find({orderedBy: user._id})
       res.send(orders)
-      // res.send(orders, user)
-      // let new_order = {
-      //   user: {
-      //     id: user._id,
-      //     firstName: user.firstName,
-      //     lastName: user.lastName,
-      //     email: user.email,
-      //     username: user.username,
-      //   },
-      //   address: user.address,
-      //   payment_intent: {
-      //     status: 'requires confirmation',
-      //     payment_method: 'cash'
-      //   },
-      //   items: order.items,
-      //   total_amount: order.total_cart
-      // }
-      // // save order in admin
-      // let admin = await User.findOne({email: 'admin@gmail.com'})
-      // admin.orders.push(new_order)
-      // await admin.save()
-      // // save order in user using the same order_id
-      // for (let i = 0; i < admin.orders.length; i++) {
-      //   if (admin.orders[i].user.id == userId) {
-      //     console.log(admin.orders[i]._id)
-      //     let new_order = {
-      //       address: user.address,
-      //       items: order.items,
-      //       order_id: admin.orders[i]._id,
-      //       payment_intent: {
-      //         status: 'requires confirmation',
-      //         payment_method: 'cash'
-      //       },
-      //       total_amount: order.total_cart
-      //     }
-      //     user.orders.push(new_order)
-      //     await user.save()
-      //   }
-      // }
-      // await user.save()
-      // res.send({user, new_order})
     } catch (error) {
       console.log(error)
       res.send({msg: error.raw ? error.raw.message : error})
