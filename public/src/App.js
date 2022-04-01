@@ -9,9 +9,18 @@ import Footer from './Components/Layout/Footer/Footer'
 import SignInDialog from './Components/Forms/SignInDialog'
 import SignUpDialog from './Components/Forms/SignUpDialog'
 
+import { io } from 'socket.io-client'
+
 import {user_demo} from './js/user_demo'
 import {admin_demo} from './js/admin_demo'
 import { Paper } from '@mui/material'
+
+const socket = io('http://localhost:5000', {
+  withCredentials: true,
+  extraHeaders: {
+    "my-custom-header": "abcd"
+  }
+})
 
 function App() {
   const [state, setState] = React.useState({
@@ -29,6 +38,9 @@ function App() {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [signUpDialog, setSignUpDialog] = React.useState(false)
   const [signInDialog, setSignInDialog] = React.useState(false)
+  const [chat, setChat] = React.useState([])
+  const [newOrders, setNewOrders] = React.useState([])
+  const [notifications, setNotifications] = React.useState([])
 
   const myTheme = createTheme({
     palette: {
@@ -211,6 +223,17 @@ function App() {
   useEffect(() => {
     updateProductsList()
     updateUser()
+    socket.on('new_order', ({order}) => {
+      console.log('new order')
+      console.log(order)
+      setNotifications([...notifications, 'new order'])
+      setNewOrders([...newOrders, order])
+    })
+
+    socket.on('message', ({sentBy, text}) => {
+      setNotifications([...notifications, 'new message'])
+      setChat([...chat, {sentBy, text}])
+    })
   }, [demo, selected])
 
   return (
@@ -254,6 +277,7 @@ function App() {
                 handleCurrency={handleCurrency}
                 theme={theme}
                 handleTheme={handleTheme}
+                notifications={notifications}
               />
 
             </Grid>
@@ -273,6 +297,8 @@ function App() {
                 handleSignInDialog={handleSignInDialog}
                 currency={currency}
                 orders={orders}
+                chat={chat}
+                newOrders={newOrders}
               />
               
             </Grid>

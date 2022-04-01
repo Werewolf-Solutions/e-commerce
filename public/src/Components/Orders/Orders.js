@@ -41,7 +41,7 @@ export default function Orders(props) {
     const handleOnlyActive = () => {
         setOnlyActive(!onlyActive)
     }
-
+    
     return (
         <div>
             <ItemsDialog
@@ -58,6 +58,7 @@ export default function Orders(props) {
                 order={order}
                 updateUser={props.updateUser}
                 user={props.user}
+                chat={props.chat}
             />
             {props.user
             ? props.user.admin
@@ -103,6 +104,21 @@ export default function Orders(props) {
                     </Grid>
                 ))
                 : null}
+                {props.newOrders.length != 0
+                ? props.newOrders.map(order => (
+                    <Grid item xs={6}>
+                        <OrderCard
+                            user={props.user}
+                            order={order}
+                            handleItemsDialog={handleItemsDialog}
+                            handleMessagesDialog={handleMessagesDialog}
+                            currency={props.currency}
+                            updateUser={props.updateUser}
+                        />
+                    </Grid>
+                ))
+                : null
+                }
             </Grid>
         </div>
     )

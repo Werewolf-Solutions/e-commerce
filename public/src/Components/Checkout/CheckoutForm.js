@@ -13,7 +13,17 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import AddressForm from './AddressForm'
 import PaymentForm from './PaymentForm'
 import Review from './Review'
+
+import { io } from 'socket.io-client'
+
 import axios from 'axios'
+
+const socket = io('http://localhost:5000', {
+    withCredentials: true,
+    extraHeaders: {
+        "my-custom-header": "abcd"
+    }
+})
 
 const steps = ['Shipping address', 'Payment details', 'Review your order']
 
@@ -211,16 +221,34 @@ export default function CheckoutForm(props) {
             console.log(`active step === steps.length -1 = ${steps.length - 1}`)
             if (paymentMethod === 'card') {
                 confirmPaymentIntent()
+                let order = {
+                    orderedBy: props.user._id,
+                    payment_method: card,
+                    address: props.user.address,
+                    payment_intent: {
+                        status: 'succeeded',
+                        card: card
+                    },
+                    items: props.cart,
+                    total_cart: props.cart.total_cart
+                }
+                socket.emit('new_order', {order})
             } else if (paymentMethod === 'cash') {
                 console.log('Add order to admin and user')
                 // TODO: save order to user and admin
                 let order = {
+                    orderedBy: props.user._id,
                     address: props.user.address,
                     items: props.cart,
+                    payment_intent: {
+                        status: 'succeeded',
+                        payment_method: 'cash'
+                    },
                     total_cart: props.cart.total_cart
                 }
                 console.log(order)
                 let res = await axios.post('/users/add-order', {order})
+                socket.emit('new_order', {order})
                 console.log(res.data)
             }
             props.emptyCart()
@@ -342,6 +370,11 @@ export default function CheckoutForm(props) {
 
     useEffect(() => {
         console.log(state)
+        socket.on('new_order', ({order}) => {
+            // setChat([...chat, {order}])
+            console.log('new order')
+            console.log(order)
+        })
     }, [])
 
     return (

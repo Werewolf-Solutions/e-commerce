@@ -21,6 +21,9 @@ export default function OrderCard(props) {
         console.log(res.data)
         props.updateUser()
     }
+
+    console.log(props.order)
+
     return (
         <div>
             <Card>

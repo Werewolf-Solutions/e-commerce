@@ -94,6 +94,8 @@ export default function Body(props) {
                     user={props.user}
                     orders={props.orders}
                     updateUser={props.updateUser}
+                    chat={props.chat}
+                    newOrders={props.newOrders}
                 />
             </div>
         )

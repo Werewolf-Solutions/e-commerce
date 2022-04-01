@@ -79,6 +79,11 @@ export default function Header(props) {
                     />
                 </Grid>
                 <Grid item xs>
+                    <Typography>
+                        {props.notifications.length}
+                    </Typography>
+                </Grid>
+                <Grid item xs>
                     <button
                         id="menu-list-button"
                         className="Menu-button"

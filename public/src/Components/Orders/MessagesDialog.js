@@ -7,7 +7,6 @@ import { Button } from '@mui/material'
 import { io } from 'socket.io-client'
 
 import axios from 'axios'
-import { PromiseProvider } from 'mongoose'
 
 const socket = io('http://localhost:5000', {
     withCredentials: true,
@@ -18,15 +17,7 @@ const socket = io('http://localhost:5000', {
 
 
 export default function MessagesDialog(props) {
-    const [chat, setChat] = React.useState(props.messages)
     const [message, setMessage] = React.useState()
-
-    
-    useEffect(() => {
-        socket.on('message', ({sentBy, text}) => {
-            setChat([...chat, {sentBy, text}])
-        })
-    })
 
     const handleChange = (e) => {
         setMessage(e.target.value)
@@ -60,12 +51,15 @@ export default function MessagesDialog(props) {
                 </div>
                 : 'No old messages'
                 }
-                {chat.map((msg) => (
+                {props.chat.length != 0
+                ? props.chat.map((msg) => (
                     <div>
                         <Typography>{msg.sentBy}:</Typography>
                         <Typography>{msg.text}</Typography>
                     </div>
-                ))}
+                ))
+                : null
+                }
                 <TextField
                     id='message'
                     value={message}
