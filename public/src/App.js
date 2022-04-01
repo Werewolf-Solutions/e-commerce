@@ -129,7 +129,7 @@ function App() {
   const signOut = async () => {
     let res = await axios.get('/users/sign-out')
     setState({user:null})
-    setSelected('products-list')
+    setSelected('products')
     setMenuList(false)
   }
 

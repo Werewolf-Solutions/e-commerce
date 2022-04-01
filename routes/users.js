@@ -83,11 +83,15 @@ router.get('/update-products-list', async (req, res, next) => {
 router.post('/send-msg', async (req, res, next) => {
   let {message, order_id} = req.body
   let {userId} = req.session
-  let user_from = await User.findById(userId)
+  let user = await User.findById(userId)
   let order = await Order.findById(order_id)
-  order.messages.push({text: message, sentBy: user_from._id})
-  await order.save()
-  res.send(order)
+  if (user) {
+    order.messages.push({text: message, sentBy: user._id, username: user.username})
+    await order.save()
+    res.send(order)
+  } else {
+    res.send({msg: 'Please sign in'})
+  }
 })
 
 /**

@@ -54,8 +54,10 @@ export default function Orders(props) {
                 open={messagesDialog}
                 onClose={handleMessagesDialog}
                 messages={messages}
+                setMessages={setMessages}
                 order={order}
                 updateUser={props.updateUser}
+                user={props.user}
             />
             {props.user
             ? props.user.admin

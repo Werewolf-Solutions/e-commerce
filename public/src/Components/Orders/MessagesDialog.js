@@ -7,6 +7,7 @@ import { Button } from '@mui/material'
 import { io } from 'socket.io-client'
 
 import axios from 'axios'
+import { PromiseProvider } from 'mongoose'
 
 const socket = io('http://localhost:5000', {
     withCredentials: true,
@@ -17,12 +18,13 @@ const socket = io('http://localhost:5000', {
 
 
 export default function MessagesDialog(props) {
-    const [chat, setChat] = React.useState([])
+    const [chat, setChat] = React.useState(props.messages)
     const [message, setMessage] = React.useState()
 
+    
     useEffect(() => {
-        socket.on('message', ({message}) => {
-            setChat(message)
+        socket.on('message', ({sentBy, text}) => {
+            setChat([...chat, {sentBy, text}])
         })
     })
 
@@ -35,7 +37,7 @@ export default function MessagesDialog(props) {
         console.log(props.order)
         // TODO: call endpoint
         let res = await axios.post('/users/send-msg', {message, order_id: props.order._id})
-        socket.emit('message', {message})
+        socket.emit('message', {sentBy: props.user.username, text:message})
         console.log(res.data)
         props.updateUser()
         setMessage('')
@@ -47,12 +49,23 @@ export default function MessagesDialog(props) {
                 onClose={props.onClose}
             >
                 {props.messages.length != 0
-                ? props.messages.map(message => (
-                    <Typography>{message.text}</Typography>
-                ))
-                : 'No messages'
+                ?
+                <div>
+                    {props.messages.map((msg) => (
+                        <div>
+                            <Typography>{msg.username}:</Typography>
+                            <Typography>{msg.text}</Typography>
+                        </div>
+                    ))}
+                </div>
+                : 'No old messages'
                 }
-                <Typography>{chat}</Typography>
+                {chat.map((msg) => (
+                    <div>
+                        <Typography>{msg.sentBy}:</Typography>
+                        <Typography>{msg.text}</Typography>
+                    </div>
+                ))}
                 <TextField
                     id='message'
                     value={message}

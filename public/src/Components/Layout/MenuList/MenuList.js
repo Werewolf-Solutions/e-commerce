@@ -33,7 +33,7 @@ export default function MenuList(props) {
                 : <div>
                     <MenuItem onClick={props.handleSignInDialog}>Sign in</MenuItem>
                     <MenuItem onClick={props.handleSignUpDialog}>Sign up</MenuItem>
-                    <MenuItem onClick={() => props.handleSelected('products-list')}>Products list</MenuItem>
+                    <MenuItem onClick={() => props.handleSelected('products')}>Products list</MenuItem>
                     <MenuItem onClick={() => props.handleSelected('cart')}>Cart</MenuItem>
                     <MenuItem onClick={() => props.handleSelected('orders')}>Orders</MenuItem>
                 </div>
