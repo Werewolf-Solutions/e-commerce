@@ -42,6 +42,11 @@ io.on('connection', (socket) => {
     io.emit('new_order', {order})
   })
 
+  socket.on('order_update', ({order}) => {
+    console.log('order update')
+    io.emit('order_update', {order})
+  })
+
   socket.on('message', ({sentBy, text}) => {
     console.log('new message')
     io.emit('message', {sentBy, text})

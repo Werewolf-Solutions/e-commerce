@@ -229,6 +229,7 @@ export default function CheckoutForm(props) {
                         status: 'succeeded',
                         card: card
                     },
+                    shipping_method: shippingMethod,
                     items: props.cart,
                     total_cart: props.cart.total_cart
                 }
@@ -244,6 +245,7 @@ export default function CheckoutForm(props) {
                         status: 'succeeded',
                         payment_method: 'cash'
                     },
+                    shipping_method: shippingMethod,
                     total_cart: props.cart.total_cart
                 }
                 console.log(order)

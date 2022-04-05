@@ -84,6 +84,7 @@ export default function Body(props) {
                     user={props.user}
                     updateUser={props.updateUser}
                     currency={props.currency}
+                    orders={props.orders}
                 />
             </div>
         )

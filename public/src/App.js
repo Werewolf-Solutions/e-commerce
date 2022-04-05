@@ -223,11 +223,21 @@ function App() {
   useEffect(() => {
     updateProductsList()
     updateUser()
+
     socket.on('new_order', ({order}) => {
       console.log('new order')
       console.log(order)
       setNotifications([...notifications, 'new order'])
-      setNewOrders([...newOrders, order])
+      // setNewOrders([...newOrders, order])
+      updateUser()
+    })
+
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      setNotifications([...notifications, 'order update'])
+      // setNewOrders([...newOrders, order])
+      updateUser()
     })
 
     socket.on('message', ({sentBy, text}) => {

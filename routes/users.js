@@ -863,6 +863,7 @@ router.post('/accept-order', async (req, res, next) => {
   let order_accepted = await Order.findById(order._id)
   if (user && user.admin) {
     order_accepted.accepted = true
+    order_accepted.delivered = false
     order_accepted.status = 'preparing-order'
     await order_accepted.save()
     res.send({msg: 'Order accepted.', order_accepted})
@@ -895,6 +896,7 @@ router.post('/accept-order', async (req, res, next) => {
       })
     } else {
       order_declined.accepted = false
+      order_declined.delivered = false
       order_declined.status = 'declined'
     }
     await order_declined.save()
@@ -1017,6 +1019,7 @@ router.post('/start-delivery', async (req, res, next) => {
   let order_updated = await Order.findById(order._id)
   if (user && user.admin) {
     order_updated.status = 'delivering'
+    order_updated.accepted = true
     await order_updated.save()
   }
   res.send(order_updated)
@@ -1037,6 +1040,8 @@ router.post('/end-delivery', async (req, res, next) => {
   let order_updated = await Order.findById(order._id)
   if (user) {
     order_updated.status = 'delivered'
+    order_updated.delivered = true
+    order_updated.accepted = true
     await order_updated.save()
   }
   res.send(order_updated)

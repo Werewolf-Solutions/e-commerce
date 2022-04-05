@@ -5,13 +5,24 @@ import {
     Typography,
     Button
 } from '@mui/material'
+
+import { io } from 'socket.io-client'
+
 import axios from 'axios'
+
+const socket = io('http://localhost:5000', {
+    withCredentials: true,
+    extraHeaders: {
+        "my-custom-header": "abcd"
+    }
+})
 
 export default function OrderCard(props) {
     const acceptOrder = async () => {
         console.log(props.order)
         let res = await axios.post('/users/accept-order', {order: props.order})
         console.log(res.data)
+        socket.emit('order_update', {order: props.order})
         props.updateUser()
     }
 
@@ -19,10 +30,21 @@ export default function OrderCard(props) {
         console.log(props.order)
         let res = await axios.post('/users/decline-order', {order: props.order})
         console.log(res.data)
+        socket.emit('order_update', {order: props.order})
         props.updateUser()
     }
 
-    console.log(props.order)
+    const startDelivery = async () => {
+        let res = await axios.post('/users/start-delivery', {order: props.order})
+        console.log(res.data)
+        socket.emit('order_update', {order: props.order})
+    }
+
+    const endDelivery = async () => {
+        let res = await axios.post('/users/end-delivery', {order: props.order})
+        console.log(res.data)
+        socket.emit('order_update', {order: props.order})
+    }
 
     return (
         <div>
@@ -49,6 +71,12 @@ export default function OrderCard(props) {
                         <Button
                             onClick={declineAndRefundOrder}
                         >Decline/refund</Button>
+                        <Button
+                            onClick={startDelivery}
+                        >Start delivery</Button>
+                        <Button
+                            onClick={endDelivery}
+                        >End delivery</Button>
                     </div>
                     :
                     <div>
@@ -57,6 +85,9 @@ export default function OrderCard(props) {
                         </Typography>
                     </div>
                     }
+                    <Typography variant="h5" component="div">
+                        Shipping method: {props.order.shipping_method}
+                    </Typography>
                     <Typography variant="h5" component="div">
                         Address details
                     </Typography>

@@ -34,16 +34,36 @@ export default function Account(props) {
         props.updateUser()
     }
 
-    const addPaymentMethod = () => {
+    const addPaymentMethod = async () => {
         console.log('add payment method')
         console.log(card)
+        let {
+            type,
+            card_number,
+            exp_month,
+            exp_year,
+            cvc
+        } = card
+        let new_card= {
+            number: card_number,
+            exp_month,
+            exp_year,
+            cvc,
+        }
         // TODO: /add-payment-method, {type, card}
+        let res = await axios.post('/users/add-payment-method', {type, card: new_card})
+        console.log(res.data)
+        props.updateUser()
+        handleAddPaymentMethod()
     }
 
-    const deletePaymentMethod = (pm) => {
+    const deletePaymentMethod = async (pm) => {
         console.log(pm)
         console.log(props.user.customer_id)
         // TODO: delete card: /delete-card, {cus_1234, card_1234}
+        let res = await axios.post('/users/detach-payment-method', {payment_method: pm.id})
+        console.log(res.data)
+        props.updateUser()
     }
 
     const handlePaymentTypeSelection = (e) => {
@@ -51,13 +71,16 @@ export default function Account(props) {
         setCard({...card, type: e.target.value})
     }
 
-    const confirmPaymentIntent = (pi) => {
+    const confirmPaymentIntent = async (pi) => {
         console.log(pi)
         // TODO: /confirm-payment-intent, {payment_intent_id: pi.id}
+        let res = await axios.post('/users/confirm-payment-intent', {payment_intent: pi.id})
+        console.log(res.data)
+        props.updateUser()
     }
 
     const handleOrderDialog = () => {
-        let orders = props.user.orders
+        let orders = props.orders
         for (let i = 0; i < orders.length; i++) {
             let payment_intents = props.user.payment_intents
             for (let j = 0; j < payment_intents.length; j++) {

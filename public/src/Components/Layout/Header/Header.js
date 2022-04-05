@@ -26,6 +26,8 @@ export default function Header(props) {
         }
     }
 
+    console.log(props.notifications)
+
     return (
         <div>
             <CheckoutDialog
