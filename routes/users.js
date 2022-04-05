@@ -45,6 +45,8 @@ router.get('/', async (req, res, next) => {
     orders = await Order.find()
   } else if (user && !user.admin) {
     orders = await Order.find({orderedBy: req.session.userId})
+  } else {
+    user = null
   }
   // if (user) {
   //   orders = await Order.find({orderedBy: user._id})
