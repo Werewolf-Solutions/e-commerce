@@ -85,7 +85,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.json('error', err)
+  res.json({msg: 'error', err, error: res.locals.error})
 })
 
 module.exports = app
