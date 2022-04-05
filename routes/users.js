@@ -30,6 +30,7 @@ var user_logged_in
  * get user logged in and update it
  */
 router.get('/', async (req, res, next) => {
+  console.log('here')
   let user = await User.findById(req.session.userId)
   let orders = []
   console.log(typeof user)
