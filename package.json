@@ -9,7 +9,6 @@
     "server": "cross-env NODE_ENV=development nodemon ./bin/www",
     "build-react": "cd public && npm run build",
     "desktop": "cross-env NODE_ENV=development npm start --prefix public",
-    "install": "npm install && cd public && npm install"
   },
   "dependencies": {
     "@mui/icons-material": "^5.2.1",
