@@ -33,7 +33,7 @@ router.get('/', async (req, res, next) => {
   console.log('here')
   let user = await User.findById(req.session.userId)
   let orders = []
-  console.log(typeof user)
+  // console.log(typeof user)
   let b = {
     c: ''
   }

@@ -24,6 +24,7 @@ var usersRouter = require('./routes/users')
 var app = express()
 
 app.set('trust proxy', 1) // trust first proxy
+app.disable('x-powered-by')
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
