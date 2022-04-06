@@ -15,7 +15,7 @@ import {user_demo} from './js/user_demo'
 import {admin_demo} from './js/admin_demo'
 import { Paper } from '@mui/material'
 
-const socket = io('http://localhost:5000', {
+const socket = io('https://tksbalti.uk/', {
   withCredentials: true,
   extraHeaders: {
     "my-custom-header": "abcd"
