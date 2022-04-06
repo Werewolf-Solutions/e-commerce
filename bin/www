@@ -30,10 +30,10 @@ var { Server } = require('socket.io')
 if (process.env.NODE_ENV === 'production') {
   var io = new Server(server, {
     cors: {
-      origin: "http://localhost:5000",
+      origin: "http://localhost",
       allowedHeaders: ["my-custom-header"],
       credentials: true,
-      // methods: ["GET", "POST"]
+      methods: ["GET", "POST"]
     }
   })
 }else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production-test') {
@@ -46,8 +46,18 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+io.on("connect_error", (err) => {
+  console.log('io connect_error')
+  console.error(err)
+})
+
 io.on('connection', (socket) => {
   console.log('a user connected')
+
+  socket.on("connect_error", (err) => {
+    console.log('io -> socket connect_error')
+    console.error(err)
+  })
 
   socket.on('new_order', ({order}) => {
     console.log('new order')

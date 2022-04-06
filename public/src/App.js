@@ -224,6 +224,10 @@ function App() {
     updateProductsList()
     updateUser()
 
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    })
+
     socket.on('new_order', ({order}) => {
       console.log('new order')
       console.log(order)
