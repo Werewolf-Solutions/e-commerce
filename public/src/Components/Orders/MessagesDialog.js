@@ -8,7 +8,7 @@ import { io } from 'socket.io-client'
 
 import axios from 'axios'
 
-const socket = io('http://localhost:5000', {
+const socket = io('https://tksbalti.uk/', {
     withCredentials: true,
     extraHeaders: {
         "my-custom-header": "abcd"
