@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production-test') {
   app.use(express.static(path.join(__dirname, 'public/build')))
-  app.get('*', function (req, res) {
+  app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'public/build', 'index.html'))
   })
 }
