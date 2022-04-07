@@ -17,9 +17,9 @@ import { Paper } from '@mui/material'
 
 const socket = io('http://localhost:5000', {
   withCredentials: true,
-  extraHeaders: {
-    "my-custom-header": "abcd"
-  }
+  // extraHeaders: {
+  //   "my-custom-header": "abcd"
+  // }
 })
 
 function App() {
