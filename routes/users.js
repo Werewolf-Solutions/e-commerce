@@ -60,6 +60,7 @@ router.get('/', async (req, res, next) => {
 /* GET update Products List */
 router.get('/update-products-list', async (req, res, next) => {
   let products = await Product.find()
+  console.log(products)
   if (products) {
     res.send({products})
   } else {
