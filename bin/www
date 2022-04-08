@@ -28,14 +28,7 @@ var server = http.createServer(app)
 var { Server } = require('socket.io')
 
 if (process.env.NODE_ENV === 'production') {
-  var io = new Server(server, {
-    cors: {
-      origin: "http://localhost:5000",
-      allowedHeaders: ["my-custom-header"],
-      credentials: true,
-      methods: ["GET", "POST"]
-    }
-  })
+  var io = new Server(server)
 }else if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production-test') {
   var io = new Server(server, {
     cors: {
