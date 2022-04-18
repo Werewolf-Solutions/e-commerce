@@ -57,7 +57,8 @@ io.on('connection', (socket) => {
   // console.log(socket)
   // send a message to the client
   socket.send(JSON.stringify({
-    type: "hello from server",
+    text: "hello from server",
+    sentBy: 'server',
     content: [ 1, "2" ]
   }))
 
