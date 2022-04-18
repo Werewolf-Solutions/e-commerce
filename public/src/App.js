@@ -246,7 +246,7 @@ function App() {
     })
 
     socket.on('message', ({sentBy, text}) => {
-      setNotifications([...notifications, 'new message'])
+      setNotifications([...notifications, text])
       setChat([...chat, {sentBy, text}])
     })
   }, [demo, selected])
