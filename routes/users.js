@@ -20,7 +20,11 @@ const Order = require('../models/Order')
 // Load Product model
 const Product = require('../models/Product')
 
-var user_logged_in
+// invoked for any requests passed to this router
+router.use(function (req, res, next) {
+  console.log('Checking connection with users/')
+  next()
+})
 
 /**
  * GET
