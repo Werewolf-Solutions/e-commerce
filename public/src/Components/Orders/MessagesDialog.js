@@ -10,7 +10,6 @@ import axios from 'axios'
 
 const socket = io()
 
-
 export default function MessagesDialog(props) {
     const [message, setMessage] = React.useState()
 

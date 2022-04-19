@@ -18,12 +18,7 @@ import { io } from 'socket.io-client'
 
 import axios from 'axios'
 
-const socket = io('http://localhost:5000', {
-    withCredentials: true,
-    extraHeaders: {
-        "my-custom-header": "abcd"
-    }
-})
+const socket = io()
 
 const steps = ['Shipping address', 'Payment details', 'Review your order']
 
