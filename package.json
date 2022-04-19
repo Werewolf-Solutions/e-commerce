@@ -7,7 +7,7 @@
     "test-prod": "cross-env NODE_ENV=production-test nodemon ./bin/www",
     "dev": "concurrently \"npm:server\" \"npm:desktop\"",
     "server": "cross-env NODE_ENV=development nodemon ./bin/www",
-    "build-react": "cd public && npm run build",
+    "build": "cd public && npm run build",
     "desktop": "cross-env NODE_ENV=development npm start --prefix public"
   },
   "dependencies": {
