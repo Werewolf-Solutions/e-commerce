@@ -47,14 +47,6 @@ io.on("connect_error", (err) => {
 io.on('connection', (socket) => {
   console.log('a user connected')
 
-  // console.log(socket)
-  // send a message to the client
-  socket.send(JSON.stringify({
-    text: "hello from server",
-    sentBy: 'server',
-    content: [ 1, "2" ]
-  }))
-
   socket.on("connect_error", (err) => {
     console.log('io -> socket connect_error')
     console.error(err)

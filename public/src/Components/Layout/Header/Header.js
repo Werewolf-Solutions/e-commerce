@@ -13,9 +13,12 @@ import CurrencySelect from './CurrencySelect'
 import ThemeSelect from './ThemeSelect'
 import DemoSelect from './DemoSelect'
 import { Paper } from '@mui/material'
+import { Button } from '@mui/material'
+import NotificationsDialog from './NotificationsDialog'
 
 export default function Header(props) {
     const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+    const [notificationsDialog, setNotificationsDialog] = React.useState(false)
 
     const handleCheckoutDialog = () => {
         if (props.cart.length === 0) {
@@ -26,10 +29,17 @@ export default function Header(props) {
         }
     }
 
-    console.log(props.notifications)
+    const handleNotificationsDialog = () => {
+        setNotificationsDialog(!notificationsDialog)
+    }
 
     return (
         <div>
+            <NotificationsDialog
+                notifications={props.notifications}
+                open={notificationsDialog}
+                onClose={handleNotificationsDialog}
+            />
             <CheckoutDialog
                 open={checkoutDialog}
                 onClose={handleCheckoutDialog}
@@ -81,9 +91,11 @@ export default function Header(props) {
                     />
                 </Grid>
                 <Grid item xs>
-                    <Typography>
+                    <Button
+                        onClick={handleNotificationsDialog}
+                    >
                         {props.notifications.length}
-                    </Typography>
+                    </Button>
                 </Grid>
                 <Grid item xs>
                     <button

@@ -241,10 +241,10 @@ function App() {
     })
 
     socket.on('message', ({sentBy, text}) => {
-      setNotifications([...notifications, text])
+      setNotifications([...notifications, 'new message from user in orders'])
       setChat([...chat, {sentBy, text}])
     })
-  }, [demo, selected])
+  }, [demo, selected, notifications])
 
   return (
     <div >
