@@ -130,6 +130,7 @@ function App() {
       setState({...state, user:user})
       handleSignUpDialog()
       setMenuList(false)
+      handleSignUpDialog()
     }
   }
 
