@@ -7,10 +7,20 @@ import { Button } from '@mui/material'
 import EditableProductCard from './EditableProductCard'
 import { SettingsInputAntennaTwoTone } from '@mui/icons-material'
 import AddProductDialog from '../AdminDashboard/AddProductDialog'
+import { List } from '@mui/material'
+import { ListItem } from '@mui/material'
+import { ListItemButton } from '@mui/material'
+import { ListItemIcon } from '@mui/material'
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import { ListItemText } from '@mui/material'
+import { ExpandLess } from '@mui/icons-material'
+import { ExpandMore } from '@mui/icons-material'
+import { Collapse } from '@mui/material'
 
 export default function ProductsList(props) {
     const [editable, setEditable] = React.useState(false)
     const [addProductDialog, setAddproductDialog] = React.useState(false)
+    const [categoryOpen, setCategoryOpen] = React.useState(false)
     const [state, setState] = React.useState()
 
     const handleAddProductDialog = () => {
@@ -62,6 +72,10 @@ export default function ProductsList(props) {
         handleAddProductDialog()
     }
 
+    const handleCategoryCollapse = () => {
+        setCategoryOpen(!categoryOpen)
+    }
+
     return (
         <div>
             <AddProductDialog
@@ -82,35 +96,55 @@ export default function ProductsList(props) {
             </div>
             : null
             }
+            <div>
+                {props.productsList.map((item, index) => (
+                    <div>
+                        <List key={index}>
+                            <ListItemButton
+                                onClick={handleCategoryCollapse}
+                            >
+                                <ListItemIcon>
+                                    <RestaurantIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={item.category}/>
+                                {categoryOpen ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                            <Collapse in={categoryOpen} timeout="auto" unmountOnExit>
+                                put here product card
+                            </Collapse>
+                        </List>
+                    </div>
+                ))}
+            </div>
             <Grid container direction='column' spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-            {props.productsList.map((item, index) => (
-                <Grid item container xs={2} sm={4} md={4} key={index}>
-                    {index} {item.category}
-                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                        {item.products.map((product, i) => (
-                        <Grid item xs={2}>
-                            {editable
-                            ?
-                            <EditableProductCard
-                                handleChange={handleChange}
-                                handleEditable={handleEditable}
-                                deleteProduct={deleteProduct}
-                                editProductList={editProductList}
-                                currency={props.currency}
-                                product={product}
-                            />
-                            :
-                            <ProductCard
-                                product={product}
-                                addToCart={props.addToCart}
-                                currency={props.currency}
-                            />
-                            }
+                {props.productsList.map((item, index) => (
+                    <Grid item container xs={2} sm={4} md={4} key={index}>
+                        {index} {item.category}
+                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                            {item.products.map((product, i) => (
+                            <Grid item xs={2} key={i}>
+                                {editable
+                                ?
+                                <EditableProductCard
+                                    handleChange={handleChange}
+                                    handleEditable={handleEditable}
+                                    deleteProduct={deleteProduct}
+                                    editProductList={editProductList}
+                                    currency={props.currency}
+                                    product={product}
+                                />
+                                :
+                                <ProductCard
+                                    product={product}
+                                    addToCart={props.addToCart}
+                                    currency={props.currency}
+                                />
+                                }
+                            </Grid>
+                            ))}
                         </Grid>
-                        ))}
                     </Grid>
-                </Grid>
-            ))}
+                ))}
             </Grid>
         </div>
     )
