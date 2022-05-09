@@ -63,8 +63,29 @@ router.use(function (req, res, next) {
 /**
  * USER endpoints
  */
+
+/**
+ * NOTES:
+ * 
+ * gets user from req.session
+ * 
+ * sends user, orders
+ * 
+ * REVIEW:
+ * 
+ * handle orders in a better way
+ */
 router.get('/', getUser)
 
+/**
+ * NOTES:
+ * 
+ * saves message in DB
+ * 
+ * REVIEW:
+ * 
+ * don't save anymore in orders but in chats and encypt everything
+ */
 router.post('/send-msg', sendMsg)
 
 router.post('/sign-in', signIn)
