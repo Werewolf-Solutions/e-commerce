@@ -4,51 +4,92 @@ const User = require('../models/User')
 // Load Order model
 const Order = require('../models/Order')
 
+// Stripe
+const { STRIPE_API_KEY } = process.env
+const stripe = require('stripe')(STRIPE_API_KEY)
+
 // TODO: add payment provider: stripe, paypal, ...
 const createPaymentIntent = async (req, res, next) => {
     let {payment_method, total_cart, cart} = req.body
     const { userId } = req.session
     let user = await User.findById(userId)
     // check total_cart is correct
+    // NOTES: amount 1.00 = 100 for Stripe
     let t_c = 0
     cart.forEach(item => t_c = t_c + item.price*item.quantity*100)
     console.log(t_c, total_cart)
     if (user && t_c === total_cart) {
         try {
-        if (user.payment_methods.length === 0) {
-            res.send({msg: 'Add a payment method first'})
-        } else {
-            // create payment intent
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: total_cart,
-                currency: 'gbp',
-                payment_method: payment_method,
-                customer: user.customer_id
-            })
-            // add payment intent to user's payment intents
-            // TODO: add payment intent details in order and delete payment_intents array from User model
-            // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
-            let card = await stripe.paymentMethods.retrieve(payment_method)
-            user.payment_intents.push(paymentIntent)
-            paymentIntent.card = card.card
-            paymentIntent.card.id = card.id
-            let order = new Order({
-                orderedBy: user._id,
-                address: user.address,
-                items: cart,
-                payment_intent: paymentIntent,
-                total_amount: total_cart
-            })
-            await user.save()
-            await order.save()
-            res.send({user, paymentIntent: paymentIntent.id, order})
-        }
+            if (user.payment_methods.length === 0) {
+                res.send({msg: 'Add a payment method first'})
+            } else {
+                // create payment intent
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: total_cart,
+                    currency: 'gbp',
+                    payment_method: payment_method,
+                    customer: user.customer_id
+                })
+                // add payment intent to user's payment intents
+                // TODO: add payment intent details in order and delete payment_intents array from User model
+                // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
+                let card = await stripe.paymentMethods.retrieve(payment_method)
+                user.payment_intents.push(paymentIntent)
+                paymentIntent.card = card.card
+                paymentIntent.card.id = card.id
+                let order = new Order({
+                    orderedBy: user._id,
+                    address: user.address,
+                    items: cart,
+                    payment_intent: paymentIntent,
+                    total_amount: total_cart
+                })
+                await user.save()
+                await order.save()
+                res.send({user, paymentIntent: paymentIntent.id, order})
+            }
         } catch (error) {
             console.log(error)
             res.send({msg: error.raw ? error.raw.message : error})
         }
     } else {
-        res.send({msg: 'No user found, please sign in or sign up first'})
+        try {
+            // guest
+            const paymentMethod = await stripe.paymentMethods.create({
+                type: payment_method.type,
+                card: payment_method.card,
+            })
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: total_cart,
+                currency: 'gbp',
+                payment_method: paymentMethod.id
+            })
+            /**
+             * TODO:
+             * 
+             * create orderController to add / update / delete orders
+             * 
+             * orderedBy = table number if ordering at the table (restaurants, coffee shops, ...)
+             * 
+             * orderedBy = guest if anything else (online or at the till)
+             */
+            let order = new Order({
+                orderedBy: 'guest',
+                address: user.address,
+                items: cart,
+                payment_intent: paymentIntent,
+                total_amount: total_cart
+            })
+            await order.save()
+            res.send({
+                msg: 'No user found, please sign in or sign up first',
+                paymentIntent,
+                order
+            })
+        } catch (error) {
+            console.log(error)
+            res.send({msg: error.raw ? error.raw.message : error})
+        }        
     }
 }
 
@@ -83,7 +124,7 @@ const confirmPaymentIntent = async (req, res, next) => {
 }
 
 const addPaymentMethod = async (req, res, next) => {
-    let {type, card} = req.body
+    let {type, card} = req.body    
     const { userId } = req.session
     let user = await User.findById(userId)
     if (user) {
@@ -138,7 +179,23 @@ const addPaymentMethod = async (req, res, next) => {
             res.send({msg: error.raw.message ? error.raw.message : error})
         }
     } else {
-        res.send({msg: 'No user found, please sign in or sign up first'})
+        // guest
+        const paymentMethods = await stripe.paymentMethods.list({
+            type: type,
+        })
+        const paymentMethod = await stripe.paymentMethods.retrieve(
+            'pm_1KxRnmAlUKnrAXrlt15k8PN0'
+        )
+        // const paymentMethod = await stripe.paymentMethods.create({
+        //     type: type,
+        //     card: card,
+        // })
+        //
+        res.send({
+            msg: 'No user found, please sign in or sign up first',
+            paymentMethod,
+            paymentMethods
+        })
     }
 }
 
