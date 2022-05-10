@@ -33,7 +33,8 @@ const {
   createPaymentIntent,
   confirmPaymentIntent,
   addPaymentMethod,
-  detachPaymentMethod
+  detachPaymentMethod,
+  refundPaymentIntent
 } = require('../controllers/paymentController')
 
 const {
