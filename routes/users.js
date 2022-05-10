@@ -14,8 +14,6 @@ const {
   deleteUser,
   updateUser,
   sendMsg,
-  addOrder,
-  deleteOrder
 } = require('../controllers/userController')
 
 // Import admin controllers
@@ -37,6 +35,11 @@ const {
   addPaymentMethod,
   detachPaymentMethod
 } = require('../controllers/paymentController')
+
+const {
+  createOrder,
+  deleteOrder
+} = require('../controllers/orderController')
 
 const imgPath = '/home/lorenzo/projects/e-commerce/files/admin-dashboard.png'
 
@@ -96,10 +99,9 @@ router.get('/sign-out', signOut)
 
 router.get('/delete-user', deleteUser)
 
-// FIXME: change endpoint edit-user from front-end
 router.post('/update-user', updateUser)
 
-router.post('/add-order', addOrder)
+router.post('/add-order', createOrder)
 
 router.post('/delete-order', deleteOrder)
 
@@ -107,13 +109,30 @@ router.post('/delete-order', deleteOrder)
  * PAYMENT endpoints
  */
 
+/**
+ * Public
+ */
 router.post('/create-payment-intent', createPaymentIntent)
 
+/**
+ * Public
+ */
 router.post('/confirm-payment-intent', confirmPaymentIntent)
 
+/**
+ * Public
+ */
 router.post('/add-payment-method', addPaymentMethod)
 
+/**
+ * Public
+ */
 router.post('/detach-payment-method', detachPaymentMethod)
+
+/**
+ * Private only admin
+ */
+router.post('/refund-payment-intent', refundPaymentIntent)
 
 router.post('/cancel-payment-intent', async (req, res, next) =>  {
   let {payment_intent} = req.body
