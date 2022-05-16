@@ -96,26 +96,6 @@ export default function ProductsList(props) {
             </div>
             : null
             }
-            <div>
-                {props.productsList.map((item, index) => (
-                    <div>
-                        <List key={index}>
-                            <ListItemButton
-                                onClick={handleCategoryCollapse}
-                            >
-                                <ListItemIcon>
-                                    <RestaurantIcon />
-                                </ListItemIcon>
-                                <ListItemText primary={item.category}/>
-                                {categoryOpen ? <ExpandLess /> : <ExpandMore />}
-                            </ListItemButton>
-                            <Collapse in={categoryOpen} timeout="auto" unmountOnExit>
-                                put here product card
-                            </Collapse>
-                        </List>
-                    </div>
-                ))}
-            </div>
             <Grid container direction='column' spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 {props.productsList.map((item, index) => (
                     <Grid item container xs={2} sm={4} md={4} key={index}>

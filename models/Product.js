@@ -7,8 +7,9 @@ const ProductSchema = mongoose.Schema({
     category: String,
     quantity: Number,
     img: {
-        data: Buffer,
-        contentType: String
+        path: String,
+        filename: String,
+        mimetype: String
     }
 })
 

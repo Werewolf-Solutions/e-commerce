@@ -5,6 +5,9 @@ const passport = require('passport')
 const bcrypt = require('bcryptjs')
 const fs = require('fs')
 
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
 // Import user controllers
 const {
   getUser,
@@ -42,7 +45,7 @@ const {
   deleteOrder
 } = require('../controllers/orderController')
 
-const imgPath = '/home/lorenzo/projects/e-commerce/files/admin-dashboard.png'
+const imgPath = '/home/lorenzo/projects/e-commerce/public/src/files/pizza-margherita.jpeg'
 
 // Stripe
 const { STRIPE_API_KEY } = process.env
@@ -204,15 +207,23 @@ router.post('/add-product', addProduct)
  * 
  * admin can add img to product
  */
- router.post('/upload-img', async (req, res, next) => {
-  let {product, img} = req.body
-  let buffer = fs.readFileSync(imgPath)
-  console.log(buffer)
-  let new_product = await Product.findById(product._id)
-  new_product.img.data = buffer
-  new_product.img.contentType = 'image/png'
+// 
+router.post('/upload-img', upload.single('file'), async (req, res, next) => {
+  console.log(req.file)
+  if (!req.file) {
+    res.send({msg: 'No file uploaded'})
+  } else {
+    res.send({msg: 'Image uploaded', img: {
+      path: req.file.path,
+      mimetype: req.file.mimetype,
+      filename: req.file.filename
+    }})
+  }
+  // let buffer = fs.readFileSync(imgPath)
+  // let new_product = await Product.findById(product._id)
+  // new_product.img.data = buffer
+  // new_product.img.contentType = 'image/png'
   // await new_product.save()
-  res.send({new_product, buffer})
 })
 
 // TODO: change api call in front-end

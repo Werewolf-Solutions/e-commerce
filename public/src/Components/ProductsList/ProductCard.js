@@ -18,8 +18,8 @@ export default function ProductCard(props) {
                 <CardMedia
                     component="img"
                     height="194"
-                    image={img}
-                    alt="Pizza margherita"
+                    image={props.product.img.path}
+                    alt={props.product.name}
                 />
                 <CardContent>
                     <Grid container>

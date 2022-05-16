@@ -29,7 +29,7 @@ const addProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     let {product} = req.body
-    let {_id, name, price, description, category} = product
+    let {_id, name, price, description, category, img} = product
     let item = await Product.findById({_id: _id})
     console.log(item)
     const { userId } = req.session
@@ -46,6 +46,9 @@ const updateProduct = async (req, res, next) => {
         }
         if (category && category != item.category) {
             item.category = category
+        }
+        if (img && img != item.img) {
+            item.img = img
         }
         await item.save()
         res.send({msg: 'Item updated!', item})
