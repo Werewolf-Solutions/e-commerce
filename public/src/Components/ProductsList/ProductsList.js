@@ -112,6 +112,7 @@ export default function ProductsList(props) {
                                     editProductList={editProductList}
                                     currency={props.currency}
                                     product={product}
+                                    updateProductsList={props.updateProductsList}
                                 />
                                 :
                                 <ProductCard

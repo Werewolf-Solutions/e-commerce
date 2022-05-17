@@ -8,10 +8,10 @@ import {
     TextField
 } from '@mui/material'
 import axios from 'axios'
-import img from '../../files/pizza-margherita.jpeg'
 
 export default function EditableProductCard(props) {
     const [file, setFile] = React.useState()
+    let img = `../../uploads/free.jpeg`
 
     const uploadImg = async () => {
         let prod = props.product
@@ -35,6 +35,7 @@ export default function EditableProductCard(props) {
         console.log(prod)
         let response = await axios.post('/users/update-product', {product: prod})
         console.log(response.data)
+        props.updateProductsList()
     }
 
     const onFileChange = event => {
@@ -60,7 +61,7 @@ export default function EditableProductCard(props) {
                 <CardMedia
                     component="img"
                     height="194"
-                    image={props.product.img.path}
+                    image={props.product.img ? `/uploads/${props.product.img.filename}` : null}
                     alt={props.product.name}
                 />
                 <CardContent>

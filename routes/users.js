@@ -6,7 +6,16 @@ const bcrypt = require('bcryptjs')
 const fs = require('fs')
 
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    // callback(null, "./public/src/uploads/")
+    callback(null, "uploads/")
+  },
+  filename: (req, file, callback) => {
+    callback(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage })
 
 // Import user controllers
 const {
