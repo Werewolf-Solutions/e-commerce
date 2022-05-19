@@ -7,7 +7,6 @@ import {
     CardMedia,
     Button
 } from '@mui/material'
-import img from '../../files/pizza-margherita.jpeg'
 import AddIcon from '@mui/icons-material/Add'
 import { Grid } from '@mui/material'
 
@@ -18,8 +17,8 @@ export default function ProductCard(props) {
                 <CardMedia
                     component="img"
                     height="194"
-                    image={img}
-                    alt="Pizza margherita"
+                    image={props.product.img ? `/uploads/${props.product.img.filename}` : null}
+                    alt={props.product.name}
                 />
                 <CardContent>
                     <Grid container>

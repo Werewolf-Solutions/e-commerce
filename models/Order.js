@@ -5,10 +5,11 @@ const PaymentMethodSchema = require('./PaymentMethod')
 const PaymentIntentSchema = require('./PaymentIntent')
 
 const OrderSchema = new mongoose.Schema({
-    orderedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
+    orderedBy: String,
+    // {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User'
+    // },
     shipping_method: String,
     delivery_time: Date,
     total_amount: Number,
