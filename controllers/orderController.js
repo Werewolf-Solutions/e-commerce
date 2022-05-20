@@ -4,9 +4,11 @@ const Order = require('../models/Order')
 
 /**
  * 
- * @desc create order
- * @route POST /users/create-order
- * @access Public
+ * @desc    create order
+ * @route   POST /users/create-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
  */
 const createOrder = async (req, res, next) => {
     let {order} = req.body
@@ -28,7 +30,7 @@ const createOrder = async (req, res, next) => {
             startCountdown()
             await new_order.save()
             let orders = await Order.find({orderedBy: user._id})
-            res.send(orders)
+            res.send({order: new_order})
         } catch (error) {
             console.log(error)
             res.send({msg: error.raw ? error.raw.message : error})
@@ -40,9 +42,11 @@ const createOrder = async (req, res, next) => {
 
 /**
  * 
- * @desc delete order
- * @route POST /users/delete-order
- * @access Public
+ * @desc    delete order
+ * @route   POST /users/delete-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
  */
 // TODO: start countdown of order when it's created (add key to model)
 const deleteOrder = async (req, res, next) => {
@@ -61,6 +65,108 @@ const deleteOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc    accept order
+ * @route   POST /users/accept-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ const acceptOrder = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_accepted = await Order.findById(order._id)
+    if (user && user.admin) {
+        order_accepted.accepted = true
+        order_accepted.delivered = false
+        order_accepted.status = 'preparing-order'
+        await order_accepted.save()
+        res.send({msg: 'Order accepted.', order_accepted})
+    } else {
+        res.send({msg: 'Please sign in as admin or make an account or missing product'})
+    }
+}
+
+/**
+ * 
+ * @desc    decline order
+ * @route   POST /users/decline-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+const declineOrder = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_declined = await Order.findById(order._id)
+    if (user && user.admin) {
+        order_declined.accepted = false
+        order_declined.status = 'declined'
+        if (order_declined.payment_intent
+        && order_declined.payment_intent.status === 'succeeded'
+        && order_declined.payment_intent.card) {
+            console.log('Refund user payment')
+            let refund = await stripe.refunds.create({
+                charge: order_declined.payment_intent.charges.id,
+            })
+        } else {
+            order_declined.accepted = false
+            order_declined.delivered = false
+            order_declined.status = 'declined'
+        }
+        await order_declined.save()
+        res.send({msg: 'Order declined.', order_declined})
+    } else {
+        res.send({msg: 'Please sign in as admin or make an account or missing product'})
+    }
+}
+
+/**
+ * 
+ * @desc    start delivery
+ * @route   POST /users/start-delivery
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ const startDelivery = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_updated = await Order.findById(order._id)
+    if (user && user.admin) {
+        order_updated.status = 'delivering'
+        order_updated.accepted = true
+        await order_updated.save()
+    }
+    res.send(order_updated)
+}
+
+/**
+ * 
+ * @desc    end delivery
+ * @route   POST /users/end-delivery
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+const endDelivery = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_updated = await Order.findById(order._id)
+    if (user) {
+        order_updated.status = 'delivered'
+        order_updated.delivered = true
+        order_updated.accepted = true
+        await order_updated.save()
+    }
+    res.send(order_updated)
+}
+
 let timeout
 const startCountdown = () => {
     console.log('starting timeout')
@@ -72,5 +178,9 @@ const startCountdown = () => {
 
 module.exports = {
     createOrder,
-    deleteOrder
+    deleteOrder,
+    startDelivery,
+    endDelivery,
+    acceptOrder,
+    declineOrder
 }
