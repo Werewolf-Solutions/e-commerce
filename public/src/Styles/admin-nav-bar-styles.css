@@ -1,0 +1,15 @@
+.adminNavLinks {
+  color: white;
+}
+
+.admin-header-links {
+  display: inline-flex;
+}
+
+.adminNavLinks {
+  text-transform: uppercase;
+}
+
+.adminNavBar {
+  justify-content: center;
+}

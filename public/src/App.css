@@ -1,41 +1,33 @@
-.App {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
+:root {
+  --navBackGround: #333;
+}
+
+body {
+  padding-top: 70px;
+}
+
+h1 {
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+}
+
+h2 {
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
   color: white;
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
 }
 
-.Dark-theme {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  color: white;
+a {
+  font-family: "Roboto bold", sans-serif;
 }
 
-.Light-theme {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.Header {
-  background-color: #3b4457;
-  color: white;
-}
-
-.Menu-button {
-  float: right;
-}
-
-.Body {
-  align-items: right;
-}
-
-.logo {
-  width: 50px;
-  height: 50px;
+button {
+  font-family: "Roboto bold", sans-serif;
+  text-transform: uppercase;
 }
