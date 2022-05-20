@@ -12,7 +12,7 @@ const Order = require('../models/Order')
 
 /**
  * 
- * @desc Get user logged in 
+ * @desc get user logged in 
  * @route GET /users/
  * @access Public
  */
@@ -178,7 +178,7 @@ const signOut = (req, res, next) => {
 /**
  * 
  * @desc delete user
- * @route POST /users/delete-user
+ * @route GET /users/delete-user
  * @access Public
  */
 const deleteUser = async (req, res, next) => {

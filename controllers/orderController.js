@@ -4,8 +4,8 @@ const Order = require('../models/Order')
 
 /**
  * 
- * @desc add order
- * @route POST /users/add-order
+ * @desc create order
+ * @route POST /users/create-order
  * @access Public
  */
 const createOrder = async (req, res, next) => {

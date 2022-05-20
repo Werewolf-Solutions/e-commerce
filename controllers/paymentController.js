@@ -8,8 +8,14 @@ const Order = require('../models/Order')
 const { STRIPE_API_KEY } = process.env
 const stripe = require('stripe')(STRIPE_API_KEY)
 
-// TODO: add payment provider: stripe, paypal, ...
 let guest_number = 0
+/**
+ * 
+ * @desc create payment intent
+ * @route POST /users/create-payment-intent
+ * @access Public
+ */
+// TODO: add payment provider: stripe, paypal, ...
 const createPaymentIntent = async (req, res, next) => {
     let {
         payment_method,
@@ -96,6 +102,12 @@ const createPaymentIntent = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc confirm payment intent
+ * @route POST /users/confirm-payment-intent
+ * @access Public
+ */
 const confirmPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
     const { userId } = req.session
@@ -141,6 +153,13 @@ const confirmPaymentIntent = async (req, res, next) => {
     }
 }
 
+
+/**
+ * 
+ * @desc refund payment intent
+ * @route POST /users/refund-payment-intent
+ * @access Public
+ */
 const refundPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
     let {userId} = req.session
@@ -168,6 +187,12 @@ const refundPaymentIntent = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc add payment method
+ * @route POST /users/add-payment-method
+ * @access Public
+ */
 const addPaymentMethod = async (req, res, next) => {
     let {type, card} = req.body    
     const { userId } = req.session
@@ -244,6 +269,13 @@ const addPaymentMethod = async (req, res, next) => {
     }
 }
 
+
+/**
+ * 
+ * @desc detach payment method
+ * @route POST /users/detach-payment-method
+ * @access Public
+ */
 const detachPaymentMethod = async (req, res, next) => {
     let {payment_method} = req.body
     const { userId } = req.session

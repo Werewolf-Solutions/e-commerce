@@ -30,7 +30,7 @@ const {
 
 // Import admin controllers
 const {
-  addProduct,
+  createProduct,
   updateProduct,
   deleteProduct,
   acceptOrder,
@@ -114,7 +114,7 @@ router.get('/delete-user', deleteUser)
 
 router.post('/update-user', updateUser)
 
-router.post('/add-order', createOrder)
+router.post('/create-order', createOrder)
 
 router.post('/delete-order', deleteOrder)
 
@@ -207,7 +207,7 @@ router.post('/list-payment-methods', async (req, res, next) => {
 
 router.get('/products', getProducts)
 
-router.post('/add-product', addProduct)
+router.post('/create-product', createProduct)
 
 /**
  * POST - TEST how to save img in mongoDB

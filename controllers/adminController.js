@@ -9,11 +9,11 @@ const Order = require('../models/Order')
 
 /**
  * 
- * @desc add product
- * @route POST /users/add-product
- * @access Public
+ * @desc create product
+ * @route POST /users/create-product
+ * @access Private
  */
-const addProduct = async (req, res, next) => {
+const createProduct = async (req, res, next) => {
     let {product} = req.body
     let {name, price, description, category} = product
     const { userId } = req.session
@@ -27,6 +27,13 @@ const addProduct = async (req, res, next) => {
     }
 }
 
+
+/**
+ * 
+ * @desc update product
+ * @route POST /users/update-product
+ * @access Public
+ */
 const updateProduct = async (req, res, next) => {
     let {product} = req.body
     let {_id, name, price, description, category, img} = product
@@ -57,6 +64,13 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
+
+/**
+ * 
+ * @desc delete product
+ * @route POST /users/delete-product
+ * @access Public
+ */
 const deleteProduct = async (req, res, next) => {
     let {product} = req.body
     const { userId } = req.session
@@ -69,6 +83,12 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc accept order
+ * @route POST /users/accept-order
+ * @access Private
+ */
 const acceptOrder = async (req, res, next) => {
     let {order} = req.body
     let {userId} = req.session
@@ -85,6 +105,12 @@ const acceptOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc decline order
+ * @route POST /users/decline-order
+ * @access Private
+ */
 const declineOrder = async (req, res, next) => {
     let {order} = req.body
     let {userId} = req.session
@@ -112,6 +138,12 @@ const declineOrder = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc start delivery
+ * @route POST /users/start-delivery
+ * @access Private
+ */
 const startDelivery = async (req, res, next) => {
     let {order} = req.body
     let {userId} = req.session
@@ -125,6 +157,12 @@ const startDelivery = async (req, res, next) => {
     res.send(order_updated)
 }
 
+/**
+ * 
+ * @desc end delivery
+ * @route POST /users/end-delivery
+ * @access Private
+ */
 const endDelivery = async (req, res, next) => {
     let {order} = req.body
     let {userId} = req.session
@@ -139,6 +177,12 @@ const endDelivery = async (req, res, next) => {
     res.send(order_updated)
 }
 
+/**
+ * 
+ * @desc get all products
+ * @route POST /users/products
+ * @access Public
+ */
 const getProducts = async (req, res, next) => {
     let products = await Product.find()
     console.log(products)
@@ -150,7 +194,7 @@ const getProducts = async (req, res, next) => {
 }
 
 module.exports = {
-    addProduct,
+    createProduct,
     updateProduct,
     deleteProduct,
     acceptOrder,
