@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage })
 
-// Import user controllers
+// Import user controller
 const {
   getUser,
   signIn,
@@ -28,19 +28,24 @@ const {
   sendMsg,
 } = require('../controllers/userController')
 
-// Import admin controllers
+// Import admin controller
+const {
+  acceptOrder,
+  declineOrder,
+  startDelivery,
+  endDelivery
+} = require('../controllers/adminController')
+
+// Imnport product controller
 const {
   createProduct,
   updateProduct,
   deleteProduct,
-  acceptOrder,
-  declineOrder,
-  startDelivery,
-  endDelivery,
-  getProducts
-} = require('../controllers/adminController')
+  getProducts,
+  uploadImg
+} = require('../controllers/productController')
 
-// Import payment controllers
+// Import payment controller
 const {
   createPaymentIntent,
   confirmPaymentIntent,
@@ -202,43 +207,19 @@ router.post('/list-payment-methods', async (req, res, next) => {
 })
 
 /**
- * ADMIN endpoints
+ * PRODUCT endpoints
  */
 
 router.get('/products', getProducts)
 
 router.post('/create-product', createProduct)
 
-/**
- * POST - TEST how to save img in mongoDB
- * 
- * /upload-img
- * 
- * admin can add img to product
- */
-// 
-router.post('/upload-img', upload.single('file'), async (req, res, next) => {
-  console.log(req.file)
-  if (!req.file) {
-    res.send({msg: 'No file uploaded'})
-  } else {
-    res.send({msg: 'Image uploaded', img: {
-      path: req.file.path,
-      mimetype: req.file.mimetype,
-      filename: req.file.filename
-    }})
-  }
-  // let buffer = fs.readFileSync(imgPath)
-  // let new_product = await Product.findById(product._id)
-  // new_product.img.data = buffer
-  // new_product.img.contentType = 'image/png'
-  // await new_product.save()
-})
-
-// TODO: change api call in front-end
 router.post('/update-product', updateProduct)
 
 router.post('/delete-product', deleteProduct)
+
+router.post('/upload-img', upload.single('file'), uploadImg)
+
 
 router.post('/accept-order', acceptOrder)
 
