@@ -1,0 +1,7 @@
+.bgImage {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../Assets/pexels-anil-sharma-10580198.jpg");
+  background-size: cover;
+  background-position: center;
+}
