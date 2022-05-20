@@ -103,6 +103,14 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
+/**
+ * 
+ * @desc    upload img
+ * @route   POST /users/upload-img
+ * @access  Private
+ * @params  img from input file
+ * @returns img path, mimetype, filename, msg
+ */
 const uploadImg = async (req, res, next) => {
     console.log(req.file)
     if (!req.file) {
