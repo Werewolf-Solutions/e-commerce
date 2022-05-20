@@ -11,11 +11,14 @@ const stripe = require('stripe')(STRIPE_API_KEY)
 let guest_number = 0
 /**
  * 
- * @desc create payment intent
- * @route POST /users/create-payment-intent
- * @access Public
+ * @desc    create payment intent
+ * @route   POST /users/create-payment-intent
+ * @access  Public
+ * @params  amount, currency, payment_method.id, user.customer_id
+ * @returns user, paymentIntent, order, msg
  */
 // TODO: add payment provider: stripe, paypal, ...
+// TODO: better response
 const createPaymentIntent = async (req, res, next) => {
     let {
         payment_method,
@@ -60,7 +63,7 @@ const createPaymentIntent = async (req, res, next) => {
                 })
                 await user.save()
                 await order.save()
-                res.send({user, paymentIntent: paymentIntent.id, order})
+                res.send({user, paymentIntent, order, msg: 'Payment intent created.'})
             }
         } catch (error) {
             console.log(error)
@@ -104,9 +107,11 @@ const createPaymentIntent = async (req, res, next) => {
 
 /**
  * 
- * @desc confirm payment intent
- * @route POST /users/confirm-payment-intent
- * @access Public
+ * @desc    confirm payment intent
+ * @route   POST /users/confirm-payment-intent
+ * @access  Public
+ * @params  payment_intent
+ * @returns user, paymentIntent, order, msg
  */
 const confirmPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
@@ -128,7 +133,7 @@ const confirmPaymentIntent = async (req, res, next) => {
             order.payment_intent = paymentIntent
             await user.save()
             await order.save()
-            res.send({user, paymentIntent, order})
+            res.send({user, paymentIntent, order, msg: 'Payment intent confirmed.'})
         } catch (error) {
             console.log(error)
             res.send({msg: error.raw ? error.raw.message : error})
@@ -156,9 +161,11 @@ const confirmPaymentIntent = async (req, res, next) => {
 
 /**
  * 
- * @desc refund payment intent
- * @route POST /users/refund-payment-intent
- * @access Public
+ * @desc    refund payment intent
+ * @route   POST /users/refund-payment-intent
+ * @access  Private
+ * @params  payment_intent
+ * @returns order_refunded, refund, msg
  */
 const refundPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
@@ -181,7 +188,7 @@ const refundPaymentIntent = async (req, res, next) => {
             order_refunded.status = 'refunded'
         }
         await order_refunded.save()
-        res.send({msg: 'Order refunded.', order_refunded})
+        res.send({msg: 'Order refunded.', order_refunded, refund})
     } else {
         res.send({msg: 'Please sign in as admin or make an account or missing product'})
     }
@@ -189,11 +196,13 @@ const refundPaymentIntent = async (req, res, next) => {
 
 /**
  * 
- * @desc add payment method
- * @route POST /users/add-payment-method
- * @access Public
+ * @desc    create payment method
+ * @route   POST /users/create-payment-method
+ * @access  Public
+ * @params  type, card
+ * @returns user, paymentMethod, msg
  */
-const addPaymentMethod = async (req, res, next) => {
+const createPaymentMethod = async (req, res, next) => {
     let {type, card} = req.body    
     const { userId } = req.session
     let user = await User.findById(userId)
@@ -223,7 +232,7 @@ const addPaymentMethod = async (req, res, next) => {
                         card_name: card.card_name
                     }) 
                     await user.save()
-                    res.send({user, paymentMethod: paymentMethod.id})
+                    res.send({user, paymentMethod, msg: 'Payment method created'})
                 }
                 })
             } else {
@@ -272,9 +281,11 @@ const addPaymentMethod = async (req, res, next) => {
 
 /**
  * 
- * @desc detach payment method
- * @route POST /users/detach-payment-method
- * @access Public
+ * @desc    detach payment method
+ * @route   POST /users/detach-payment-method
+ * @access  Public
+ * @params  payment_method
+ * @returns user, paymentMethod, msg
  */
 const detachPaymentMethod = async (req, res, next) => {
     let {payment_method} = req.body
@@ -289,7 +300,7 @@ const detachPaymentMethod = async (req, res, next) => {
                 }
             }
             await user.save()
-            res.send({user, paymentMethod})
+            res.send({user, paymentMethod, msg: 'Payment method detached'})
         } catch (error) {
             res.send({msg: error.raw.message ? error.raw.message : error})
         }
@@ -360,7 +371,7 @@ const stripePayDelivery = async (payment_method, total_amount, shipping_adddress
 module.exports = {
     createPaymentIntent,
     confirmPaymentIntent,
-    addPaymentMethod,
+    createPaymentMethod,
     detachPaymentMethod,
     refundPaymentIntent
 }

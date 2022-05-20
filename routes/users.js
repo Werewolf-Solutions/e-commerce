@@ -49,7 +49,7 @@ const {
 const {
   createPaymentIntent,
   confirmPaymentIntent,
-  addPaymentMethod,
+  createPaymentMethod,
   detachPaymentMethod,
   refundPaymentIntent
 } = require('../controllers/paymentController')
@@ -140,7 +140,7 @@ router.post('/confirm-payment-intent', confirmPaymentIntent)
 /**
  * Public
  */
-router.post('/add-payment-method', addPaymentMethod)
+router.post('/create-payment-method', createPaymentMethod)
 
 /**
  * Public
