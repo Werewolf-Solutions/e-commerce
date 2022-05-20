@@ -1,8 +1,24 @@
+import axios from 'axios'
+
+/**
+ * 
+ * @desc    get user orders
+ * @route   POST /users/orders
+ * @access  Public
+ * @params  orderedBy
+ * @returns orders, msg
+ */
+export async function getOrders() {
+    let orderedBy = '1'
+    let res = await axios.post('users/orders', {orderedBy})
+    console.log(res.data)
+}
+
 /**
  * 
  * @desc    create order
  * @route   POST /users/create-order
- * @access  Private
+ * @access  Public
  * @params  order
  * @returns order, msg
  */

@@ -19,6 +19,9 @@ import {
   deleteProduct,
   ulpoadImg
 } from './apiCalls/productController'
+import {
+  getOrders
+} from "./apiCalls/orderController";
 
 function App() {
 
@@ -31,6 +34,7 @@ function App() {
 
   useEffect(() => {
     getProducts()
+    getOrders()
     // getUser()
     // signIn({email: 'admin@gmail.com', password: '1234'})
     // signIn({email: 'foo@gmail.com', password: '1234'})

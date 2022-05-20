@@ -1,6 +1,41 @@
 // Load Order model
 const Order = require('../models/Order')
 
+// Load User model
+const User = require('../models/User')
+
+// TODO: change it like below
+const order = {
+    all: () => {
+        let orders = []
+        return orders
+    },
+    create: () =>  {
+        let order = {}
+        return order
+    }
+}
+// module.exports = order
+
+/**
+ * 
+ * @desc    get user orders
+ * @route   GET /users/orders
+ * @access  Public
+ * @params  -
+ * @returns orders
+ */
+const getOrders = async (req, res, next) => {
+    let {orderedBy} = req.body
+    const { userId } = req.session
+    let user = await User.findById(userId)
+    let orders = await Order.find({'orderedBy': orderedBy})
+    if (orders) {
+        res.send({orders})
+    } else {
+        res.send({msg: 'No order'})
+    }
+}
 
 /**
  * 
@@ -182,5 +217,6 @@ module.exports = {
     startDelivery,
     endDelivery,
     acceptOrder,
-    declineOrder
+    declineOrder,
+    getOrders
 }

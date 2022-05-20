@@ -28,14 +28,6 @@ const {
   sendMsg,
 } = require('../controllers/userController')
 
-// Import admin controller
-const {
-  acceptOrder,
-  declineOrder,
-  startDelivery,
-  endDelivery
-} = require('../controllers/adminController')
-
 // Imnport product controller
 const {
   createProduct,
@@ -56,7 +48,12 @@ const {
 
 const {
   createOrder,
-  deleteOrder
+  deleteOrder,
+  acceptOrder,
+  declineOrder,
+  startDelivery,
+  endDelivery,
+  getOrders
 } = require('../controllers/orderController')
 
 const imgPath = '/home/lorenzo/projects/e-commerce/public/src/files/pizza-margherita.jpeg'
@@ -220,6 +217,12 @@ router.post('/delete-product', deleteProduct)
 
 router.post('/upload-img', upload.single('file'), uploadImg)
 
+
+/**
+ * ORDER endpoints
+ */
+
+router.post('/orders', getOrders)
 
 router.post('/accept-order', acceptOrder)
 
