@@ -2,14 +2,11 @@ import * as React from "react";
 import "./App.css";
 import { ModalContainer } from "./Components/ModalContainer";
 import Main from "./Pages/Main";
+import AdminMain from "./Pages/AdminMain";
 import { useEffect } from "react";
 
 // Import user controller
-import {
-  getUser,
-  signIn,
-  signUp
-} from './apiCalls/userController'
+import { getUser, signIn, signUp } from "./apiCalls/userController";
 
 // Import product controller
 import {
@@ -17,39 +14,37 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  ulpoadImg
-} from './apiCalls/productController'
-import {
-  getOrders
-} from "./apiCalls/orderController";
+  ulpoadImg,
+} from "./apiCalls/productController";
+import { getOrders } from "./apiCalls/orderController";
 
 function App() {
+  const [file, setFile] = React.useState();
 
-  const [file, setFile] = React.useState()
-
-  const onFileChange = event => {
+  const onFileChange = (event) => {
     // Update the state
-    setFile(event.target.files[0])
-  }
+    setFile(event.target.files[0]);
+  };
 
   useEffect(() => {
-    getProducts()
-    getOrders()
+    getProducts();
+    getOrders();
     // getUser()
-    // signIn({email: 'admin@gmail.com', password: '1234'})
+    signIn({ email: "admin@gmail.com", password: "1234" });
     // signIn({email: 'foo@gmail.com', password: '1234'})
-  }, [])
+  }, []);
 
   return (
     <>
       <div>
-        <input type="file" onChange={onFileChange} name="file"/>
-        <button onClick={() => console.log('call upload img function')}>
+        <input type="file" onChange={onFileChange} name="file" />
+        <button onClick={() => console.log("call upload img function")}>
           Upload!
         </button>
       </div>
       <div className="App">
         <Main />
+        <AdminMain />
       </div>
       <ModalContainer />
     </>
