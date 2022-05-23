@@ -7,16 +7,16 @@ import AdminNavBar from "../Components/AdminNavBar";
 import AdminOrders from "../Components/AdminOrders";
 import AdminCards from "../Components/AdminCards";
 
-function Main() {
+function Main(props) {
   return (
     <div className="main">
-      {/* <NavBar />
+      <NavBar update={props.update}/>
       <HeroImage />
-      <Cards />
-      <Footer /> */}
-      <AdminNavBar />
-      <AdminOrders />
-      <AdminCards />
+      {/**
+       * TODO:
+       * props.products.map(product => <Card product={product}/>)
+       */}
+      <Cards products={props.products}/>
       <Footer />
     </div>
   );

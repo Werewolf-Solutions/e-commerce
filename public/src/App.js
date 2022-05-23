@@ -6,7 +6,11 @@ import AdminMain from "./Pages/AdminMain";
 import { useEffect } from "react";
 
 // Import user controller
-import { getUser, signIn, signUp } from "./apiCalls/userController";
+import {
+  getUser,
+  signIn,
+  signUp
+} from "./apiCalls/userController";
 
 // Import product controller
 import {
@@ -16,22 +20,54 @@ import {
   deleteProduct,
   ulpoadImg,
 } from "./apiCalls/productController";
-import { getOrders } from "./apiCalls/orderController";
+
+// Import order controller
+import {
+  getOrders
+} from "./apiCalls/orderController";
 
 function App() {
-  const [file, setFile] = React.useState();
+  const [file, setFile] = React.useState()
+  const [user, setUser] = React.useState('guest')
+  const [products, setProducts] = React.useState()
+  const [orders, setOrders] = React.useState()
 
   const onFileChange = (event) => {
     // Update the state
-    setFile(event.target.files[0]);
-  };
+    setFile(event.target.files[0])
+  }
+
+  // dev
+  const initializeUser = async () => {
+    // let email = 'admin@gmail.com'
+    // let email = 'foo@gmail.com'
+    // let password = '1234'
+    // let usr = await signIn(email, password)
+    // in production get user logged in
+    let usr = await getUser() 
+    setUser(usr)
+    let ords = await getOrders(usr._id)
+    setOrders(ords)
+  }
+
+  // function to be called every time to update user, orders, products
+  const update = async () => {
+    let usr = await getUser() 
+    setUser(usr)
+    let ords = await getOrders(usr._id)
+    setOrders(ords)
+    let prods = await getProducts()
+    setProducts(prods)
+  }
+
+  const initializeProducts = async () => {
+    let prods = await getProducts()
+    setProducts(prods)
+  }
 
   useEffect(() => {
-    getProducts();
-    getOrders();
-    // getUser()
-    signIn({ email: "admin@gmail.com", password: "1234" });
-    // signIn({email: 'foo@gmail.com', password: '1234'})
+    initializeUser()
+    initializeProducts()
   }, []);
 
   return (
@@ -43,8 +79,12 @@ function App() {
         </button>
       </div>
       <div className="App">
-        <Main />
-        <AdminMain />
+        {user
+        ? user.admin
+          ? <AdminMain orders={orders}/>
+          : <Main products={products} update={update}/>
+        : <Main products={products} update={update}/>
+        }
       </div>
       <ModalContainer />
     </>

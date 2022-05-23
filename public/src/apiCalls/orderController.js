@@ -8,10 +8,9 @@ import axios from 'axios'
  * @params  orderedBy
  * @returns orders, msg
  */
-export async function getOrders() {
-    let orderedBy = '1'
+export async function getOrders(orderedBy) {
     let res = await axios.post('users/orders', {orderedBy})
-    console.log(res.data)
+    return res.data.orders
 }
 
 /**

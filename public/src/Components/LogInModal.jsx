@@ -2,8 +2,19 @@ import React from "react";
 import { useStore } from "../Hooks/Store";
 import "../Styles/log-in-modal-styles.css";
 
-function LogInModal() {
-  const setModal = useStore((store) => store.setModal);
+// Import user controller
+import {
+  signIn
+} from "../apiCalls/userController";
+
+function LogInModal(props) {
+  const setModal = useStore((store) => store.setModal)
+
+  const [state, setState] = React.useState()
+
+  const handleChange = (e) => {
+    setState({...state, [e.target.id]: e.target.value})
+  }
 
   return (
     <div className="modalContainer ">
@@ -30,9 +41,11 @@ function LogInModal() {
               <input
                 className="ms-5"
                 type="email"
+                id='email'
                 placeholder="Enter Email"
                 name="email"
                 required
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -41,14 +54,24 @@ function LogInModal() {
               </label>
               <input
                 className="ms-5"
+                id='password'
                 type="password"
                 placeholder="Enter Password"
                 name="psw"
                 required
+                onChange={handleChange}
+
               />
             </div>
             <div>
-              <button className="loginButton ms-2 mt-3" type="submit">
+              <button
+                className="loginButton ms-2 mt-3"
+                type="submit"
+                onClick={() => {
+                  signIn(state.email, state.password)
+                  props.update()
+                }}
+              >
                 Login
               </button>
             </div>

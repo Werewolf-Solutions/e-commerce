@@ -11,6 +11,7 @@ const axios = require('axios')
 export async function getUser() {
     let res = await axios.get('users/')
     console.log(res.data)
+    return res.data.user
 }
 
 /**
@@ -22,8 +23,9 @@ export async function getUser() {
  * @returns user, msg
  */
 export async function signIn(email, password) {
-    let res = await axios.post('users/sign-in', {email, password})
+    let res = await axios.post('/users/sign-in', {email, password})
     console.log(res.data)
+    return res.data.user
 }
 
 /**
@@ -37,6 +39,7 @@ export async function signIn(email, password) {
 export async function signUp(email, password, password2) {
     let res = await axios.post('users/sign-up', {email, password, password2})
     console.log(res.data)
+    return res.data.user
 }
 
 
