@@ -11,8 +11,6 @@ import {
 import AddressCard from './AddressCard'
 
 export default function Review(props) {
-    // console.log(props.cart)
-    console.log(props.card)
     return (
         <React.Fragment>
         <Typography variant="h6" gutterBottom>
@@ -56,29 +54,31 @@ export default function Review(props) {
                 </Typography>
                 {props.paymentMethod ? props.paymentMethod === 'card'
                 ?
-                <div>
-                    <Grid item>
-                        <Typography gutterBottom>
-                            Card name: {props.card.cardName}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography gutterBottom>
-                            Card number: {props.card.last4}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography gutterBottom>
-                            Expire month: {props.card.exp_month}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography gutterBottom>
-                            Expire year: {props.card.exp_year}
-                        </Typography>
-                    </Grid>
-
-                </div>
+                    props.card
+                    ?
+                        <div>
+                            <Grid item>
+                                <Typography gutterBottom>
+                                    Card name: {props.card.cardName}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography gutterBottom>
+                                    Card number: {props.card.last4}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography gutterBottom>
+                                    Expire month: {props.card.exp_month}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography gutterBottom>
+                                    Expire year: {props.card.exp_year}
+                                </Typography>
+                            </Grid>
+                        </div>
+                    : null
                 : 'Cash' : null
                 }
             </Grid>
