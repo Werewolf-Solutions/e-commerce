@@ -2,7 +2,7 @@ import React from "react";
 import "../Styles/card-styles.css";
 import curry from "../Assets/pexels-asit-naskar-9809033.jpeg";
 
-function Cards() {
+function Cards(props) {
   return (
     <div className="container ">
       <div className="row">
@@ -20,7 +20,7 @@ function Cards() {
             </div>
             <h3>
               <a href="*" className="mt-2 text-danger">
-                CHICKEN TIKKA
+                {props.products ? props.products[0].name : 'loading'}
               </a>
             </h3>
             <p className="text-secondary">

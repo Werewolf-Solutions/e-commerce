@@ -3,11 +3,11 @@ import AdminNavBar from "../Components/AdminNavBar";
 import AdminOrders from "../Components/AdminOrders";
 import Footer from "../Components/Footer";
 
-const AdminMain = () => {
+const AdminMain = (props) => {
   return (
     <>
       <AdminNavBar />
-      <AdminOrders />
+      <AdminOrders orders={props.orders}/>
       <AdminCards />
       <Footer />
     </>

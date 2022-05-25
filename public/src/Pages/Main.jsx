@@ -4,12 +4,16 @@ import HeroImage from "../Components/HeroImage";
 import Cards from "../Components/Cards";
 import Footer from "../Components/Footer";
 
-function Main() {
+function Main(props) {
   return (
     <div className="main">
-      <NavBar />
+      <NavBar update={props.update}/>
       <HeroImage />
-      <Cards />
+      {/**
+       * TODO:
+       * props.products.map(product => <Card product={product}/>)
+       */}
+      <Cards products={props.products}/>
       <Footer />
     </div>
   );

@@ -2,9 +2,22 @@ import React from "react";
 import "../Styles/nav-bar-styles.css";
 import logo from "../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import { useStore } from "../Hooks/Store.jsx";
+import CheckoutDialog from "./Checkout/CheckoutDialog";
 
 function NavBar() {
   const setModal = useStore((store) => store.setModal);
+
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+
+  const handleCheckoutDialog = () => {
+      setCheckoutDialog(!checkoutDialog)
+      // if (props.cart.length === 0) {
+      //     console.log("Cart is empty. Don't open checkout dialog")
+      //     // TODO: message pop up
+      // } else {
+      //   setCheckoutDialog(!checkoutDialog)
+      // }
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -22,6 +35,10 @@ function NavBar() {
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
         >
+          <CheckoutDialog
+            open={checkoutDialog}
+            onClose={handleCheckoutDialog}
+          />
           <ul className="navbar-nav ">
             <li className="nav-item dropdown me-3">
               <a
@@ -77,7 +94,8 @@ function NavBar() {
               <button
                 onClick={() => {
                   console.log("checkout button clicked test");
-                  setModal("CheckOutModal");
+                  // setModal("CheckOutModal");
+                  handleCheckoutDialog()
                 }}
                 className="nav-link text-danger checkoutButton"
               >

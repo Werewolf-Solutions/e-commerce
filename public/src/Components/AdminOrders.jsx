@@ -1,7 +1,7 @@
 import React from "react";
 import "../Styles/admin-orders-styles.css";
 
-export default function AdminOrders() {
+export default function AdminOrders(props) {
   return (
     <div class="admin-orders row mt-2">
       {/* orders in */}
@@ -14,6 +14,7 @@ export default function AdminOrders() {
         <div class="card mb-3 ms-3 me-3">
           <div class="card-body">
             <h5 class="card-title">Order number: 005</h5>
+            <h5 class="card-title">Order id: {props.orders ? props.orders[0]._id : 'loading'}</h5>
             <h5 class="card-title">Time: 13.30 Date: 19/04/22</h5>
             <h5 class="card-title">Date: 19/04/22</h5>
             <p class="card-text">Shipping Method: Pick up</p>
@@ -31,7 +32,7 @@ export default function AdminOrders() {
               <li>coke</li>
               <li>bottle of wine</li>
             </ul>
-            <p class="card-text">Total Price: 52.87</p>
+            <p class="card-text">Total Price: {props.orders ? props.orders[1].total_amount : 'loading'}</p>
             <a href="#*" class="btn btn-warning me-2 btn-sm">
               Decline / Refund
             </a>
@@ -61,8 +62,8 @@ export default function AdminOrders() {
               <li>coke</li>
               <li>bottle of wine</li>
             </ul>
-            <p class="card-text">Total Price: 52.87</p>
-            <a href="#*" class="btn btn-warning me-2 btn-sm">
+            <p class="card-text">Total Price: {props.orders ? props.orders[1].total_amount : 'loading'}</p>
+            <a href="#*" class="btn btn-warning me-2 btn-sm">>
               Decline / Refund
             </a>
             <a href="#*" class="btn btn-danger btn-sm">

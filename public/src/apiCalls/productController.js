@@ -10,7 +10,7 @@ const axios = require('axios')
  */
 export async function getProducts() {
     let res = await axios.get('users/products')
-    console.log(res.data)
+    return res.data.products
 }
 
 /**
