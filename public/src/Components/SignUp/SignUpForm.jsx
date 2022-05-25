@@ -12,6 +12,11 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
+// Import user controller
+import {
+  signUp
+} from "../../apiCalls/userController"
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -28,6 +33,12 @@ function Copyright(props) {
 const theme = createTheme()
 
 export default function SignUpForm(props) {
+
+  const [state, setState] = React.useState()
+
+  const handleChange = (e) => {
+    setState({...state, [e.target.id]: e.target.value})
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -56,7 +67,7 @@ export default function SignUpForm(props) {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                  onChange={props.handleChange}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -67,7 +78,7 @@ export default function SignUpForm(props) {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
-                  onChange={props.handleChange}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -78,7 +89,7 @@ export default function SignUpForm(props) {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={props.handleChange}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -90,7 +101,7 @@ export default function SignUpForm(props) {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                  onChange={props.handleChange}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -102,7 +113,7 @@ export default function SignUpForm(props) {
                   type="password"
                   id="password2"
                   autoComplete="new-password2"
-                  onChange={props.handleChange}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,7 +128,10 @@ export default function SignUpForm(props) {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={props.signUp}
+              onClick={() => {
+                signUp(state.email, state.password, state.password2).then(() => props.update())
+                props.onClose()
+              }}
             >
               Sign Up
             </Button>
@@ -125,7 +139,7 @@ export default function SignUpForm(props) {
               <Grid item>
                 <Link href="#" variant="body2" onClick={() => {
                         props.handleSignInDialog()
-                        props.handleSignUpDialog()
+                        props.onClose()
                     }}>
                   Already have an account? Sign in
                 </Link>

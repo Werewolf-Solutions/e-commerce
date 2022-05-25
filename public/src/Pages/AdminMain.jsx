@@ -1,19 +1,28 @@
-import AdminCards from "../Components/AdminCards";
-import AdminOrders from "../Components/AdminOrders";
+import AdminCard from "../Components/AdminCard"
+import AdminOrder from "../Components/AdminOrder"
 
-const AdminMain = (props) => {
+export default function AdminMain(props) {
   return (
     <>
-      <AdminOrders
-        orders={props.orders}
-        update={props.update}
-      />
-      <AdminCards
-        products={props.products}
-        update={props.update}
-      />
+    {props.orders
+    ?
+      props.orders.map(order => (
+        <AdminOrder
+          order={order}
+          update={props.update}
+        />
+      ))
+    : 'loading'
+    }
+      {props.products
+      ? 
+        props.products.map(product => (
+          <AdminCard
+            product={product}
+            update={props.update}
+          />))
+      : 'loading'
+      }
     </>
   );
 };
-
-export default AdminMain;

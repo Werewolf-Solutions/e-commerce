@@ -1,4 +1,5 @@
 const passport = require('passport')
+const bcrypt = require('bcryptjs')
 
 // Stripe
 const { STRIPE_API_KEY } = process.env

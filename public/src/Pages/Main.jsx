@@ -1,16 +1,21 @@
 import React from "react";
 import HeroImage from "../Components/HeroImage";
-import Cards from "../Components/Cards";
+import Card from "../Components/Card"
 
 function Main(props) {
   return (
     <div className="main">
       <HeroImage />
-      {/**
-       * TODO:
-       * props.products.map(product => <Card product={product}/>)
-       */}
-      <Cards products={props.products}/>
+       {props.products
+       ? 
+          props.products.map(product => (
+            <Card
+              product={product}
+              update={props.update}
+            />
+          ))
+       : 'loading'
+       }
     </div>
   );
 }

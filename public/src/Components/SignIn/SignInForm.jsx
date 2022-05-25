@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 // Import user controller
 import {
     signIn
-  } from "../../apiCalls/userController"
+} from "../../apiCalls/userController"
 
 function Copyright(props) {
     return (
@@ -107,7 +107,7 @@ export default function SignInForm(props) {
                             </Grid>
                             <Grid item>
                                 <Link href="#" variant="body2" onClick={() => {
-                                        props.handleSignInDialog()
+                                        props.onClose()
                                         props.handleSignUpDialog()
                                     }}>
                                     Don't have an account? Sign Up

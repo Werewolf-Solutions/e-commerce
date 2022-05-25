@@ -19,11 +19,7 @@ export default function SignInDialog(props) {
                     handleSignUpDialog={props.handleSignUpDialog}
                     update={props.update}
                     onClose={props.onClose}
-                />                
-                {/* <button onClick={() => {
-                    props.handleSignInDialog()
-                    props.handleSignUpDialog()
-                }}>open sign up</button> */}
+                />
             </Dialog>
         </div>
     )

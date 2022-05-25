@@ -5,7 +5,13 @@ import { signOut } from "../../apiCalls/userController"
 export default function UserNavBar(props) {
   return (
     <div>
-        Logout || Orders
+        <li className="nav-item">
+          <button
+            className="nav-link adminNavLinks"
+          >
+            my orders
+          </button>
+        </li>
         <li className="nav-item">
             <button
             className="nav-link adminNavLinks"

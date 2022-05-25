@@ -8,7 +8,8 @@ import { useEffect } from "react";
 
 // Import user controller
 import {
-  getUser
+  getUser,
+  signIn
 } from "./apiCalls/userController";
 
 // Import product controller
@@ -56,10 +57,10 @@ function App() {
     let usr = await getUser()
     console.log(usr)
     setUser(usr)
-    // let ords = await getOrders(usr._id)
-    // setOrders(ords)
-    // let prods = await getProducts()
-    // setProducts(prods)
+    let ords = await getOrders(usr._id)
+    setOrders(ords)
+    let prods = await getProducts()
+    setProducts(prods)
   }
 
   const initializeProducts = async () => {
@@ -70,7 +71,7 @@ function App() {
   useEffect(() => {
     initializeUser()
     initializeProducts()
-  }, []);
+  }, [])
 
   return (
     <>
@@ -88,9 +89,19 @@ function App() {
         />
         {user
         ? user.admin
-          ? <AdminMain orders={orders} update={update}/>
-          : <Main products={products} update={update}/>
-        : <Main products={products} update={update}/>
+          ? <AdminMain
+              orders={orders}
+              products={products}
+              update={update}
+            />
+          : <Main
+              products={products}
+              update={update}
+            />
+        : <Main
+            products={products}
+            update={update}
+          />
         }
         <Footer />
       </div>
