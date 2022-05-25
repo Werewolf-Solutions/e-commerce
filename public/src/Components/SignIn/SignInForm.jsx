@@ -93,8 +93,7 @@ export default function SignInForm(props) {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                             onClick={() => {
-                                signIn(state.email, state.password)
-                                props.update()
+                                signIn(state.email, state.password).then(() => props.update())
                                 props.onClose()
                             }}
                         >

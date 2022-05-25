@@ -3,13 +3,12 @@ import "./App.css";
 import { ModalContainer } from "./Components/ModalContainer";
 import Main from "./Pages/Main";
 import AdminMain from "./Pages/AdminMain";
+import Footer from "./Components/Footer";
 import { useEffect } from "react";
 
 // Import user controller
 import {
-  getUser,
-  signIn,
-  signUp
+  getUser
 } from "./apiCalls/userController";
 
 // Import product controller
@@ -25,9 +24,11 @@ import {
 import {
   getOrders
 } from "./apiCalls/orderController";
+import NavBar from "./Components/NavBar/NavBar";
 
 function App() {
   const [file, setFile] = React.useState()
+  const [cart, setCart] = React.useState()
   const [user, setUser] = React.useState('guest')
   const [products, setProducts] = React.useState()
   const [orders, setOrders] = React.useState()
@@ -37,14 +38,14 @@ function App() {
     setFile(event.target.files[0])
   }
 
-  // dev
   const initializeUser = async () => {
     // let email = 'admin@gmail.com'
     // let email = 'foo@gmail.com'
     // let password = '1234'
     // let usr = await signIn(email, password)
     // in production get user logged in
-    let usr = await getUser() 
+    let usr = await getUser()
+    console.log(usr)
     setUser(usr)
     let ords = await getOrders(usr._id)
     setOrders(ords)
@@ -52,12 +53,13 @@ function App() {
 
   // function to be called every time to update user, orders, products
   const update = async () => {
-    let usr = await getUser() 
+    let usr = await getUser()
+    console.log(usr)
     setUser(usr)
-    let ords = await getOrders(usr._id)
-    setOrders(ords)
-    let prods = await getProducts()
-    setProducts(prods)
+    // let ords = await getOrders(usr._id)
+    // setOrders(ords)
+    // let prods = await getProducts()
+    // setProducts(prods)
   }
 
   const initializeProducts = async () => {
@@ -79,12 +81,18 @@ function App() {
         </button>
       </div>
       <div className="App">
+        <NavBar
+          user={user}
+          update={update}
+          cart={cart}
+        />
         {user
         ? user.admin
-          ? <AdminMain orders={orders}/>
+          ? <AdminMain orders={orders} update={update}/>
           : <Main products={products} update={update}/>
         : <Main products={products} update={update}/>
         }
+        <Footer />
       </div>
       <ModalContainer />
     </>
