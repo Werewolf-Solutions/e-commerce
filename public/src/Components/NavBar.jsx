@@ -3,11 +3,13 @@ import "../Styles/nav-bar-styles.css";
 import logo from "../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import { useStore } from "../Hooks/Store.jsx";
 import CheckoutDialog from "./Checkout/CheckoutDialog";
+import SignInDialog from "./SignIn/SignInDialog";
 
-function NavBar() {
+function NavBar(props) {
   const setModal = useStore((store) => store.setModal);
 
   const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+  const [signInDialog, setSignInDialog] = React.useState(false)
 
   const handleCheckoutDialog = () => {
       setCheckoutDialog(!checkoutDialog)
@@ -18,6 +20,10 @@ function NavBar() {
       //   setCheckoutDialog(!checkoutDialog)
       // }
   }
+
+  const handleSignInDialog = () => {
+    setSignInDialog(!signInDialog)
+}
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -38,6 +44,11 @@ function NavBar() {
           <CheckoutDialog
             open={checkoutDialog}
             onClose={handleCheckoutDialog}
+          />
+          <SignInDialog
+            open={signInDialog}
+            onClose={handleSignInDialog}
+            update={props.update}
           />
           <ul className="navbar-nav ">
             <li className="nav-item dropdown me-3">
@@ -111,7 +122,8 @@ function NavBar() {
                 data-bs-toggle="dropdown"
                 onClick={() => {
                   console.log("login button clicked test");
-                  setModal("LogInModal");
+                  // setModal("LogInModal");
+                  handleSignInDialog()
                 }}
               >
                 Login
