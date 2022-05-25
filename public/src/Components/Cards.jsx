@@ -14,7 +14,7 @@ function Cards(props) {
         </div>
         {/* side orders cards */}
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -79,7 +79,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -144,7 +144,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -209,7 +209,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -281,7 +281,7 @@ function Cards(props) {
         </div>
         {/* curry cards */}
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -346,7 +346,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -411,7 +411,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -483,7 +483,7 @@ function Cards(props) {
         </div>
         {/* desert cards */}
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -548,7 +548,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -613,7 +613,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -685,7 +685,7 @@ function Cards(props) {
         </div>
         {/* drinks cards */}
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -750,7 +750,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>
@@ -815,7 +815,7 @@ function Cards(props) {
           </div>
         </div>
         <div className="col-md-6 col-lg-4">
-          <div className="card-box">
+          <div className="card-box ms-3 me-3">
             <div className="card-thumbnail">
               <img src={curry} className="img-fluid" alt="" />
             </div>

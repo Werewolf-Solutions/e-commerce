@@ -1,0 +1,24 @@
+.edit-image {
+  height: 80px;
+}
+
+.inputDish {
+  width: 70vw;
+}
+
+.admin-edit-card {
+  background-color: rgb(52, 52, 52);
+}
+
+.modalClose {
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.changePhotoBtn {
+  background-color: white;
+}
+
+#file-upload-button {
+  background-color: pink;
+}
