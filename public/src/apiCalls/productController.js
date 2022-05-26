@@ -22,8 +22,9 @@ export async function getProducts() {
  * @returns product, msg
  */
 export async function createProduct(product) {
-    let res = await axios.get('users/create-product', {product})
+    let res = await axios.post('users/create-product', {product})
     console.log(res.data)
+    return res.data.product
 }
 
 /**
@@ -35,7 +36,7 @@ export async function createProduct(product) {
  * @returns product, msg
  */
 export async function updateProduct(product) {
-    let res = await axios.get('users/update-product', {product})
+    let res = await axios.post('users/update-product', {product})
     console.log(res.data)
 }
 

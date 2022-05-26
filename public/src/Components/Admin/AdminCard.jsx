@@ -1,11 +1,27 @@
-import "../Styles/admin-cards.css";
-import { useStore } from "../Hooks/Store";
-import curry from "../Assets/pexels-asit-naskar-9809033.jpeg";
+import React from 'react'
+import "../../Styles/admin-cards.css";
+import { useStore } from "../../Hooks/Store";
+import curry from "../../Assets/pexels-asit-naskar-9809033.jpeg";
+import UpdateProductDialog from "./UpdateProductDialog";
+import { deleteProduct } from '../../apiCalls/productController';
 
 export default function AdminCard(props) {
   const setModal = useStore((store) => store.setModal)
+
+  const [updateProductDialog, setUpdateProductDialog] = React.useState(false)
+
+  const handleUpdateProductDialog = () => {
+    setUpdateProductDialog(!updateProductDialog)
+  }
+
   return (
     <div className="container ">
+      <UpdateProductDialog
+        open={updateProductDialog}
+        onClose={handleUpdateProductDialog}
+        product={props.product}
+        update={props.update}
+      />
       <div className="row">
         {/* side orders section header */}
         <div className="col-12">
@@ -15,16 +31,6 @@ export default function AdminCard(props) {
           <a href="#*" class="btn btn-info ms-3 btn-sm">
             Edit Section header
           </a>
-          <a
-            href="#*"
-            class="btn btn-info ms-3 btn-sm"
-            onClick={() => {
-              console.log("createProductDialog");
-              setModal("EditCardModal");
-            }}
-          >
-            add to menu
-          </a>
         </div>
         {/* side orders cards */}
         <div className="col-md-6 col-lg-4">
@@ -33,13 +39,22 @@ export default function AdminCard(props) {
               <button
                 onClick={() => {
                   console.log("updateProductDialog");
-                  setModal("EditCardModal");
+                  handleUpdateProductDialog()
+                  // setModal("EditCardModal");
                 }}
                 className="btn btn-danger mb-3"
               >
-                Edit Card
+                Edit product
               </button>
-              <img src={curry} className="img-fluid" alt="" />
+              <button
+                onClick={() => {
+                  deleteProduct(props.product).then(() => props.update())
+                }}
+                className="btn btn-danger mb-3"
+              >
+                Delete product
+              </button>
+              <img src={props.product.img.path} className="img-fluid" alt="" />
             </div>
             <h3>
               <a href="*" className="mt-4 text-danger">

@@ -1,5 +1,5 @@
 import React from "react";
-import "../Styles/admin-orders-styles.css";
+import "../../Styles/admin-orders-styles.css";
 
 export default function AdminOrder(props) {
   return (

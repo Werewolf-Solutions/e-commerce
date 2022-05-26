@@ -3,12 +3,10 @@ import { useStore } from "../Hooks/Store";
 
 import CheckOutModal from "../Components/CheckOutModal";
 import LogInModal from "../Components/LogInModal";
-import EditCardModal from "../Components/EditCardModal";
 
 const modals = {
   CheckOutModal: CheckOutModal,
   LogInModal: LogInModal,
-  EditCardModal: EditCardModal,
 };
 
 export function ModalContainer() {

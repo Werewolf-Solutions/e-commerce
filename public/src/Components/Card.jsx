@@ -16,7 +16,7 @@ export default function Card(props) {
           <div className="col-md-6 col-lg-4">
             <div className="card-box ms-3 me-3">
               <div className="card-thumbnail">
-                <img src={curry} className="img-fluid" alt="" />
+                <img src={props.product.img.path} className="img-fluid" alt="" />
               </div>
               <h3>
                 <a href="*" className="mt-2 text-danger">
