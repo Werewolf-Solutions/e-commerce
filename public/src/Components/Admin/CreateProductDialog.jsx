@@ -50,7 +50,7 @@ export default function CreateProductDialog(props) {
               <input
                 class="form-control"
                 id="name"
-                placeholder="Name dynamically placed here"
+                placeholder="Put name here"
                 onChange={handleChange}
               />
             </div>
@@ -62,7 +62,7 @@ export default function CreateProductDialog(props) {
               <input
                 class="form-control"
                 id="description"
-                placeholder="Description dynamically placed here"
+                placeholder="Put description here"
                 onChange={handleChange}
               />
             </div>
@@ -74,7 +74,7 @@ export default function CreateProductDialog(props) {
               <input
                 class="form-control category"
                 id="category"
-                placeholder="Category dynamically placed here"
+                placeholder="Put category here"
                 onChange={handleChange}
               />
             </div>
@@ -86,6 +86,7 @@ export default function CreateProductDialog(props) {
               <input
                 class="form-control"
                 id="price"
+                type="number"
                 placeholder="Price dynamically placed here"
                 onChange={handleChange}
               />

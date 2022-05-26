@@ -12,6 +12,7 @@ export default function AdminMain(props) {
     setCreateProductDialog(!createProductDialog)
   }
 
+
   return (
     <>
       <CreateProductDialog
@@ -28,6 +29,7 @@ export default function AdminMain(props) {
         //     update={props.update}
         //   />
         // ))
+        // {props.order.accepted ? 'accepted orders' : null}
         <AdminOrder
           order={props.orders[0]}
           update={props.update}

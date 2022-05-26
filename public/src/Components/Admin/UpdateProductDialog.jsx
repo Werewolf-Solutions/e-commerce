@@ -55,7 +55,7 @@ export default function UpdateProductDialog(props) {
               <input
                 class="form-control"
                 id="name"
-                placeholder="Name dynamically placed here"
+                placeholder={props.product.name}
                 onChange={handleChange}
               />
             </div>
@@ -67,7 +67,7 @@ export default function UpdateProductDialog(props) {
               <input
                 class="form-control"
                 id="description"
-                placeholder="Description dynamically placed here"
+                placeholder={props.product.description}
                 onChange={handleChange}
               />
             </div>
@@ -79,7 +79,7 @@ export default function UpdateProductDialog(props) {
               <input
                 class="form-control category"
                 id="category"
-                placeholder="Category dynamically placed here"
+                placeholder={props.product.category}
                 onChange={handleChange}
               />
             </div>
@@ -91,7 +91,8 @@ export default function UpdateProductDialog(props) {
               <input
                 class="form-control"
                 id="price"
-                placeholder="Price dynamically placed here"
+                type="number"
+                placeholder={props.product.price}
                 onChange={handleChange}
               />
             </div>
