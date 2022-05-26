@@ -53,7 +53,9 @@ const {
   declineOrder,
   startDelivery,
   endDelivery,
-  getOrders
+  getOrders,
+  completeOrder,
+  orderReady
 } = require('../controllers/orderController')
 
 const imgPath = '/home/lorenzo/projects/e-commerce/public/src/files/pizza-margherita.jpeg'
@@ -115,10 +117,6 @@ router.get('/sign-out', signOut)
 router.get('/delete-user', deleteUser)
 
 router.post('/update-user', updateUser)
-
-router.post('/create-order', createOrder)
-
-router.post('/delete-order', deleteOrder)
 
 /**
  * PAYMENT endpoints
@@ -224,12 +222,20 @@ router.post('/upload-img', upload.single('file'), uploadImg)
 
 router.post('/orders', getOrders)
 
+router.post('/create-order', createOrder)
+
 router.post('/accept-order', acceptOrder)
 
+router.post('/order-ready', orderReady)
+
 router.post('/decline-order', declineOrder)
+
+router.post('/delete-order', deleteOrder)
 
 router.post('/start-delivery', startDelivery)
 
 router.post('/end-delivery', endDelivery)
+
+router.post('/complete-order', completeOrder)
 
 module.exports = router

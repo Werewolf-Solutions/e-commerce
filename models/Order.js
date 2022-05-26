@@ -5,24 +5,40 @@ const PaymentMethodSchema = require('./PaymentMethod')
 const PaymentIntentSchema = require('./PaymentIntent')
 
 const OrderSchema = new mongoose.Schema({
-    orderedBy: String,
+    orderedBy: {
+        id: String,
+        name: String,
+        mobile: String,
+    },
     // {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User'
     // },
     shipping_method: String,
+    number: Number,
     delivery_time: Date,
     total_amount: Number,
     status: String,
     payment_intent: PaymentIntentSchema,
+    payment_method: PaymentMethodSchema,
     address: AddressSchema,
-    items: [],
+    details: [],
     accepted: {
         type: Boolean,
         enum: [true, false],
         default: false
     },
     delivered: {
+        type: Boolean,
+        enum: [true, false],
+        default: false
+    },
+    ready: {
+        type: Boolean,
+        enum: [true, false],
+        default: false
+    },
+    completed: {
         type: Boolean,
         enum: [true, false],
         default: false

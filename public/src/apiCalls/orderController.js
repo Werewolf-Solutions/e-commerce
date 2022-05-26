@@ -90,3 +90,29 @@ export async function endDelivery(order) {
     let res = await axios.post('users/end-delivery', {order})
     console.log(res.data)
 }
+
+/**
+ * 
+ * @desc    complete order
+ * @route   POST /users/complete-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ export async function completeOrder(order) {
+    let res = await axios.post('users/complete-order', {order})
+    console.log(res.data)
+}
+
+/**
+ * 
+ * @desc    make order ready for next stage
+ * @route   POST /users/order-ready
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ export async function orderReady(order) {
+    let res = await axios.post('users/order-ready', {order})
+    console.log(res.data)
+}

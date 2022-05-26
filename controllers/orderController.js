@@ -51,6 +51,7 @@ const getOrders = async (req, res, next) => {
  * @params  order
  * @returns order, msg
  */
+let number = 0
 const createOrder = async (req, res, next) => {
     let {order} = req.body
     const { userId } = req.session
@@ -60,9 +61,11 @@ const createOrder = async (req, res, next) => {
     order.items.forEach(item => t_c = t_c + item.price*item.quantity)
     console.log(t_c, order.total_cart)
     if (user && t_c === order.total_cart) {
+        number++
         try {
             order.orderedBy = user._id
             order.total_amount = order.total_cart*100
+            order.number = number
             order.payment_intent = {
                 status: 'succeeded',
                 payment_method: 'cash'
@@ -123,6 +126,8 @@ const deleteOrder = async (req, res, next) => {
         order_accepted.accepted = true
         order_accepted.delivered = false
         order_accepted.status = 'preparing-order'
+        order_accepted.completed = false
+        order_accepted.ready = false
         await order_accepted.save()
         res.send({msg: 'Order accepted.', order_accepted})
     } else {
@@ -146,6 +151,9 @@ const declineOrder = async (req, res, next) => {
     if (user && user.admin) {
         order_declined.accepted = false
         order_declined.status = 'declined'
+        order_declined.delivered = false
+        order_declined.completed = false
+        order_declined.ready = false
         if (order_declined.payment_intent
         && order_declined.payment_intent.status === 'succeeded'
         && order_declined.payment_intent.card) {
@@ -157,6 +165,8 @@ const declineOrder = async (req, res, next) => {
             order_declined.accepted = false
             order_declined.delivered = false
             order_declined.status = 'declined'
+            order_declined.completed = false
+            order_declined.ready = false
         }
         await order_declined.save()
         res.send({msg: 'Order declined.', order_declined})
@@ -181,6 +191,9 @@ const declineOrder = async (req, res, next) => {
     if (user && user.admin) {
         order_updated.status = 'delivering'
         order_updated.accepted = true
+        order_updated.delivered = false
+        order_updated.completed = false
+        order_updated.ready = false
         await order_updated.save()
     }
     res.send(order_updated)
@@ -203,9 +216,63 @@ const endDelivery = async (req, res, next) => {
         order_updated.status = 'delivered'
         order_updated.delivered = true
         order_updated.accepted = true
+        order_updated.completed = true
+        order_updated.ready = true
         await order_updated.save()
     }
     res.send(order_updated)
+}
+
+/**
+ * 
+ * @desc    complete order
+ * @route   POST /users/complete-order
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ const completeOrder = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_completed = await Order.findById(order._id)
+    if (user && user.admin) {
+        order_completed.completed = true
+        order_completed.ready = true
+        order_completed.delivered = true
+        order_completed.accepted = true
+        order_completed.status = 'order-completed'
+        await order_completed.save()
+        res.send({msg: 'Order completed.', order_completed})
+    } else {
+        res.send({msg: 'Please sign in as admin or make an account or missing product'})
+    }
+}
+
+/**
+ * 
+ * @desc    make order ready for next stage
+ * @route   POST /users/order-ready
+ * @access  Private
+ * @params  order
+ * @returns order, msg
+ */
+ const orderReady = async (req, res, next) => {
+    let {order} = req.body
+    let {userId} = req.session
+    let user = await User.findById(userId)
+    let order_ready = await Order.findById(order._id)
+    if (user && user.admin) {
+        order_ready.ready = true
+        order_ready.completed = false
+        order_ready.delivered = false
+        order_ready.accepted = true
+        order_ready.status = 'order-ready'
+        await order_ready.save()
+        res.send({msg: 'Order ready.', order_ready})
+    } else {
+        res.send({msg: 'Please sign in as admin or make an account or missing product'})
+    }
 }
 
 let timeout
@@ -224,5 +291,7 @@ module.exports = {
     endDelivery,
     acceptOrder,
     declineOrder,
-    getOrders
+    getOrders,
+    completeOrder,
+    orderReady
 }

@@ -50,15 +50,7 @@ export async function confirmPaymentIntent() {
  * @params  payment_intent
  * @returns order_refunded, refund, msg
  */
-export async function refundPaymentIntent() {
-    let payment_intent = {
-        id: '1',
-        amount: 10,
-        currency: 'gbp',
-        payment_method: 'payment_method.id',
-        customer: 'user.customer_id', // optional
-        cart: ['items']
-    }
+export async function refundPaymentIntent(payment_intent) {
     let res = await axios.post('users/refund-payment-intent', {payment_intent})
     console.log(res.data)
 }

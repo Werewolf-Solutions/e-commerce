@@ -4,6 +4,8 @@ const User = require('../models/User')
 // Load Order model
 const Order = require('../models/Order')
 
+const { createOrder } = require('./orderController')
+
 // Stripe
 const { STRIPE_API_KEY } = process.env
 const stripe = require('stripe')(STRIPE_API_KEY)
@@ -25,7 +27,7 @@ const createPaymentIntent = async (req, res, next) => {
         total_amount,
         cart,
         shipping_method,
-        shipping_adddress,
+        shipping_address,
         gateway
     } = req.body
     const { userId } = req.session
@@ -59,6 +61,8 @@ const createPaymentIntent = async (req, res, next) => {
                     address: user.address,
                     items: cart,
                     payment_intent: paymentIntent,
+                    shipping_method: shipping_method,
+                    address: shipping_address,
                     total_amount: total_amount
                 })
                 await user.save()
@@ -81,14 +85,14 @@ const createPaymentIntent = async (req, res, next) => {
             let order
             guest_number++
             if (payment_method.card) {
-                if (shipping_method.in_store) {
+                if (shipping_method === 'pick-up') {
                     if (gateway.stripe) {
-                        order = await stripePayInStore(payment_method, total_amount, cart)
+                        order = await stripePayInStore(payment_method, total_amount, cart, shipping_method)
                     }
                 }
-                if (shipping_method.delivery) {
+                if (shipping_method === 'delivery') {
                     if (gateway.stripe) {
-                        order = await stripePayDelivery(payment_method, total_amount, shipping_adddress, cart)
+                        order = await stripePayDelivery(payment_method, total_amount, shipping_address, cart, shipping_method)
                     }
                 }
                 res.send({
@@ -309,7 +313,7 @@ const detachPaymentMethod = async (req, res, next) => {
     }
 }
 
-const stripePayInStore = async (payment_method, total_amount, cart) => {
+const stripePayInStore = async (payment_method, total_amount, cart, shipping_method) => {
     let paymentMethod
     let paymentIntent
     let order
@@ -328,18 +332,26 @@ const stripePayInStore = async (payment_method, total_amount, cart) => {
 
     // save new order
     order = new Order({
-        orderedBy: `guest${payment_method.table_number
-            ? payment_method.table_number
-            : guest_number}`,
+        orderedBy: {
+            name: `guest${payment_method.table_number
+                ? payment_method.table_number
+                : guest_number}`,
+            mobile: '077226264',
+            id: `guest${payment_method.table_number
+                ? payment_method.table_number
+                : guest_number}`
+        },
         items: cart,
         payment_intent: paymentIntent,
+        payment_method: paymentMethod,
+        shipping_method: shipping_method,
         total_amount: total_amount
     })
     await order.save()
     return {order, paymentIntent, paymentMethod}
 }
 
-const stripePayDelivery = async (payment_method, total_amount, shipping_adddress, cart) => {
+const stripePayDelivery = async (payment_method, total_amount, shipping_address, cart, shipping_method) => {
     let paymentMethod
     let paymentIntent
     let order
@@ -358,12 +370,20 @@ const stripePayDelivery = async (payment_method, total_amount, shipping_adddress
 
     // save new order
     order = new Order({
-        orderedBy: `guest${guest_number}`,
-        address: shipping_adddress,
+        orderedBy: {
+            name: `guest${guest_number}`,
+            mobile: '077226264',
+            id: `guest${guest_number}`
+        },
+        address: shipping_address,
+        shipping_method: shipping_method,
         items: cart,
         payment_intent: paymentIntent,
+        payment_method: paymentMethod,
         total_amount: total_amount
     })
+    // createOrder()
+    console.log(order)
     await order.save()
     return {order, paymentIntent, paymentMethod}
 }

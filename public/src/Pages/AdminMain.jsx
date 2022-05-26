@@ -2,6 +2,8 @@ import React from 'react'
 import AdminCard from "../Components/Admin/AdminCard"
 import AdminOrder from "../Components/Admin/AdminOrder"
 import CreateProductDialog from '../Components/Admin/CreateProductDialog'
+import AcceptedOrder from '../Components/Orders/AcceptedOrder'
+import ReadyOrder from '../Components/Orders/ReadyOrder'
 
 export default function AdminMain(props) {
 
@@ -11,7 +13,6 @@ export default function AdminMain(props) {
   const handleCreateProductDialog = () => {
     setCreateProductDialog(!createProductDialog)
   }
-
 
   return (
     <>
@@ -23,17 +24,29 @@ export default function AdminMain(props) {
       />
       {props.orders
       ?
-        // props.orders.map(order => (
-        //   <AdminOrder
-        //     order={order}
-        //     update={props.update}
-        //   />
-        // ))
-        // {props.order.accepted ? 'accepted orders' : null}
-        <AdminOrder
-          order={props.orders[0]}
-          update={props.update}
-        />
+        props.orders.map(order => (
+          order.accepted && !order.ready && !order.completed
+          ?
+            // orders in preparation || middle column
+            <AcceptedOrder
+              order={order}
+              update={props.update}
+            />
+          : order.ready && !order.completed
+            ?
+              // orders ready to be colected or delivered || last column
+              <ReadyOrder
+                order={order}
+                update={props.update}
+              />
+            : !order.completed
+              ?
+                <AdminOrder
+                  order={order}
+                  update={props.update}
+                />
+              : null
+        ))
       : 'loading'
       }
       <a
