@@ -39,7 +39,7 @@ function NavBar(props) {
           />
           {props.user
           ? props.user.admin
-            ? <AdminNavBar update={props.update}/>
+            ? <AdminNavBar update={props.update} handleSelected={props.handleSelected}/>
             : <UserNavBar update={props.update}/>
           : <GuestNavBar update={props.update}/>
           }

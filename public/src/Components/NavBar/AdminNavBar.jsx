@@ -7,16 +7,17 @@ import { signOut } from "../../apiCalls/userController"
 export default function AdminNavBar(props) {
   return (
     <div>
-        Logout || Orders || Edit products
         <li className="nav-item">
           <button
             className="nav-link adminNavLinks"
+            onClick={() => props.handleSelected('orders')}
           >
             users orders
           </button>
         </li>
         <li className="nav-item">
           <button
+            onClick={() => props.handleSelected('products')}
             className="nav-link adminNavLinks"
           >
             edit products

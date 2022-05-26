@@ -31,6 +31,11 @@ function App() {
   const [user, setUser] = React.useState('guest')
   const [products, setProducts] = React.useState()
   const [orders, setOrders] = React.useState()
+  const [selected, setSelected] = React.useState('products')
+
+  const handleSelected = (selection) => {
+    setSelected(selection)
+  }
 
   const initializeUser = async () => {
     let email = 'admin@gmail.com'
@@ -76,6 +81,7 @@ function App() {
           user={user}
           update={update}
           cart={cart}
+          handleSelected={handleSelected}
         />
         {user
         ? user.admin
@@ -83,6 +89,7 @@ function App() {
               orders={orders}
               products={products}
               update={update}
+              selected={selected}
             />
           : <Main
               products={products}

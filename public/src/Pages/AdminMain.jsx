@@ -8,7 +8,6 @@ import ReadyOrder from '../Components/Orders/ReadyOrder'
 export default function AdminMain(props) {
 
   const [createProductDialog, setCreateProductDialog] = React.useState(false)
-  const [selected, setSelected] = React.useState('products')
 
   const handleCreateProductDialog = () => {
     setCreateProductDialog(!createProductDialog)
@@ -22,32 +21,43 @@ export default function AdminMain(props) {
         product={props.product}
         update={props.update}
       />
-      {props.orders
+      {props.selected === 'orders'
       ?
-        props.orders.map(order => (
-          order.accepted && !order.ready && !order.completed
-          ?
-            // orders in preparation || middle column
-            <AcceptedOrder
-              order={order}
-              update={props.update}
-            />
-          : order.ready && !order.completed
+        props.orders
+        ?
+          props.orders.map(order => (
+            order.accepted && !order.ready && !order.completed
             ?
-              // orders ready to be colected or delivered || last column
-              <ReadyOrder
+              // orders in preparation || middle column
+              <AcceptedOrder
                 order={order}
                 update={props.update}
               />
-            : !order.completed
+            : order.ready && !order.completed
               ?
-                <AdminOrder
+                // orders ready to be colected or delivered || last column
+                <ReadyOrder
                   order={order}
                   update={props.update}
                 />
-              : null
-        ))
-      : 'loading'
+              : !order.completed
+                ?
+                  <AdminOrder
+                    order={order}
+                    update={props.update}
+                  />
+                : null
+          ))
+        : 'loading'
+      :
+        props.products
+        ? 
+          props.products.map(product => (
+            <AdminCard
+              product={product}
+              update={props.update}
+            />))
+        : 'loading'
       }
       <a
         href="#*"
@@ -59,15 +69,6 @@ export default function AdminMain(props) {
       >
         create product
       </a>
-      {props.products
-      ? 
-        props.products.map(product => (
-          <AdminCard
-            product={product}
-            update={props.update}
-          />))
-      : 'loading'
-      }
     </>
   );
 };
