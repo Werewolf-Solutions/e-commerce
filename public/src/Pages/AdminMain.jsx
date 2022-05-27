@@ -13,6 +13,12 @@ export default function AdminMain(props) {
     setCreateProductDialog(!createProductDialog)
   }
 
+  if (props.orders) {
+    props.orders.forEach(order => console.log(!order.completed 
+      && order.payment_intent.status == 'succeeded'
+      && order.payment_intent.status != 'refunded'))
+  }
+
   return (
     <>
       <CreateProductDialog
@@ -26,21 +32,29 @@ export default function AdminMain(props) {
         props.orders
         ?
           props.orders.map(order => (
-            order.accepted && !order.ready && !order.completed
+            order.accepted
+            && !order.ready
+            && !order.completed
+            && order.payment_intent.status != 'refunded'
             ?
               // orders in preparation || middle column
               <AcceptedOrder
                 order={order}
                 update={props.update}
               />
-            : order.ready && !order.completed
+            : order.ready
+              && !order.completed
+              && order.payment_intent.status != 'refunded'
               ?
                 // orders ready to be colected or delivered || last column
                 <ReadyOrder
                   order={order}
                   update={props.update}
                 />
-              : !order.completed
+                // orders in - paid or pay at pick up || first column
+              : !order.completed 
+                && order.payment_intent.status == 'succeeded'
+                && order.payment_intent.status != 'refunded'
                 ?
                   <AdminOrder
                     order={order}

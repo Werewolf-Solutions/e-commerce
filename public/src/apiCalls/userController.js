@@ -78,6 +78,6 @@ export async function deleteUser(email, password) {
  * @returns user, msg
  */
 export async function updateUser(user) {
-    let res = await axios.post('users/update-user', {user})
+    let res = await axios.post('users/update-user', user)
     console.log(res.data)
 }

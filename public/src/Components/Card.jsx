@@ -66,7 +66,10 @@ export default function Card(props) {
                   </ul>
                 </div>
 
-                <a href="*" className="btn btn-sm btn-danger float-right">
+                <a
+                  className="btn btn-sm btn-danger float-right"
+                  onClick={() => props.addToCart(props.product)}
+                >
                   ADD TO CART
                 </a>
               </div>

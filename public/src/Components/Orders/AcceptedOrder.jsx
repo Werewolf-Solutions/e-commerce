@@ -15,11 +15,25 @@ export default function AcceptedOrder(props) {
                         <h5 class="card-title">Order id: {props.order._id}</h5>
                         <h5 class="card-title">Date: {props.order.date}</h5>
                         <p class="card-text">Shipping Method: {props.order.shipping_method}</p>
-                        <p class="card-text">Payment Method: {props.order.payment_method.type}</p>
+                        <p class="card-text">
+                            {props.order.payment_method
+                            ?
+                                <div>
+                                Payment Method: {props.order.payment_method.type}
+                                </div>
+                            : 'cash'
+                            }
+                        </p>
                         <p class="card-text">Customer Name: {props.order.orderedBy.name}</p>
                         <p class="card-text">Customer Telephone: {props.order.orderedBy.mobile}</p>
                         <p class="card-text">
+                        {props.order.shipping_method === 'delivery'
+                        ?
+                            <div>
                             Customer Address: {props.order.address.number}, {props.order.address.line1}, {props.order.address.city}, {props.order.address.country}, {props.order.address.postcode}
+                            </div>
+                        : 'pick-up'
+                        }
                         </p>
                         <p class="card-text">Order Details</p>
                         <ul>

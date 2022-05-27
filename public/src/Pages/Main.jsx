@@ -12,6 +12,7 @@ function Main(props) {
             <Card
               product={product}
               update={props.update}
+              addToCart={props.addToCart}
             />
           ))
        : 'loading'

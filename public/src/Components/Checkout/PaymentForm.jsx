@@ -11,26 +11,58 @@ import {
     MenuItem
 } from '@mui/material'
 import { Button } from '@mui/material'
+import { createPaymentMethod } from '../../apiCalls/paymentController'
 
 export default function PaymentForm(props) {
+
+    const [state, setState] = React.useState({
+        cardName: '',
+        cardNumber: '',
+        expMonth: '',
+        expYear: '',
+        cvc: '',
+    })
+
+    const [guestCard, setGuestCard] = React.useState()
+
+    const handleChange = (e) => {
+        setState({...state, [e.target.id]: e.target.value})
+    }
+
     return (
         <React.Fragment>
         <Typography variant="h6" gutterBottom>
             Choose payment method
         </Typography>
-        <FormControl fullWidth>
-            <InputLabel id="select-payment-method">Payment method</InputLabel>
-            <Select
-                labelId="select-payment-method"
-                id="dselect-payment-method"
-                value={props.paymentMethod}
-                label="Payment method"
-                onChange={props.handlePaymentMethodSelected}
-            >
-                <MenuItem value={'cash'}>Cash</MenuItem>
-                <MenuItem value={'card'}>Card</MenuItem>
-            </Select>
-        </FormControl>
+        {props.user
+        ?
+            <FormControl fullWidth>
+                <InputLabel id="select-payment-method">Payment method</InputLabel>
+                <Select
+                    labelId="select-payment-method"
+                    id="dselect-payment-method"
+                    value={props.paymentMethod}
+                    label="Payment method"
+                    onChange={props.handlePaymentMethodSelected}
+                >
+                    <MenuItem value={'cash'}>Cash</MenuItem>
+                    <MenuItem value={'card'}>Card</MenuItem>
+                </Select>
+            </FormControl>
+        :
+            <FormControl fullWidth>
+                <InputLabel id="select-payment-method">Payment method</InputLabel>
+                <Select
+                    labelId="select-payment-method"
+                    id="dselect-payment-method"
+                    value={props.paymentMethod}
+                    label="Payment method"
+                    onChange={props.handlePaymentMethodSelected}
+                >
+                    <MenuItem value={'card'}>Card</MenuItem>
+                </Select>
+            </FormControl>
+        }
         {props.addPaymentMethod
         ? 
             <div>
@@ -47,8 +79,8 @@ export default function PaymentForm(props) {
                                 fullWidth
                                 autoComplete="cc-name"
                                 variant="standard"
-                                value={props.state.cardName}
-                                onChange={props.handleChange}
+                                value={state.cardName}
+                                onChange={handleChange}
                             />
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -59,8 +91,8 @@ export default function PaymentForm(props) {
                                 fullWidth
                                 autoComplete="cc-number"
                                 variant="standard"
-                                value={props.state.cardNumber}
-                                onChange={props.handleChange}
+                                value={state.cardNumber}
+                                onChange={handleChange}
                             />
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -71,8 +103,8 @@ export default function PaymentForm(props) {
                                 fullWidth
                                 autoComplete="cc-exp"
                                 variant="standard"
-                                value={props.state.expMonth}
-                                onChange={props.handleChange}
+                                value={state.expMonth}
+                                onChange={handleChange}
                             />
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -83,8 +115,8 @@ export default function PaymentForm(props) {
                                 fullWidth
                                 autoComplete="cc-exp"
                                 variant="standard"
-                                value={props.state.expYear}
-                                onChange={props.handleChange}
+                                value={state.expYear}
+                                onChange={handleChange}
                             />
                             </Grid>
                             <Grid item xs={12} md={6}>
@@ -96,13 +128,32 @@ export default function PaymentForm(props) {
                                 fullWidth
                                 autoComplete="cc-csc"
                                 variant="standard"
-                                value={props.state.cvc}
-                                onChange={props.handleChange}
+                                value={state.cvc}
+                                onChange={handleChange}
                             />
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <Button
-                                    onClick={props.createPaymentMethod}
+                                    onClick={() => {
+                                        let card = {
+                                            number: state.cardNumber,
+                                            exp_month: state.expMonth,
+                                            exp_year: state.expYear,
+                                            cvc: state.cvc,
+                                        }
+                                        createPaymentMethod(props.paymentMethod, card).then((paymentMethod) => {
+                                            let pm = {
+                                                id: paymentMethod.id,
+                                                last4: paymentMethod.card.last4,
+                                                brand: paymentMethod.card.brand,
+                                                exp_month: paymentMethod.card.exp_month,
+                                                exp_year: paymentMethod.card.exp_year
+                                            }
+                                            props.setCard(pm)
+                                            props.update()
+                                            props.handleAddPaymentMethod()
+                                        })
+                                    }}
                                 >add card</Button>
                             </Grid>
                         </Grid>
@@ -132,7 +183,15 @@ export default function PaymentForm(props) {
                     </FormControl>
                 </div>
             : null            
-        : null
+        : props.card
+            ?
+                <div>
+                    {`Number: xxxx-xxxx-${props.card.last4}`}<br/>
+                    {`Brand: ${props.card.brand}`}<br/>
+                    {`Exp month: ${props.card.exp_month}`}<br/>
+                    {`Exp year: ${props.card.exp_year}`}
+                </div>
+            : null
         }
         </React.Fragment>
     )

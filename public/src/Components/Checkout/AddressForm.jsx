@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import Checkbox from '@mui/material/Checkbox'
 import {
     Select,
     FormControl,
@@ -30,10 +29,8 @@ export default function AddressForm(props) {
             <DeliveryForm
                 open={deliveryFormDialog}
                 onClose={handleDeliveryFormDialog}
-                handleChange={props.handleChange}
-                state={props.state}
                 user={props.user}
-                editUser={props.editUser}
+                update={props.update}
             />
             <Typography variant="h6" gutterBottom>
                 Shipping address

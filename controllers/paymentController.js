@@ -35,35 +35,42 @@ const createPaymentIntent = async (req, res, next) => {
     // check total_cart is correct
     // NOTES: amount 1.00 = 100 for Stripe
     let t_c = 0
-    cart.forEach(item => t_c = t_c + item.price*item.quantity*100)
+    cart.forEach(item => t_c = t_c + item.price*item.quantity)
     console.log(t_c, total_amount)
     if (user && t_c === total_amount) {
+        console.log('user create payment intent')
         try {
             if (user.payment_methods.length === 0) {
                 res.send({msg: 'Add a payment method first'})
             } else {
                 // create payment intent
+                console.log(payment_method)
                 const paymentIntent = await stripe.paymentIntents.create({
-                    amount: total_amount,
+                    amount: total_amount*100,
                     currency: 'gbp',
-                    payment_method: payment_method,
+                    payment_method: payment_method.id,
                     customer: user.customer_id
                 })
                 // add payment intent to user's payment intents
                 // TODO: add payment intent details in order and delete payment_intents array from User model
                 // TODO: add address from user.address => don't need admin/user cause admin it's an user and will have an address?
-                let card = await stripe.paymentMethods.retrieve(payment_method)
+                let card = await stripe.paymentMethods.retrieve(payment_method.id)
                 user.payment_intents.push(paymentIntent)
                 paymentIntent.card = card.card
                 paymentIntent.card.id = card.id
                 let order = new Order({
-                    orderedBy: user._id,
+                    orderedBy: {
+                        id: user._id,
+                        name: 'user.name',
+                        mobile: 'user.mobile'
+                    },
                     address: user.address,
                     items: cart,
                     payment_intent: paymentIntent,
                     shipping_method: shipping_method,
                     address: shipping_address,
-                    total_amount: total_amount
+                    total_amount: total_amount,
+                    payment_method: payment_method
                 })
                 await user.save()
                 await order.save()
@@ -74,6 +81,7 @@ const createPaymentIntent = async (req, res, next) => {
             res.send({msg: error.raw ? error.raw.message : error})
         }
     } else {
+        console.log('guest create payment intent')
         try {
             // guest
             /**
@@ -84,20 +92,45 @@ const createPaymentIntent = async (req, res, next) => {
              */
             let order
             guest_number++
-            if (payment_method.card) {
+            if (payment_method) {
+                // create payment intent
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: total_amount*100,
+                    currency: 'gbp',
+                    payment_method: payment_method.id,
+                })
+                // save new order
+                order = new Order({
+                    orderedBy: {
+                        name: `guest${guest_number}`,
+                        mobile: '077226264',
+                        id: `guest${guest_number}`
+                    },
+                    number: guest_number,
+                    address: shipping_address,
+                    shipping_method: shipping_method,
+                    items: cart,
+                    payment_intent: paymentIntent,
+                    payment_method: payment_method,
+                    total_amount: total_amount
+                })
+                // createOrder()
+                // console.log(order)
+                await order.save()
                 if (shipping_method === 'pick-up') {
-                    if (gateway.stripe) {
-                        order = await stripePayInStore(payment_method, total_amount, cart, shipping_method)
-                    }
+                    // if (gateway.stripe) {
+                    //     order = await stripePayInStore(payment_method, total_amount, cart, shipping_method)
+                    // }
                 }
                 if (shipping_method === 'delivery') {
-                    if (gateway.stripe) {
-                        order = await stripePayDelivery(payment_method, total_amount, shipping_address, cart, shipping_method)
-                    }
+                    // if (gateway.stripe) {
+                    //     order = await stripePayDelivery(payment_method, total_amount, shipping_address, cart, shipping_method)
+                    // }
                 }
                 res.send({
                     msg: 'Guest order succeded',
-                    order
+                    order,
+                    paymentIntent
                 })
             } else {
                 res.send({msg: 'Missing card'})
@@ -121,10 +154,10 @@ const confirmPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
     const { userId } = req.session
     let user = await User.findById(userId)
-    let order = await Order.findOne({'payment_intent.id': payment_intent})
+    let order = await Order.findOne({'payment_intent.id': payment_intent.id})
     if (user) {
         try {
-            let paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+            let paymentIntent = await stripe.paymentIntents.confirm(payment_intent.id)
             console.log(paymentIntent.charges.data[0].id)
             paymentIntent.charges.id = paymentIntent.charges.data[0].id
             // update user's payment intent
@@ -145,9 +178,9 @@ const confirmPaymentIntent = async (req, res, next) => {
     } else {
         // guest
         try {
-            let paymentIntent = await stripe.paymentIntents.confirm(payment_intent)
+            let paymentIntent = await stripe.paymentIntents.confirm(payment_intent.id)
             paymentIntent.charges.id = paymentIntent.charges.data[0].id
-            let order = await Order.findOne({'payment_intent.id': payment_intent})
+            let order = await Order.findOne({'payment_intent.id': payment_intent.id})
             // update order payment intent status
             order.payment_intent = paymentIntent
             await order.save()
@@ -157,6 +190,7 @@ const confirmPaymentIntent = async (req, res, next) => {
                 order
             })
         } catch (error) {
+            console.log(error)
             res.send({msg: error.raw ? error.raw.message : error})
         }
     }
@@ -175,7 +209,7 @@ const refundPaymentIntent = async (req, res, next) => {
     let {payment_intent} = req.body
     let {userId} = req.session
     let user = await User.findById(userId)
-    let order_refunded = await Order.findOne({'payment_intent.id': payment_intent})
+    let order_refunded = await Order.findOne({'payment_intent.id': payment_intent.id})
     if (user && user.admin) {
         if (order_refunded.payment_intent
         && order_refunded.payment_intent.status === 'succeeded'
@@ -186,13 +220,18 @@ const refundPaymentIntent = async (req, res, next) => {
             })
             order_refunded.accepted = false
             order_refunded.status = 'refunded'
+            order_refunded.delivered = false
+            order_refunded.completed = false
+            order_refunded.ready = false
         } else {
             order_refunded.accepted = false
-            order_refunded.delivered = false
             order_refunded.status = 'refunded'
+            order_refunded.delivered = false
+            order_refunded.completed = false
+            order_refunded.ready = false
         }
         await order_refunded.save()
-        res.send({msg: 'Order refunded.', order_refunded, refund})
+        res.send({msg: 'Order refunded.', order_refunded})
     } else {
         res.send({msg: 'Please sign in as admin or make an account or missing product'})
     }
@@ -233,7 +272,8 @@ const createPaymentMethod = async (req, res, next) => {
                         exp_month: paymentMethod.card.exp_month,
                         exp_year: paymentMethod.card.exp_year,
                         brand: paymentMethod.card.brand,
-                        card_name: card.card_name
+                        card_name: card.card_name,
+                        type: paymentMethod.type
                     }) 
                     await user.save()
                     res.send({user, paymentMethod, msg: 'Payment method created'})
@@ -263,21 +303,14 @@ const createPaymentMethod = async (req, res, next) => {
         }
     } else {
         // guest
-        const paymentMethods = await stripe.paymentMethods.list({
+        const paymentMethod = await stripe.paymentMethods.create({
             type: type,
+            card: card,
         })
-        const paymentMethod = await stripe.paymentMethods.retrieve(
-            'pm_1KxRnmAlUKnrAXrlt15k8PN0'
-        )
-        // const paymentMethod = await stripe.paymentMethods.create({
-        //     type: type,
-        //     card: card,
-        // })
-        //
+        
         res.send({
-            msg: 'No user found, please sign in or sign up first',
-            paymentMethod,
-            paymentMethods
+            msg: 'Payment method added as a guest',
+            paymentMethod
         })
     }
 }

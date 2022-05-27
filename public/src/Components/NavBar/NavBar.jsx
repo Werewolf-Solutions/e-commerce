@@ -1,7 +1,6 @@
 import React from "react";
 import "../../Styles/nav-bar-styles.css";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
-import { useStore } from "../../Hooks/Store.jsx";
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 
 import AdminNavBar from "./AdminNavBar";
@@ -9,8 +8,6 @@ import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
 
 function NavBar(props) {
-  const setModal = useStore((store) => store.setModal);
-
   const [checkoutDialog, setCheckoutDialog] = React.useState(false)
 
   const handleCheckoutDialog = () => {
@@ -36,6 +33,10 @@ function NavBar(props) {
           <CheckoutDialog
             open={checkoutDialog}
             onClose={handleCheckoutDialog}
+            user={props.user}
+            cart={props.cart}
+            totalAmount={props.totalAmount}
+            update={props.update}
           />
           {props.user
           ? props.user.admin
@@ -86,15 +87,15 @@ function NavBar(props) {
 
             <li className="nav-item">
               <a className="nav-link">
-                Items in my Cart : 2
+                Items in my Cart : {props.cart.length}
               </a>
             </li>
             <li className="nav-item">
               <a className="nav-link">
-                Total Price: $55.00
+                Total Price: {props.totalAmount}
               </a>
             </li>
-            {props.cart
+            {props.cart.length !== 0
             ? 
               <li className="nav-item">
                 <button

@@ -9,16 +9,10 @@ const axios = require('axios')
  * @returns user, paymentIntent, order, msg
  */
 // TODO: handle guest or user
-export async function createPaymentIntent() {
-    let payment_intent = {
-        amount: 10,
-        currency: 'gbp',
-        payment_method: 'payment_method.id',
-        customer: 'user.customer_id', // optional
-        cart: ['items']
-    }
+export async function createPaymentIntent(payment_intent) {
     let res = await axios.post('users/create-payment-intent', payment_intent)
     console.log(res.data)
+    return res.data.paymentIntent
 }
 
 /**
@@ -29,15 +23,7 @@ export async function createPaymentIntent() {
  * @params  payment_intent
  * @returns user, paymentIntent, order, msg
  */
-export async function confirmPaymentIntent() {
-    let payment_intent = {
-        _id: '1',
-        amount: 10,
-        currency: 'gbp',
-        payment_method: 'payment_method.id',
-        customer: 'user.customer_id', // optional
-        cart: ['items']
-    }
+export async function confirmPaymentIntent(payment_intent) {
     let res = await axios.post('users/confirm-payment-intent', {payment_intent})
     console.log(res.data)
 }
@@ -63,13 +49,10 @@ export async function refundPaymentIntent(payment_intent) {
  * @params  type, card
  * @returns user, paymentMethod, msg
  */
- export async function createPaymentMethod() {
-    let payment_method = {
-        type: 'card',
-        card: {details: 'card'}
-    }
-    let res = await axios.post('users/create-payment-method', {payment_method})
+ export async function createPaymentMethod(type, card) {
+    let res = await axios.post('users/create-payment-method', {type, card})
     console.log(res.data)
+    return res.data.paymentMethod
 }
 
 /**

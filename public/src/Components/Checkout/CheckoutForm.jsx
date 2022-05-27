@@ -14,6 +14,11 @@ import AddressForm from './AddressForm'
 import PaymentForm from './PaymentForm'
 import Review from './Review'
 
+import {
+    createPaymentIntent,
+    confirmPaymentIntent
+} from '../../apiCalls/paymentController'
+
 // import { io } from 'socket.io-client'
 
 import axios from 'axios'
@@ -28,27 +33,22 @@ const theme = createTheme()
 export default function CheckoutForm(props) {
     const [activeStep, setActiveStep] = React.useState(0)
     const [state, setState] = React.useState({
-        email: props.user ? props.user.email : '',
-        firstName: props.user ? props.user.firstName : '',
-        lastName: props.user ? props.user.lastName : '',
-        address1: props.user ? props.user.address.line1 : '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        address1: '',
         address2: '',
         number: '',
         city: '',
         region: '',
         postcode: '',
         country: '',
-        cardName: '',
-        cardNumber: '',
-        expMonth: '',
-        expYear: '',
-        cvc: '',
     })
-    const [card, setCard] = React.useState({})
+    const [card, setCard] = React.useState()
     const [paymentIntent, setPaymentIntent] = React.useState()
     const [addPaymentMethod, setAddPaymentMethod] = React.useState(false)
-    const [paymentMethod, setPaymentMethod] = React.useState('')
-    const [shippingMethod, setShippingMethod] = React.useState('')
+    const [paymentMethod, setPaymentMethod] = React.useState()
+    const [shippingMethod, setShippingMethod] = React.useState()
 
     const handleShippingMethodSelect = (e) => {
         setShippingMethod(e.target.value)
@@ -74,8 +74,6 @@ export default function CheckoutForm(props) {
 
     const handleNext = async () => {
 
-        setActiveStep(activeStep + 1) // delete in production
-
         // Address form
 
         // if there's not a shipping method don't go next
@@ -89,7 +87,15 @@ export default function CheckoutForm(props) {
             // TODO: handle errors
             // TODO: if required fields are empty send error
             // sign up user
-            if (state.email != '' && state.password != '' && state.password2 != '') {
+            if (state.email != ''
+                && state.password != ''
+                && state.password2 != ''
+                && state.address1 != ''
+                && state.address2 != ''
+                && state.postcode != ''
+                && state.city != ''
+                && state.country != ''
+                && state.number != '') {
                 // TODO: sign up with user's details or call /users/edit-user
                 console.log('Try sign in and if not existing sign up')
                 console.log(state)
@@ -100,18 +106,16 @@ export default function CheckoutForm(props) {
             }
             // if shipping method is delivery & user signed in
         } else if (shippingMethod === 'delivery' && props.user && activeStep === 0) {
-            // edit user signed in
-            // TODO: edit only if user's details are different from DB ones
-            // updateUser()
             setActiveStep(activeStep + 1)
             // if shipping method is pick-up & there's no user signed in
         } else if (shippingMethod === 'pick-up' && !props.user && activeStep === 0) {
+            setActiveStep(activeStep + 1)
             // sign up user
             if (state.email != '' && state.password != '' && state.password2 != '') {
                 console.log('Try sign in and if not existing sign up')
                 console.log(state)
 
-                // sign up
+                // sign up && update user
             } else {
                 console.log('Fill all fields')
             }
@@ -137,7 +141,7 @@ export default function CheckoutForm(props) {
                     setActiveStep(activeStep + 1)
                 }
                 // if payment method === card
-                if (paymentMethod === 'card') {
+                if (paymentMethod === 'card' && card) {
                     // if there's no card selected
                     if (!card && !addPaymentMethod) {
                         // TODO: pop up message
@@ -148,7 +152,16 @@ export default function CheckoutForm(props) {
                         console.log('Card selected. Create payment intent. Go next.')
                         // TODO: create payment intent
                         if (!paymentIntent) {
-                            // createPaymentIntent()
+                            let payment_intent = {
+                                total_amount: props.totalAmount,
+                                currency: 'gbp',
+                                payment_method: card,
+                                customer: props.user.customer_id,
+                                cart: props.cart
+                            }
+                            let pi = await createPaymentIntent(payment_intent)
+                            console.log(pi)
+                            setPaymentIntent(pi)
                         }
                         setActiveStep(activeStep + 1)
                     }
@@ -164,12 +177,27 @@ export default function CheckoutForm(props) {
             } else {
                 console.log('Please select a payment method')
             }
+            // guest
+        } else if (activeStep === 1 && !props.user && card) {
+            console.log('guest payment form => create payment intent')
+            let payment_intent = {
+                total_amount: props.totalAmount,
+                currency: 'gbp',
+                payment_method: card,
+                // customer: 'user.customer_id', // optional
+                cart: props.cart
+            }
+            let pi = await createPaymentIntent(payment_intent)
+            console.log(pi)
+            setPaymentIntent(pi)
+            setActiveStep(activeStep + 1)
         }
 
         if (activeStep === steps.length - 1 && props.user) {
             console.log(`active step === steps.length -1 = ${steps.length - 1}`)
+            console.log(paymentIntent)
             if (paymentMethod === 'card') {
-                // confirmPaymentIntent()
+                confirmPaymentIntent(paymentIntent)
                 // let order = {
                 //     orderedBy: props.user._id,
                 //     payment_method: card,
@@ -186,25 +214,29 @@ export default function CheckoutForm(props) {
             } else if (paymentMethod === 'cash') {
                 console.log('Add order to admin and user')
                 // TODO: save order to user and admin
-                // let order = {
-                //     orderedBy: props.user._id,
-                //     address: props.user.address,
-                //     items: props.cart,
-                //     payment_intent: {
-                //         status: 'succeeded',
-                //         payment_method: 'cash'
-                //     },
-                //     shipping_method: shippingMethod,
-                //     total_cart: props.cart.total_cart
-                // }
-                // console.log(order)
-                // createOrder()
+                let order = {
+                    orderedBy: props.user._id,
+                    address: props.user.address,
+                    items: props.cart,
+                    payment_intent: {
+                        status: 'succeeded',
+                        payment_method: 'cash'
+                    },
+                    shipping_method: shippingMethod,
+                    total_amount: props.totalAmount
+                }
+                console.log(order)
+                createOrder(order)
                 // socket.emit('new_order', {order})
             }
             // props.emptyCart()
             // props.updateProductsList()
-            props.onClose()
-
+            setActiveStep(activeStep + 1)
+        } else if (activeStep === steps.length - 1 && !props.user) {
+            console.log('guest review order => confirm payment intent')
+            confirmPaymentIntent(paymentIntent)
+            setActiveStep(activeStep + 1)
+            props.update()
         }
     }
 
@@ -223,6 +255,7 @@ export default function CheckoutForm(props) {
                     state={state}
                     shippingMethod={shippingMethod}
                     handleShippingMethodSelect={handleShippingMethodSelect}
+                    update={props.update}
                 />)
             case 1:
             return (
@@ -231,6 +264,8 @@ export default function CheckoutForm(props) {
                     handleChange={handleChange}
                     state={state}
                     card={card}
+                    setCard={setCard}
+                    update={props.update}
                     handleCardSelected={handleCardSelected}
                     handleAddPaymentMethod={handleAddPaymentMethod}
                     addPaymentMethod={addPaymentMethod}
@@ -248,6 +283,7 @@ export default function CheckoutForm(props) {
                     shippingMethod={shippingMethod}
                     currency={props.currency}
                     user={props.user}
+                    update={props.update}
                 />)
             default:
             throw new Error('Unknown step')
@@ -287,6 +323,7 @@ export default function CheckoutForm(props) {
                         confirmation, and will send you an update when your order has
                         shipped.
                     </Typography>
+                    <button onClick={props.onClose}>close</button>
                 </React.Fragment>
                 ) : (
                 <React.Fragment>

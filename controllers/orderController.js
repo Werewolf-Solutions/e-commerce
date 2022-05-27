@@ -33,7 +33,7 @@ const getOrders = async (req, res, next) => {
     if (user.admin) {
         // if admin get all orders
         orders = await Order.find()
-        // console.log(orders)
+        console.log(orders)
         res.send({orders})
     } else if (orderedBy) {
         // else get user's orders
@@ -59,12 +59,16 @@ const createOrder = async (req, res, next) => {
     // check total_cart is correct
     let t_c = 0
     order.items.forEach(item => t_c = t_c + item.price*item.quantity)
-    console.log(t_c, order.total_cart)
-    if (user && t_c === order.total_cart) {
+    console.log(t_c, order.total_amount)
+    if (user && t_c === order.total_amount) {
         number++
         try {
-            order.orderedBy = user._id
-            order.total_amount = order.total_cart*100
+            order.orderedBy = {
+                id: user._id,
+                name: 'user.name',
+                mobile: 'user.mobile'
+            },
+            order.total_amount = order.total_amount*100
             order.number = number
             order.payment_intent = {
                 status: 'succeeded',
