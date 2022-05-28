@@ -2,6 +2,7 @@ import React from 'react'
 import AdminCard from "../Components/Admin/AdminCard"
 import AdminOrder from "../Components/Admin/AdminOrder"
 import CreateProductDialog from '../Components/Admin/CreateProductDialog'
+import Dashboard from '../Components/Admin/Dashboard'
 import AcceptedOrder from '../Components/Orders/AcceptedOrder'
 import ReadyOrder from '../Components/Orders/ReadyOrder'
 
@@ -13,11 +14,11 @@ export default function AdminMain(props) {
     setCreateProductDialog(!createProductDialog)
   }
 
-  if (props.orders) {
-    props.orders.forEach(order => console.log(!order.completed,
-      order.payment_intent.status == 'succeeded',
-      order.status != 'refunded'))
-  }
+  // if (props.orders) {
+  //   props.orders.forEach(order => console.log(!order.completed,
+  //     order.payment_intent.status == 'succeeded',
+  //     order.status != 'refunded'))
+  // }
 
   return (
     <>
@@ -63,15 +64,28 @@ export default function AdminMain(props) {
                 : null
           ))
         : 'loading'
-      :
-        props.products
-        ? 
-          props.products.map(product => (
-            <AdminCard
-              product={product}
-              update={props.update}
-            />))
-        : 'loading'
+      : props.selected === 'products'
+        ?
+          props.products
+          ? 
+            props.products.map(product => (
+              <AdminCard
+                product={product}
+                update={props.update}
+              />))
+          : 'loading'
+        : 
+            props.orders.map(order => (
+              order.accepted
+              && order.ready
+              && order.completed
+              ?
+                <Dashboard
+                  order={order}
+                  update={props.update}
+                />
+              : null
+            ))
       }
       <a
         href="#*"

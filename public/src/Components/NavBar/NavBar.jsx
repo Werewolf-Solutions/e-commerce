@@ -44,8 +44,8 @@ function NavBar(props) {
           {props.user
           ? props.user.admin
             ? <AdminNavBar update={props.update} handleSelected={props.handleSelected}/>
-            : <UserNavBar update={props.update}/>
-          : <GuestNavBar update={props.update}/>
+            : <UserNavBar update={props.update} handleSelected={props.handleSelected}/>
+          : <GuestNavBar update={props.update} handleSelected={props.handleSelected}/>
           }
           <ul className="navbar-nav ">
             <li className="nav-item dropdown me-3">

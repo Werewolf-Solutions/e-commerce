@@ -33,6 +33,14 @@ export default function AdminNavBar(props) {
             logout
             </button>
         </li>
+        <li className="nav-item">
+            <button
+            className="nav-link adminNavLinks"
+            onClick={() => props.handleSelected('dashboard')}
+            >
+            dashboard
+            </button>
+        </li>
     </div>
   )
 }

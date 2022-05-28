@@ -32,10 +32,10 @@ function App() {
   const [state, setState] = React.useState({
     cart: []
   })
-  const [user, setUser] = React.useState('guest')
+  const [user, setUser] = React.useState()
   const [products, setProducts] = React.useState()
   const [orders, setOrders] = React.useState()
-  const [selected, setSelected] = React.useState('orders')
+  const [selected, setSelected] = React.useState('products')
 
   const handleSelected = (selection) => {
     setSelected(selection)
@@ -127,13 +127,19 @@ function App() {
             />
           : <Main
               products={products}
+              user={user}
+              orders={orders}
               update={update}
               addToCart={addToCart}
+              selected={selected}
             />
         : <Main
             products={products}
+            orders={orders}
+            user={user}
             update={update}
             addToCart={addToCart}
+            selected={selected}
           />
         }
         <Footer />

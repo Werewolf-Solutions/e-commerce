@@ -37,7 +37,7 @@ const getOrders = async (req, res, next) => {
         res.send({orders})
     } else if (orderedBy) {
         // else get user's orders
-        orders = await Order.find({'orderedBy': orderedBy})
+        orders = await Order.find({'orderedBy.id': orderedBy})
         // console.log(orders)
         res.send({orders})
     }
