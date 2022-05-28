@@ -14,6 +14,9 @@ function NavBar(props) {
     setCheckoutDialog(!checkoutDialog)
   }
 
+  console.log(props.cart)
+  console.log(props.totalAmount)
+
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
       <div className="container-fluid align-items-end">

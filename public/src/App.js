@@ -35,52 +35,44 @@ function App() {
   const [user, setUser] = React.useState('guest')
   const [products, setProducts] = React.useState()
   const [orders, setOrders] = React.useState()
-  const [selected, setSelected] = React.useState('products')
+  const [selected, setSelected] = React.useState('orders')
 
   const handleSelected = (selection) => {
     setSelected(selection)
   }
 
   const addToCart = (product) => {
-    // check if cart length === 0 if yes add product
-
-    // if not check for same id and add quantity
-
-
-
-
-    // check if product is already in cart, if yes add quantity, if not add product
-    if (state.cart.length === 0) {
-      // add first product
+    let new_cart = cart
+    let total_amount = 0
+    // add first product
+    if (new_cart.length === 0) {
       product.quantity = 1
-      setState(prevState => ({
-        cart: [...prevState.cart, product] 
-      }))
+      new_cart.push(product)
     } else {
-      let new_cart = state.cart
-      new_cart.forEach(prod => {
-        if (prod._id === product._id) {
+      for (let i = 0; i < new_cart.length; i++) {
+        if (new_cart[i]._id === product._id) {
+          console.log('product in cart, add quantity')
           // add quantity
-          prod.quantity++
-          console.log(prod.quantity)
-          setState({...state, cart: new_cart})
+          new_cart[i].quantity++
+          break
         } else {
           // add product
+          console.log('product not in cart, add product')
           product.quantity = 1
-          setState(prevState => ({
-            cart: [...prevState.cart, product] 
-          }))
+          new_cart.push(product)
+          break
         }
-      })
+      }
     }
-    let total_amount = totalAmount
-    state.cart.forEach(item => total_amount += item.quantity*item.price)
+    console.log(new_cart)
+    new_cart.forEach(item => total_amount += item.quantity*item.price)
+    setCart(new_cart)
     setTotalAmount(total_amount)
   }
 
   const initializeUser = async () => {
-    let email = 'admin@gmail.com'
-    // let email = 'foo@gmail.com'
+    // let email = 'admin@gmail.com'
+    let email = 'foo20002@gmail.com'
     let password = '1234'
     let usr = await signIn(email, password)
     // in production get user logged in
@@ -121,7 +113,7 @@ function App() {
         <NavBar
           user={user}
           update={update}
-          cart={state.cart}
+          cart={cart}
           handleSelected={handleSelected}
           totalAmount={totalAmount}
         />
