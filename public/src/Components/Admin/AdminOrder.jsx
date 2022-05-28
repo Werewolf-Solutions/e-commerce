@@ -51,6 +51,7 @@ export default function AdminOrder(props) {
             <p class="card-text">Total Price: {props.order.total_amount}</p>
             <a
               onClick={() => {
+                console.log(props.order.payment_intent)
                 refundPaymentIntent(props.order.payment_intent).then(() => props.update())
               }}
               class="btn btn-warning me-2 btn-sm"

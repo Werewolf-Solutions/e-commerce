@@ -14,9 +14,9 @@ export default function AdminMain(props) {
   }
 
   if (props.orders) {
-    props.orders.forEach(order => console.log(!order.completed 
-      && order.payment_intent.status == 'succeeded'
-      && order.payment_intent.status != 'refunded'))
+    props.orders.forEach(order => console.log(!order.completed,
+      order.payment_intent.status == 'succeeded',
+      order.status != 'refunded'))
   }
 
   return (
@@ -35,7 +35,7 @@ export default function AdminMain(props) {
             order.accepted
             && !order.ready
             && !order.completed
-            && order.payment_intent.status != 'refunded'
+            && order.status != 'refunded'
             ?
               // orders in preparation || middle column
               <AcceptedOrder
@@ -44,7 +44,7 @@ export default function AdminMain(props) {
               />
             : order.ready
               && !order.completed
-              && order.payment_intent.status != 'refunded'
+              && order.status != 'refunded'
               ?
                 // orders ready to be colected or delivered || last column
                 <ReadyOrder
@@ -54,7 +54,7 @@ export default function AdminMain(props) {
                 // orders in - paid or pay at pick up || first column
               : !order.completed 
                 && order.payment_intent.status == 'succeeded'
-                && order.payment_intent.status != 'refunded'
+                && order.status != 'refunded'
                 ?
                   <AdminOrder
                     order={order}

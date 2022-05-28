@@ -213,7 +213,7 @@ const refundPaymentIntent = async (req, res, next) => {
     if (user && user.admin) {
         if (order_refunded.payment_intent
         && order_refunded.payment_intent.status === 'succeeded'
-        && order_refunded.payment_intent.charges) {
+        && order_refunded.payment_intent.charges.id) {
             console.log('Refund user payment')
             let refund = await stripe.refunds.create({
                 charge: order_refunded.payment_intent.charges.id,
@@ -223,6 +223,7 @@ const refundPaymentIntent = async (req, res, next) => {
             order_refunded.delivered = false
             order_refunded.completed = false
             order_refunded.ready = false
+            order_refunded.payment_intent = refund
         } else {
             order_refunded.accepted = false
             order_refunded.status = 'refunded'
