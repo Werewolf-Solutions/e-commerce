@@ -97,8 +97,7 @@ export default function CreateProductDialog(props) {
             onClick={() => {
               createProduct(product).then((prod) => {
                 console.log(prod)
-                uploadImg(file, prod)
-                props.update()
+                uploadImg(file, prod).then(() => props.update())                
               })
               props.onClose()
             }}
