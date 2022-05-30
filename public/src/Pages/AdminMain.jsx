@@ -88,7 +88,6 @@ export default function AdminMain(props) {
             ))
       }
       <a
-        href="#*"
         class="btn btn-info ms-3 btn-sm"
         onClick={() => {
           console.log("createProductDialog");
