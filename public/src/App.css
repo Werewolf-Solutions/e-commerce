@@ -30,7 +30,7 @@ a {
 button {
   font-family: "Roboto bold", sans-serif;
   text-transform: uppercase;
-  box-shadow: 5px 5px 5px rgba(110, 110, 110, 0.649);
+  /* box-shadow: 5px 5px 5px rgba(110, 110, 110, 0.649); */
 }
 
 button:hover {
