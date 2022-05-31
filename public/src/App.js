@@ -5,6 +5,7 @@ import Main from "./Pages/Main";
 import AdminMain from "./Pages/AdminMain";
 import Footer from "./Components/Footer";
 import { useEffect } from "react";
+import { io } from 'socket.io-client'
 
 // Import user controller
 import {
@@ -25,6 +26,8 @@ import {
   getOrders
 } from "./apiCalls/orderController";
 import NavBar from "./Components/NavBar/NavBar";
+
+const socket = io()
 
 function App() {
   const [cart, setCart] = React.useState([])
@@ -121,6 +124,22 @@ function App() {
   useEffect(() => {
     initializeUser()
     initializeProducts()
+
+    socket.on('new_order', ({order}) => {
+      console.log('new order')
+      console.log(order)
+      // setNotifications([...notifications, 'new order'])
+      update()
+    })
+
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      // setNotifications([...notifications, 'order update'])
+      update()
+    })
+
+
   }, [])
 
   return (
