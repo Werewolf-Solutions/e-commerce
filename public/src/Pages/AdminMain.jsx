@@ -28,6 +28,7 @@ export default function AdminMain(props) {
         product={props.product}
         update={props.update}
       />
+      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       {props.selected === 'orders'
       ?
         props.orders
@@ -86,7 +87,7 @@ export default function AdminMain(props) {
                 />
               : null
             ))
-      }
+      }<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       <a
         class="btn btn-info ms-3 btn-sm"
         onClick={() => {
