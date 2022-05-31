@@ -5,6 +5,7 @@ import Main from "./Pages/Main";
 import AdminMain from "./Pages/AdminMain";
 import Footer from "./Components/Footer";
 import { useEffect } from "react";
+import { io } from 'socket.io-client'
 
 // Import user controller
 import { getUser, signIn } from "./apiCalls/userController";
@@ -20,6 +21,8 @@ import {
 // Import order controller
 import { getOrders } from "./apiCalls/orderController";
 import NavBar from "./Components/NavBar/NavBar";
+
+const socket = io()
 
 function App() {
   const [cart, setCart] = React.useState([]);
@@ -66,17 +69,17 @@ function App() {
   };
 
   const initializeUser = async () => {
-    let email = "admin@gmail.com";
-    // let email = "foo@gmail.com";
-    let password = "1234";
-    let usr = await signIn(email, password);
+    // let email = 'admin@gmail.com'
+    // let email = 'foo@gmail.com'
+    // let password = '1234'
+    // let usr = await signIn(email, password)
     // in production get user logged in
-    // let usr = await getUser();
-    console.log(usr);
-    setUser(usr);
-    let ords = await getOrders(usr._id);
-    setOrders(ords);
-  };
+    let usr = await getUser()
+    console.log(usr)
+    setUser(usr)
+    let ords = await getOrders(usr._id)
+    setOrders(ords)
+  }
 
   // function to be called every time to update user, orders, products
   const update = async () => {
@@ -91,13 +94,46 @@ function App() {
 
   const initializeProducts = async () => {
     let prods = await getProducts();
-    setProducts(prods);
-  };
+    let p = createList(prods)
+    setProducts(p)
+  }
+
+  const createList = (products) => {
+    let result = products.reduce((acc, d) => {
+      const found = acc.find(a => a.category === d.category)
+      //const value = { category: d.category, val: d.value }
+      const value = d // the element in data property
+      if (!found) {
+        //acc.push(...value)
+        acc.push({category:d.category, products: [value]}) // not found, so need to add products property
+      }
+      else {
+        //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
+        found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
+      }
+      return acc
+    }, [])
+    return result
+  }
 
   useEffect(() => {
-    initializeUser();
-    initializeProducts();
-  }, []);
+    initializeUser()
+    initializeProducts()
+
+    socket.on('new_order', ({order}) => {
+      console.log('new order')
+      console.log(order)
+      // setNotifications([...notifications, 'new order'])
+      update()
+    })
+
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      // setNotifications([...notifications, 'order update'])
+      update()
+    })
+  }, [])
 
   return (
     <>

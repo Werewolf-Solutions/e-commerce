@@ -27,18 +27,25 @@ export default function AdminMain(props) {
         product={props.product}
         update={props.update}
       />
-      {props.selected === "orders"
-        ? props.orders
-          ? props.orders.map((order) =>
-              order.accepted &&
-              !order.ready &&
-              !order.completed &&
-              order.status != "refunded" ? (
-                // orders in preparation || middle column
-                <AcceptedOrder order={order} update={props.update} />
-              ) : order.ready &&
-                !order.completed &&
-                order.status != "refunded" ? (
+      {props.selected === 'orders'
+      ?
+        props.orders
+        ?
+          props.orders.map(order => (
+            order.accepted
+            && !order.ready
+            && !order.completed
+            && order.status != 'refunded'
+            ?
+              // orders in preparation || middle column
+              <AcceptedOrder
+                order={order}
+                update={props.update}
+              />
+            : order.ready
+              && !order.completed
+              && order.status != 'refunded'
+              ?
                 // orders ready to be colected or delivered || last column
                 <ReadyOrder order={order} update={props.update} />
               ) : // orders in - paid or pay at pick up || first column

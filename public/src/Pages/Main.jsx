@@ -4,7 +4,7 @@ import Card from "../Components/Card"
 import UserAccount from "../Components/UserAccount";
 
 function Main(props) {
-  console.log(props.orders)
+  console.log(props.products)
   return (
     <div className="main">
       <HeroImage />
@@ -12,12 +12,17 @@ function Main(props) {
       ?
         props.products
         ? 
-          props.products.map(product => (
-            <Card
-              product={product}
-              update={props.update}
-              addToCart={props.addToCart}
-            />
+          props.products.map(category => (
+            <div>
+              {category.category}
+              {category.products.map(prod => (
+                <Card
+                  product={prod}
+                  update={props.update}
+                  addToCart={props.addToCart}
+                />
+              ))}
+            </div>
           ))
         : 'loading'
       : props.selected === 'user-orders'
