@@ -65,7 +65,7 @@ const createOrder = async (req, res, next) => {
         try {
             order.orderedBy = {
                 id: user._id,
-                name: 'user.name',
+                name: user.username,
                 mobile: 'user.mobile'
             },
             order.total_amount = order.total_amount*100

@@ -2,27 +2,31 @@ import React from "react";
 import "../../Styles/edit-card-modal-styles.css";
 import { Dialog } from "@mui/material";
 
-import { updateProduct, uploadImg } from "../../apiCalls/productController";
+import {
+  updateProduct,
+  uploadImg,
+} from '../../apiCalls/productController'
 
 export default function UpdateProductDialog(props) {
+
   const [product, setProduct] = React.useState({
     _id: props.product._id,
     name: props.product.name,
     description: props.product.description,
     category: props.product.category,
     price: props.product.price,
-  });
-  const [file, setFile] = React.useState();
+  })
+  const [file, setFile] = React.useState()
 
   const handleChange = (e) => {
-    setProduct({ ...product, [e.target.id]: e.target.value });
-  };
-
+    setProduct({...product, [e.target.id]: e.target.value})
+  }
+  
   const onFileChange = (event) => {
     // Update the state
-    setFile(event.target.files[0]);
-  };
-
+    setFile(event.target.files[0])
+  }
+  
   return (
     <Dialog open={props.open} onClose={props.onClose}>
       <div className="photoSection ms-2 me-2">
@@ -109,11 +113,13 @@ export default function UpdateProductDialog(props) {
         >
           Save to update your menu
         </button>
-
-        <p className="modalClose me-4 mt-4" onClick={props.onClose}>
-          X CLOSE
-        </p>
-      </div>
+          <p
+            className="modalClose me-4 mt-4"
+            onClick={props.onClose}
+          >
+            X CLOSE
+          </p>
+        </div>
     </Dialog>
   );
 }
