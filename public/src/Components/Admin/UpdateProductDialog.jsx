@@ -28,28 +28,44 @@ export default function UpdateProductDialog(props) {
   }
   
   return (
-    <Dialog open={props.open} onClose={props.onClose}>
+    <Dialog
+      open={props.open}
+      onClose={props.onClose}
+      className="edit-card-dialog"
+    >
       <div className="photoSection ms-2 me-2">
-        <h3 className=" mt-2 mb-0 photoCopy">Change Photo:</h3>
+        <h5 className=" mt-2 mb-0 photoCopy text-center">
+          Edit Photo and text for this card:
+        </h5>
 
-        <div className="d-flex flex-column">
-          <img src={props.product.img.path} className="edit-image" alt="" />
-
-          <span>
-            <input
-              className="mt-1 ms-2 btn-sm chooseFile"
-              type="file"
-              name="file"
-              id="file"
-              onChange={onFileChange}
+        <div class="container">
+          <div class="row">
+            <img
+              src={props.product.img.path}
+              className="edit-image col-sm ms-2"
+              alt=""
             />
-            <button
-              className="mt-1 btn-sm uploadbttn"
-              onClick={() => uploadImg(file, props.product)}
-            >
-              Upload!
-            </button>
-          </span>
+            <div class="col-sm">
+              <input type="file" id="imgupload" onChange={onFileChange} />
+              <label for="imgupload">
+                {" "}
+                <button
+                  className="mt-1 mb-2 btn-sm btn btn-danger chooseimagebttn"
+                  id="OpenImgUpload"
+                >
+                  choose
+                </button>
+              </label>
+
+              <button
+                className="mt-1 btn-sm btn btn-danger uploadbttn"
+                onClick={() => uploadImg(file, props.product)}
+              >
+                Upload!
+              </button>
+            </div>
+            <div class="col-sm"> </div>
+          </div>
         </div>
       </div>
 
@@ -105,7 +121,7 @@ export default function UpdateProductDialog(props) {
           </div>
         </form>
         <button
-          className="mt-4 btn btn-danger"
+          className="ms-2 me-2 mt-4 btn btn-danger"
           onClick={() => {
             updateProduct(product).then(() => props.update());
             props.onClose();
@@ -113,13 +129,10 @@ export default function UpdateProductDialog(props) {
         >
           Save to update your menu
         </button>
-          <p
-            className="modalClose me-4 mt-4"
-            onClick={props.onClose}
-          >
-            X CLOSE
-          </p>
-        </div>
+        <p className="ms-2 modalClose me-4 mt-4" onClick={props.onClose}>
+          X CLOSE
+        </p>
+      </div>
     </Dialog>
   );
 }
