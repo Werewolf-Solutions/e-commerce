@@ -69,11 +69,17 @@ export default function AdminMain(props) {
         ?
           props.products
           ? 
-            props.products.map(product => (
-              <AdminCard
-                product={product}
-                update={props.update}
-              />))
+            props.products.map(category => (
+              <div>
+                {category.category}
+                {category.products.map(prod => (
+                  <AdminCard
+                    product={prod}
+                    update={props.update}
+                  />
+                ))}
+              </div>
+            ))
           : 'loading'
         : 
             props.orders.map(order => (

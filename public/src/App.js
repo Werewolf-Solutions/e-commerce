@@ -93,8 +93,7 @@ function App() {
     setUser(usr)
     let ords = await getOrders(usr._id)
     setOrders(ords)
-    let prods = await getProducts()
-    setProducts(prods)
+    initializeProducts()
   }
 
   const initializeProducts = async () => {
