@@ -9,22 +9,28 @@ function Main(props) {
     <div className="main">
       {props.selected === 'products'
       ?
-        props.products
-        ? 
-          props.products.map(category => (
-            <div>
-              <HeroImage />
-              {category.category}
-              {category.products.map(prod => (
-                <Card
-                  product={prod}
-                  update={props.update}
-                  addToCart={props.addToCart}
-                />
-              ))}
-            </div>
-          ))
-        : 'loading'
+        <div>
+          <HeroImage />
+          {props.products
+          ? 
+            props.products.map(category => (
+              <div>
+                <div className="col-12">
+                  <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
+                    {category.category}
+                  </h2>
+                </div>
+                {category.products.map(prod => (
+                  <Card
+                    product={prod}
+                    update={props.update}
+                    addToCart={props.addToCart}
+                  />
+                ))}
+              </div>
+            ))
+          : 'loading'}
+        </div>
       : props.selected === 'user-orders'
         ?
           props.orders.map(order => (

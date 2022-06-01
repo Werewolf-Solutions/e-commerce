@@ -6,13 +6,6 @@ export default function Card(props) {
   return (
     <div className="container ">
       <div className="row">
-        {/* side orders section header */}
-        <div className="col-12">
-          <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
-            SIDE ORDERS
-          </h2>
-        </div>
-        {/* side orders cards */}
           <div className="col-md-6 col-lg-4">
             <div className="card-box ms-3 me-3">
               <div className="card-thumbnail">
