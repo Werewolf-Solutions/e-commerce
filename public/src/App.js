@@ -32,9 +32,7 @@ const socket = io()
 function App() {
   const [cart, setCart] = React.useState([])
   const [totalAmount, setTotalAmount] = React.useState(0)
-  const [state, setState] = React.useState({
-    cart: []
-  })
+  const [notifications, setNotifications] = React.useState([])
   const [user, setUser] = React.useState()
   const [products, setProducts] = React.useState()
   const [orders, setOrders] = React.useState()
@@ -132,14 +130,14 @@ function App() {
     socket.on('new_order', ({order}) => {
       console.log('new order')
       console.log(order)
-      // setNotifications([...notifications, 'new order'])
+      setNotifications([...notifications, {msg: 'new order', body: order}])
       update()
     })
 
     socket.on('order_update', ({order}) => {
       console.log('order update')
       console.log(order)
-      // setNotifications([...notifications, 'order update'])
+      setNotifications([...notifications, {msg: 'order update', body: order}])
       update()
     })
 
@@ -159,6 +157,7 @@ function App() {
           handleSelected={handleSelected}
           totalAmount={totalAmount}
           emptyCart={emptyCart}
+          notifications={notifications}
         />
         {user
         ? user.admin

@@ -3,14 +3,22 @@ import "../../Styles/nav-bar-styles.css";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 
+import {NotificationsNoneOutlined} from '@mui/icons-material';
+
 import AdminNavBar from "./AdminNavBar";
 import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
 import CartDialog from "../CartDialog";
+import NotificationsDialog from "../NotificationsDialog";
 
 function NavBar(props) {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false)
   const [cartDialog, setCartDialog] = React.useState(false)
+  const [notificationsDialog, setNotificationsDialog] = React.useState(false)
+
+  const handleNotificationsDialog = () => {
+    setNotificationsDialog(!notificationsDialog)
+  }
 
   const handleCheckoutDialog = () => {
     setCheckoutDialog(!checkoutDialog)
@@ -52,6 +60,11 @@ function NavBar(props) {
             open={cartDialog}
             onClose={handleCartDialog}
             cart={props.cart}
+          />
+          <NotificationsDialog
+            open={notificationsDialog}
+            onClose={handleNotificationsDialog}
+            notifications={props.notifications}
           />
           {props.user
           ? props.user.admin
@@ -103,6 +116,12 @@ function NavBar(props) {
               onClick={handleCartDialog}
             >
               Cart Icon
+            </button>
+            <button
+              onClick={handleNotificationsDialog}
+            >
+            {/* <NotificationsNoneOutlined /> */}
+            {props.notifications.length}
             </button>
             <li className="nav-item">
               <a className="nav-link">
