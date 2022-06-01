@@ -5,16 +5,3 @@
   background-size: cover;
   background-position: center;
 }
-
-/* On screens that are 600px or less, set the background color to olive */
-@media screen and (max-width: 600px) {
-  .bgImage {
-    width: 100vw;
-    height: 30vh;
-    /* max-width: 100%;
-    height: auto; */
-
-    background-size: cover;
-    background-position: center;
-  }
-}

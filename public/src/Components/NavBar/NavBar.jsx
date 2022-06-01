@@ -6,29 +6,16 @@ import CheckoutDialog from "../Checkout/CheckoutDialog";
 import AdminNavBar from "./AdminNavBar";
 import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
-import SignInDialog from "../SignIn/SignInDialog";
-import SignUpDialog from "../SignUp/SignUpDialog";
 
 function NavBar(props) {
-  const [checkoutDialog, setCheckoutDialog] = React.useState(false);
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false)
 
   const handleCheckoutDialog = () => {
-    setCheckoutDialog(!checkoutDialog);
-  };
+    setCheckoutDialog(!checkoutDialog)
+  }
 
-  console.log(props.cart);
-  console.log(props.totalAmount);
-
-  const [signInDialog, setSignInDialog] = React.useState(false);
-  const [signUpDialog, setSignUpDialog] = React.useState(false);
-
-  const handleSignInDialog = () => {
-    setSignInDialog(!signInDialog);
-  };
-
-  const handleSignUpDialog = () => {
-    setSignUpDialog(!signUpDialog);
-  };
+  console.log(props.cart)
+  console.log(props.totalAmount)
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -54,28 +41,17 @@ function NavBar(props) {
             totalAmount={props.totalAmount}
             update={props.update}
           />
-          {props.user ? (
-            props.user.admin ? (
-              <AdminNavBar
-                update={props.update}
-                handleSelected={props.handleSelected}
-              />
-            ) : (
-              <UserNavBar
-                update={props.update}
-                handleSelected={props.handleSelected}
-              />
-            )
-          ) : (
-            <GuestNavBar
-              update={props.update}
-              handleSelected={props.handleSelected}
-            />
-          )}
+          {props.user
+          ? props.user.admin
+            ? <AdminNavBar update={props.update} handleSelected={props.handleSelected}/>
+            : <UserNavBar update={props.update} handleSelected={props.handleSelected}/>
+          : <GuestNavBar update={props.update} handleSelected={props.handleSelected}/>
+          }
           <ul className="navbar-nav ">
-            <li className="nav-item dropdown">
+            <li className="nav-item dropdown me-3">
               <a
                 class="nav-link dropdown-toggle"
+               
                 role="button"
                 data-bs-toggle="dropdown"
               >
@@ -113,12 +89,17 @@ function NavBar(props) {
             </li>
 
             <li className="nav-item">
-              <a className="nav-link">Items in my Cart : {props.cart.length}</a>
+              <a className="nav-link">
+                Items in my Cart : {props.cart.length}
+              </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link">Total Price: {props.totalAmount}</a>
+              <a className="nav-link">
+                Total Price: {props.totalAmount}
+              </a>
             </li>
-            {props.cart.length !== 0 ? (
+            {props.cart.length !== 0
+            ? 
               <li className="nav-item">
                 <button
                   onClick={handleCheckoutDialog}
@@ -127,34 +108,7 @@ function NavBar(props) {
                   checkout
                 </button>
               </li>
-            ) : null}
-
-            <div>
-              <SignInDialog
-                open={signInDialog}
-                onClose={handleSignInDialog}
-                update={props.update}
-                handleSignUpDialog={handleSignUpDialog}
-              />
-              <SignUpDialog
-                open={signUpDialog}
-                onClose={handleSignUpDialog}
-                update={props.update}
-                handleSignInDialog={handleSignInDialog}
-              />
-
-              <li className="nav-item dropdown dropleft me-3">
-                <a
-                  className="nav-link text-danger"
-                  clbuttonss="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  onClick={handleSignInDialog}
-                >
-                  LOGIN
-                </a>
-              </li>
-            </div>
+            : null}
           </ul>
         </div>
       </div>
