@@ -28,7 +28,6 @@ export default function AdminMain(props) {
         product={props.product}
         update={props.update}
       />
-      <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
       {props.selected === 'orders'
       ?
         props.orders
@@ -71,7 +70,14 @@ export default function AdminMain(props) {
           ? 
             props.products.map(category => (
               <div>
-                {category.category}
+                <div className="col-12">
+                  <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
+                    {category.category}
+                  </h2>
+                  <a class="btn btn-info ms-3 btn-sm">
+                    Edit Section header
+                  </a>
+                </div>
                 {category.products.map(prod => (
                   <AdminCard
                     product={prod}
@@ -93,7 +99,7 @@ export default function AdminMain(props) {
                 />
               : null
             ))
-      }<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      }
       <a
         class="btn btn-info ms-3 btn-sm"
         onClick={() => {
