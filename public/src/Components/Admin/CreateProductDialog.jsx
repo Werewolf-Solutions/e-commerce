@@ -15,6 +15,7 @@ export default function CreateProductDialog(props) {
     price: '',
   })
   const [file, setFile] = React.useState()
+  const [img, setImg] = React.useState()
 
   const handleChange = (e) => {
     setProduct({...product, [e.target.id]: e.target.value})
@@ -23,6 +24,8 @@ export default function CreateProductDialog(props) {
   const onFileChange = (event) => {
     // Update the state
     setFile(event.target.files[0])
+    let image = URL.createObjectURL(event.target.files[0])
+    setImg(image)
   }
   
   return (
@@ -32,7 +35,7 @@ export default function CreateProductDialog(props) {
     >
         <div className="card-box mt-5 d-flex flex-column justify-items-center align-content-center admin-edit-card">
           <div className="card-thumbnail">
-            <img src={file} className="img-fluid edit-image" alt="" />
+            <img src={img} className="img-fluid edit-image" alt="" />
             Upload Photo:
             <input
               className="ms-2 me-2 chooseFile"
