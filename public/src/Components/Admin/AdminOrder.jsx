@@ -24,9 +24,11 @@ export default function AdminOrder(props) {
               {props.order.payment_method
               ?
                 <div>
-                  Payment Method: {props.order.payment_method.type}
+                  Payment Method:
+                    type: {props.order.payment_method.type}
+                    brand: {props.order.payment_method.brand}
                 </div>
-              : 'cash'
+              : 'Payment Method: cash'
               }
             </p>
             <p class="card-text">Customer Name: {props.order.orderedBy.name}</p>
@@ -41,13 +43,11 @@ export default function AdminOrder(props) {
               }
             </p>
             <p class="card-text">Order Details</p>
-            <ul>
-              <li>Chicken Tikka</li>
-              <li>Chicken Korma</li>
-              <li>Rice</li>
-              <li>coke</li>
-              <li>bottle of wine</li>
-            </ul>
+            {props.order.items.map(item => (
+              <ul>
+                <li>{item.name}</li>
+              </ul>
+            ))}
             <p class="card-text">Total Price: {props.order.total_amount}</p>
             <a
               onClick={() => {

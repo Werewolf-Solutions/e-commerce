@@ -74,6 +74,7 @@ const createOrder = async (req, res, next) => {
                 status: 'succeeded',
                 payment_method: 'cash'
             }
+            order.items = order.items
             let new_order = new Order(order)
             startCountdown()
             await new_order.save()

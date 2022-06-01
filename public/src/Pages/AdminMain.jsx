@@ -14,11 +14,18 @@ export default function AdminMain(props) {
     setCreateProductDialog(!createProductDialog)
   }
 
-  // if (props.orders) {
-  //   props.orders.forEach(order => console.log(!order.completed,
-  //     order.payment_intent.status == 'succeeded',
-  //     order.status != 'refunded'))
-  // }
+  if (props.orders) {
+    props.orders.forEach(order => {
+      console.log(!order.completed,
+        order.payment_intent.status == 'succeeded',
+        order.status != 'refunded')
+      if (!order.completed
+        && order.payment_intent.status == 'succeeded'
+        && order.status != 'refunded') {
+        console.log(order)
+      }
+    })
+  }
 
   return (
     <>
