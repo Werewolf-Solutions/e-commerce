@@ -25,29 +25,33 @@ export default function UpdateProductDialog(props) {
 
   return (
     <Dialog open={props.open} onClose={props.onClose}>
-      <div className="p-4 d-flex flex-column justify-items-center align-content-center admin-edit-card">
-        <div className="edit">
-          <div className="card-thumbnail">
-            <img
-              src={props.product.img.path}
-              className="img-fluid edit-image"
-              alt=""
-            />
-            Change Photo:
+      <div className="photoSection ms-2 me-2">
+        <h3 className=" mt-2 mb-0 photoCopy">Change Photo:</h3>
+
+        <div className="d-flex flex-column">
+          <img src={props.product.img.path} className="edit-image" alt="" />
+
+          <span>
             <input
-              className="ms-2 me-2 chooseFile"
+              className="mt-1 ms-2 btn-sm chooseFile"
               type="file"
               name="file"
               id="file"
               onChange={onFileChange}
             />
-            <button onClick={() => uploadImg(file, props.product)}>
+            <button
+              className="mt-1 btn-sm uploadbttn"
+              onClick={() => uploadImg(file, props.product)}
+            >
               Upload!
             </button>
-          </div>
+          </span>
         </div>
+      </div>
+
+      <div className="ms-2 me-2 d-flex flex-column justify-items-center align-content-center admin-edit-card">
         <form>
-          <div class="form-group">
+          <div class="form-group ms-2 me-2">
             <label className="mt-3 mb-2 text-danger inputDish" for="DishTitle">
               Name
             </label>
@@ -59,7 +63,7 @@ export default function UpdateProductDialog(props) {
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group ms-2 me-2">
             <label className="mt-2 mb-2 text-danger" for="DishDesc">
               Description
             </label>
@@ -71,7 +75,7 @@ export default function UpdateProductDialog(props) {
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group ms-2 me-2">
             <label className="mt-2 mb-2 text-danger" for="Ingredients">
               Category
             </label>
@@ -83,7 +87,7 @@ export default function UpdateProductDialog(props) {
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group ms-2 me-2">
             <label className="mt-2 mb-2 text-danger" for="Price">
               Price
             </label>
