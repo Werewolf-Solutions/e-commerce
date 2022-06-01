@@ -38,7 +38,7 @@ export default function AdminCard(props) {
           <a href="#*" class="btn btn-info ms-3 btn-sm">
             Edit Section header
           </a>
-          <a
+          <button
             class="btn btn-sm ms-2 btn-warning"
             onClick={() => {
               console.log("createProductDialog");
@@ -46,7 +46,7 @@ export default function AdminCard(props) {
             }}
           >
             create new product for this section
-          </a>
+          </button>
         </div>
         {/* side orders cards */}
         <div className="col-md-6 col-lg-4">

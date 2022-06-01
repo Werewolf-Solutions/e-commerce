@@ -36,6 +36,12 @@
   );
 }
 
-/* .uploadbttn {
-  width: 10px;
-} */
+.edit-image {
+  width: 25vw;
+  border-bottom-right-radius: 10%;
+  border-top-right-radius: 10%;
+}
+
+.edit-card-dialog {
+  background-color: rgba(0, 0, 0, 0.494);
+}
