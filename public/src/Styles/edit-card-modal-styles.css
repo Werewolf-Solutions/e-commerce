@@ -1,6 +1,6 @@
-.edit-image {
+/* .edit-image {
   height: 80px;
-}
+} */
 
 .inputDish {
   width: 70vw;
@@ -22,3 +22,20 @@
 #file-upload-button {
   background-color: pink;
 }
+
+.photoCopy {
+  text-transform: capitalize;
+}
+
+.photoSection {
+  /* background-color: rgb(52, 52, 52); */
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 5%,
+    rgb(52, 52, 52) 100%
+  );
+}
+
+/* .uploadbttn {
+  width: 10px;
+} */
