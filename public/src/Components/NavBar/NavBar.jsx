@@ -40,6 +40,7 @@ function NavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
+            emptyCart={props.emptyCart}
           />
           {props.user
           ? props.user.admin

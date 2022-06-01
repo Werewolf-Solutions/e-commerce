@@ -238,12 +238,14 @@ export default function CheckoutForm(props) {
             }
             setActiveStep(activeStep + 1)
             props.update()
+            props.emptyCart()
         } else if (activeStep === steps.length - 1 && !props.user) {
             console.log('guest review order => confirm payment intent')
             let {order} = await confirmPaymentIntent(paymentIntent)
             socket.emit('new_order', {order})
             setActiveStep(activeStep + 1)
             props.update()
+            props.setCart([])
         }
     }
 

@@ -74,8 +74,8 @@ function App() {
   }
 
   const initializeUser = async () => {
-    let email = 'admin@gmail.com'
-    // let email = 'foo@gmail.com'
+    // let email = 'admin@gmail.com'
+    let email = 'foo@gmail.com'
     let password = '1234'
     let usr = await signIn(email, password)
     // in production get user logged in
@@ -120,6 +120,11 @@ function App() {
     return result
   }
 
+  const emptyCart = () => {
+    setCart([])
+    setTotalAmount(0)
+  }
+
   useEffect(() => {
     initializeUser()
     initializeProducts()
@@ -153,6 +158,7 @@ function App() {
           cart={cart}
           handleSelected={handleSelected}
           totalAmount={totalAmount}
+          emptyCart={emptyCart}
         />
         {user
         ? user.admin
