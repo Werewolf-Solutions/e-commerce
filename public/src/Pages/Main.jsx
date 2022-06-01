@@ -7,13 +7,13 @@ function Main(props) {
   console.log(props.products)
   return (
     <div className="main">
-      <HeroImage />
       {props.selected === 'products'
       ?
         props.products
         ? 
           props.products.map(category => (
             <div>
+              <HeroImage />
               {category.category}
               {category.products.map(prod => (
                 <Card
