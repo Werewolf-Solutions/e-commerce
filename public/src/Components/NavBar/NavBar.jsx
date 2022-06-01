@@ -6,12 +6,18 @@ import CheckoutDialog from "../Checkout/CheckoutDialog";
 import AdminNavBar from "./AdminNavBar";
 import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
+import CartDialog from "../CartDialog";
 
 function NavBar(props) {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+  const [cartDialog, setCartDialog] = React.useState(false)
 
   const handleCheckoutDialog = () => {
     setCheckoutDialog(!checkoutDialog)
+  }
+
+  const handleCartDialog = () => {
+    setCartDialog(!cartDialog)
   }
 
   console.log(props.cart)
@@ -41,6 +47,11 @@ function NavBar(props) {
             totalAmount={props.totalAmount}
             update={props.update}
             emptyCart={props.emptyCart}
+          />
+          <CartDialog
+            open={cartDialog}
+            onClose={handleCartDialog}
+            cart={props.cart}
           />
           {props.user
           ? props.user.admin
@@ -88,7 +99,11 @@ function NavBar(props) {
                 </li>
               </ul>
             </li>
-
+            <button
+              onClick={handleCartDialog}
+            >
+              Cart Icon
+            </button>
             <li className="nav-item">
               <a className="nav-link">
                 Items in my Cart : {props.cart.length}
