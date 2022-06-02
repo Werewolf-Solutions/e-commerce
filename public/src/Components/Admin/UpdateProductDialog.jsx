@@ -11,24 +11,24 @@ export default function UpdateProductDialog(props) {
     description: props.product.description,
     category: props.product.category,
     price: props.product.price,
-  })
-  const [file, setFile] = React.useState()
-  const [img, setImg] = React.useState()
-  const [newImg, setNewImg] = React.useState(false)
+  });
+  const [file, setFile] = React.useState();
+  const [img, setImg] = React.useState();
+  const [newImg, setNewImg] = React.useState(false);
 
   const handleChange = (e) => {
-    setProduct({...product, [e.target.id]: e.target.value})
-  }
-  
+    setProduct({ ...product, [e.target.id]: e.target.value });
+  };
+
   const onFileChange = (event) => {
     // Update the state
     if (event.target.files[0]) {
-      setNewImg(true)
-      setFile(event.target.files[0])
-      let image = URL.createObjectURL(event.target.files[0])
-      setImg(image)
+      setNewImg(true);
+      setFile(event.target.files[0]);
+      let image = URL.createObjectURL(event.target.files[0]);
+      setImg(image);
     }
-  }
+  };
 
   return (
     <Dialog
@@ -53,7 +53,7 @@ export default function UpdateProductDialog(props) {
               <label for="imgupload">
                 {" "}
                 <button
-                  className="mt-1 mb-2 btn-sm btn btn-danger chooseimagebttn"
+                  className="mt-1 mb-2 ms-1 btn-sm btn btn-info chooseimagebttn"
                   id="OpenImgUpload"
                 >
                   choose
@@ -61,7 +61,7 @@ export default function UpdateProductDialog(props) {
               </label>
 
               <button
-                className="mt-1 btn-sm btn btn-danger uploadbttn"
+                className="mt-1 mb-2 ms-1  btn-sm btn btn-danger uploadbttn"
                 onClick={() => uploadImg(file, props.product)}
               >
                 Upload!
