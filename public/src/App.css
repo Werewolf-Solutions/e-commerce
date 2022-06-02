@@ -25,6 +25,7 @@ h2 {
 
 a {
   font-family: "Roboto bold", sans-serif;
+  cursor: pointer;
 }
 
 button {

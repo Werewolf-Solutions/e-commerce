@@ -20,16 +20,6 @@ export default function AdminCard(props) {
 
   return (
     <div className="container ">
-      <button
-        class="btn btn-sm ms-2 btn-warning"
-        onClick={() => {
-          console.log("createProductDialog");
-          handleCreateProductDialog();
-        }}
-      >
-        create new product for this section
-      </button>
-
       <UpdateProductDialog
         open={updateProductDialog}
         onClose={handleUpdateProductDialog}
