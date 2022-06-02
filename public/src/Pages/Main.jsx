@@ -21,6 +21,7 @@ function Main(props) {
                 <Card
                   product={prod}
                   update={props.update}
+                  addToCart={props.addToCart}
                 />
               ))}
             </div>
