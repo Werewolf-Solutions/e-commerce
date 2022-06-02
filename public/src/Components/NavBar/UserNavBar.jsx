@@ -1,9 +1,18 @@
 import React from "react";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 
+import CheckoutDialog from "../Checkout/CheckoutDialog";
+
 import { signOut } from "../../apiCalls/userController";
 
 export default function UserNavBar(props) {
+
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false);
+
+  const handleCheckoutDialog = () => {
+    setCheckoutDialog(!checkoutDialog);
+  };
+
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
       <div className="container-fluid align-items-end">
@@ -46,6 +55,24 @@ export default function UserNavBar(props) {
               logout
             </a>
           </li>
+          {props.cart.length !== 0 ? (
+            <li className="nav-item">
+              <button
+                onClick={handleCheckoutDialog}
+                className="nav-link text-danger checkoutButton"
+              >
+                checkout
+              </button>
+            </li>
+          ) : null}
+          <CheckoutDialog
+            open={checkoutDialog}
+            onClose={handleCheckoutDialog}
+            user={props.user}
+            cart={props.cart}
+            totalAmount={props.totalAmount}
+            update={props.update}
+          />
           {/* what should be in here end */}
         </div>
       </div>

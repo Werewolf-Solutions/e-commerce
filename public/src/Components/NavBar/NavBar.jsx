@@ -16,7 +16,7 @@ function NavBar(props) {
     setCheckoutDialog(!checkoutDialog);
   };
 
-  console.log(props.cart);
+  console.log(props.cart.length);
   console.log(props.totalAmount);
 
   const [signInDialog, setSignInDialog] = React.useState(false);
@@ -64,6 +64,9 @@ function NavBar(props) {
               <UserNavBar
                 update={props.update}
                 handleSelected={props.handleSelected}
+                cart={props.cart}
+                user={props.user}
+                totalAmount={props.totalAmount}
               />
             )
           ) : (
