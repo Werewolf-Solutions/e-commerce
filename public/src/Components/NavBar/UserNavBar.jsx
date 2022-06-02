@@ -66,12 +66,17 @@ export default function UserNavBar(props) {
               src={cart}
               alt=""
             />
+          </li>
+          {/* total price */}
+          <li className="nav-item">
             {/* cart item dialog */}
             {props.cart.length !== 0 ? (
               <button
                 onClick={handleCheckoutDialog}
                 className="nav-link text-danger checkoutButton"
-              ></button>
+              >
+                checkout
+              </button>
             ) : null}
           </li>
 
@@ -79,6 +84,7 @@ export default function UserNavBar(props) {
           <li className="nav-item">
             <a className="nav-link">Total Price: {props.totalAmount}</a>
           </li>
+
           {/* logout */}
           <li className="nav-item">
             <a

@@ -19,7 +19,7 @@ export default function AdminCard(props) {
   };
 
   return (
-    <div className="container ">
+    <>
       <UpdateProductDialog
         open={updateProductDialog}
         onClose={handleUpdateProductDialog}
@@ -33,43 +33,40 @@ export default function AdminCard(props) {
         update={props.update}
       />
 
-      <div className="row">
-        {/* side orders section header */}
-        <div className="col-12"></div>
-        {/* side orders cards */}
-        <div className="col-md-6 col-lg-4">
-          <div className="card-box ms-3 me-3 mb-3">
-            <div className="card-thumbnail">
-              <button
-                onClick={() => {
-                  console.log("updateProductDialog");
-                  handleUpdateProductDialog();
-                  // setModal("EditCardModal");
-                }}
-                className="btn btn-danger mb-3 me-3"
-              >
-                Edit product
-              </button>
-              <button
-                onClick={() => {
-                  deleteProduct(props.product).then(() => props.update());
-                }}
-                className="btn btn-danger mb-3"
-              >
-                Delete product
-              </button>
-              <img src={props.product.img.path} className="img-fluid" alt="" />
-            </div>
-            <h3>
-              <a href="*" className="mt-4 text-danger">
-                {props.product.name}
-              </a>
-            </h3>
-            <p className="text-secondary">{props.product.description}</p>
-            <h3 className="price text-danger">PRICE: {props.product.price}</h3>
-          </div>
+      {/* side orders section header */}
+
+      {/* side orders cards */}
+
+      <div className="card-box ms-3 me-3 mb-3">
+        <div className="card-thumbnail">
+          <button
+            onClick={() => {
+              console.log("updateProductDialog");
+              handleUpdateProductDialog();
+              // setModal("EditCardModal");
+            }}
+            className="btn btn-danger mb-3 me-3"
+          >
+            Edit product
+          </button>
+          <button
+            onClick={() => {
+              deleteProduct(props.product).then(() => props.update());
+            }}
+            className="btn btn-danger mb-3"
+          >
+            Delete product
+          </button>
+          <img src={props.product.img.path} className="img-fluid" alt="" />
         </div>
+        <h3>
+          <a href="*" className="mt-4 text-danger">
+            {props.product.name}
+          </a>
+        </h3>
+        <p className="text-secondary">{props.product.description}</p>
+        <h3 className="price text-danger">PRICE: {props.product.price}</h3>
       </div>
-    </div>
+    </>
   );
 }
