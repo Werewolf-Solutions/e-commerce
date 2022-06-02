@@ -65,7 +65,7 @@ const createOrder = async (req, res, next) => {
         try {
             order.orderedBy = {
                 id: user._id,
-                name: user.username,
+                name: 'user.name',
                 mobile: 'user.mobile'
             },
             order.total_amount = order.total_amount*100
@@ -74,7 +74,6 @@ const createOrder = async (req, res, next) => {
                 status: 'succeeded',
                 payment_method: 'cash'
             }
-            order.items = order.items
             let new_order = new Order(order)
             startCountdown()
             await new_order.save()

@@ -11,12 +11,13 @@ export default function CheckoutDialog(props) {
             >
                 <CheckoutForm
                     user={props.user}
+                    handleSignInDialog={props.handleSignInDialog}
                     cart={props.cart}
                     onClose={props.onClose}
+                    emptyCart={props.emptyCart}
                     currency={props.currency}
                     totalAmount={props.totalAmount}
                     update={props.update}
-                    emptyCart={props.emptyCart}
                 />
             </Dialog>
         </div>

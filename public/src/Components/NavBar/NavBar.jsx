@@ -3,33 +3,32 @@ import "../../Styles/nav-bar-styles.css";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 
-import {NotificationsNoneOutlined} from '@mui/icons-material';
-
 import AdminNavBar from "./AdminNavBar";
 import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
-import CartDialog from "../CartDialog";
-import NotificationsDialog from "../NotificationsDialog";
+import SignInDialog from "../SignIn/SignInDialog";
+import SignUpDialog from "../SignUp/SignUpDialog";
 
 function NavBar(props) {
-  const [checkoutDialog, setCheckoutDialog] = React.useState(false)
-  const [cartDialog, setCartDialog] = React.useState(false)
-  const [notificationsDialog, setNotificationsDialog] = React.useState(false)
-
-  const handleNotificationsDialog = () => {
-    setNotificationsDialog(!notificationsDialog)
-  }
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false);
 
   const handleCheckoutDialog = () => {
-    setCheckoutDialog(!checkoutDialog)
-  }
+    setCheckoutDialog(!checkoutDialog);
+  };
 
-  const handleCartDialog = () => {
-    setCartDialog(!cartDialog)
-  }
+  console.log(props.cart);
+  console.log(props.totalAmount);
 
-  console.log(props.cart)
-  console.log(props.totalAmount)
+  const [signInDialog, setSignInDialog] = React.useState(false);
+  const [signUpDialog, setSignUpDialog] = React.useState(false);
+
+  const handleSignInDialog = () => {
+    setSignInDialog(!signInDialog);
+  };
+
+  const handleSignUpDialog = () => {
+    setSignUpDialog(!signUpDialog);
+  };
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -54,29 +53,29 @@ function NavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
-            emptyCart={props.emptyCart}
           />
-          <CartDialog
-            open={cartDialog}
-            onClose={handleCartDialog}
-            cart={props.cart}
-          />
-          <NotificationsDialog
-            open={notificationsDialog}
-            onClose={handleNotificationsDialog}
-            notifications={props.notifications}
-          />
-          {props.user
-          ? props.user.admin
-            ? <AdminNavBar update={props.update} handleSelected={props.handleSelected}/>
-            : <UserNavBar update={props.update} handleSelected={props.handleSelected}/>
-          : <GuestNavBar update={props.update} handleSelected={props.handleSelected}/>
-          }
+          {props.user ? (
+            props.user.admin ? (
+              <AdminNavBar
+                update={props.update}
+                handleSelected={props.handleSelected}
+              />
+            ) : (
+              <UserNavBar
+                update={props.update}
+                handleSelected={props.handleSelected}
+              />
+            )
+          ) : (
+            <GuestNavBar
+              update={props.update}
+              handleSelected={props.handleSelected}
+            />
+          )}
           <ul className="navbar-nav ">
-            <li className="nav-item dropdown me-3">
+            <li className="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
-               
                 role="button"
                 data-bs-toggle="dropdown"
               >
@@ -112,29 +111,14 @@ function NavBar(props) {
                 </li>
               </ul>
             </li>
-            <button
-              onClick={handleCartDialog}
-            >
-              Cart Icon
-            </button>
-            <button
-              onClick={handleNotificationsDialog}
-            >
-            {/* <NotificationsNoneOutlined /> */}
-            {props.notifications.length}
-            </button>
+
             <li className="nav-item">
-              <a className="nav-link">
-                Items in my Cart : {props.cart.length}
-              </a>
+              <a className="nav-link">Items in my Cart : {props.cart.length}</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link">
-                Total Price: {props.totalAmount}
-              </a>
+              <a className="nav-link">Total Price: {props.totalAmount}</a>
             </li>
-            {props.cart.length !== 0
-            ? 
+            {props.cart.length !== 0 ? (
               <li className="nav-item">
                 <button
                   onClick={handleCheckoutDialog}
@@ -143,7 +127,34 @@ function NavBar(props) {
                   checkout
                 </button>
               </li>
-            : null}
+            ) : null}
+
+            <div>
+              <SignInDialog
+                open={signInDialog}
+                onClose={handleSignInDialog}
+                update={props.update}
+                handleSignUpDialog={handleSignUpDialog}
+              />
+              <SignUpDialog
+                open={signUpDialog}
+                onClose={handleSignUpDialog}
+                update={props.update}
+                handleSignInDialog={handleSignInDialog}
+              />
+
+              <li className="nav-item dropdown dropleft me-3">
+                <a
+                  className="nav-link text-danger"
+                  clbuttonss="nav-link dropdown-toggle"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  onClick={handleSignInDialog}
+                >
+                  LOGIN
+                </a>
+              </li>
+            </div>
           </ul>
         </div>
       </div>

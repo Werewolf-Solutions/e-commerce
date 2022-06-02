@@ -26,7 +26,6 @@ export async function createPaymentIntent(payment_intent) {
 export async function confirmPaymentIntent(payment_intent) {
     let res = await axios.post('users/confirm-payment-intent', {payment_intent})
     console.log(res.data)
-    return res.data
 }
 
 /**
