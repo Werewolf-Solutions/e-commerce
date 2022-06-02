@@ -19,12 +19,12 @@ import {
     confirmPaymentIntent
 } from '../../apiCalls/paymentController'
 
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 
 import axios from 'axios'
 import { createOrder } from '../../apiCalls/orderController'
 
-const socket = io()
+// const socket = io()
 
 const steps = ['Shipping address', 'Payment details', 'Review your order']
 
@@ -197,13 +197,9 @@ export default function CheckoutForm(props) {
             console.log(`active step === steps.length -1 = ${steps.length - 1}`)
             console.log(paymentIntent)
             if (paymentMethod === 'card') {
-                let {order} = await confirmPaymentIntent(paymentIntent)
+                confirmPaymentIntent(paymentIntent)
                 // let order = {
-                //     orderedBy: {
-                //         id: props.user._id,
-                //         name: props.user.username,
-                //         mobile: 'user.mobile'
-                //     },
+                //     orderedBy: props.user._id,
                 //     payment_method: card,
                 //     address: props.user.address,
                 //     payment_intent: {
@@ -214,16 +210,12 @@ export default function CheckoutForm(props) {
                 //     items: props.cart,
                 //     total_cart: props.cart.total_cart
                 // }
-                socket.emit('new_order', {order})
+                // socket.emit('new_order', {order})
             } else if (paymentMethod === 'cash') {
                 console.log('Add order to admin and user')
                 // TODO: save order to user and admin
                 let order = {
-                    orderedBy: {
-                        id: props.user._id,
-                        name: props.user.username,
-                        mobile: 'user.mobile'
-                    },
+                    orderedBy: props.user._id,
                     address: props.user.address,
                     items: props.cart,
                     payment_intent: {
@@ -233,19 +225,18 @@ export default function CheckoutForm(props) {
                     shipping_method: shippingMethod,
                     total_amount: props.totalAmount
                 }
+                console.log(order)
                 createOrder(order)
-                socket.emit('new_order', {order})
+                // socket.emit('new_order', {order})
             }
+            // props.emptyCart()
+            // props.updateProductsList()
             setActiveStep(activeStep + 1)
-            props.update()
-            props.emptyCart()
         } else if (activeStep === steps.length - 1 && !props.user) {
             console.log('guest review order => confirm payment intent')
-            let {order} = await confirmPaymentIntent(paymentIntent)
-            socket.emit('new_order', {order})
+            confirmPaymentIntent(paymentIntent)
             setActiveStep(activeStep + 1)
             props.update()
-            props.setCart([])
         }
     }
 
