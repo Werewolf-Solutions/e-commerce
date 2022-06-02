@@ -66,12 +66,12 @@ function App() {
   };
 
   const deleteFromCart = () => {
-    console.log('delete from cart')
-  }
+    console.log("delete from cart");
+  };
 
   const initializeUser = async () => {
-    let email = "admin@gmail.com";
-    // let email = "foo@gmail.com";
+    // let email = "admin@gmail.com";
+    let email = "foo@gmail.com";
     let password = "1234";
     let usr = await signIn(email, password);
     // in production get user logged in
