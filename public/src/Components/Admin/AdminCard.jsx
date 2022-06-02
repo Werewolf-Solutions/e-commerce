@@ -20,6 +20,16 @@ export default function AdminCard(props) {
 
   return (
     <div className="container ">
+      <button
+        class="btn btn-sm ms-2 btn-warning"
+        onClick={() => {
+          console.log("createProductDialog");
+          handleCreateProductDialog();
+        }}
+      >
+        create new product for this section
+      </button>
+
       <UpdateProductDialog
         open={updateProductDialog}
         onClose={handleUpdateProductDialog}
@@ -35,17 +45,7 @@ export default function AdminCard(props) {
 
       <div className="row">
         {/* side orders section header */}
-        <div className="col-12">
-          <button
-            class="btn btn-sm ms-2 btn-warning"
-            onClick={() => {
-              console.log("createProductDialog");
-              handleCreateProductDialog();
-            }}
-          >
-            create new product for this section
-          </button>
-        </div>
+        <div className="col-12"></div>
         {/* side orders cards */}
         <div className="col-md-6 col-lg-4">
           <div className="card-box ms-3 me-3 mb-3">
