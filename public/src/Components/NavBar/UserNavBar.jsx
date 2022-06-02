@@ -4,10 +4,17 @@ import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-gra
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 
 import { signOut } from "../../apiCalls/userController";
+import CartDialog from "../CartDialog";
 
 export default function UserNavBar(props) {
 
   const [checkoutDialog, setCheckoutDialog] = React.useState(false);
+
+  const [cartDialog, setCartDialog] = React.useState(false);
+
+  const handleCartDialog = () => {
+    setCartDialog(!cartDialog);
+  };
 
   const handleCheckoutDialog = () => {
     setCheckoutDialog(!checkoutDialog);
@@ -65,6 +72,15 @@ export default function UserNavBar(props) {
               </button>
             </li>
           ) : null}
+          <button
+            onClick={handleCartDialog}
+          >cart icon</button>
+          <li className="nav-item">
+            <a className="nav-link">Items in my Cart : {props.cart.length}</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link">Total Price: {props.totalAmount}</a>
+          </li>
           <CheckoutDialog
             open={checkoutDialog}
             onClose={handleCheckoutDialog}
@@ -72,6 +88,12 @@ export default function UserNavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
+          />
+          <CartDialog
+            open={cartDialog}
+            onClose={handleCartDialog}
+            cart={props.cart}
+            deleteFromCart={props.deleteFromCart}
           />
           {/* what should be in here end */}
         </div>

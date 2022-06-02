@@ -17,6 +17,7 @@ export default function CartDialog(props) {
                         <div>
                             <Typography>Name: {item.name}</Typography>
                             <Typography>Quantity: {item.quantity}</Typography>
+                            <button onClick={props.deleteFromCart}>delete from cart</button>
                         </div>
                     ))
                 : 'cart empty'
