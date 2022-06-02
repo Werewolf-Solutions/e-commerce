@@ -67,6 +67,7 @@ function NavBar(props) {
                 cart={props.cart}
                 user={props.user}
                 totalAmount={props.totalAmount}
+                deleteFromCart={props.deleteFromCart}
               />
             )
           ) : (

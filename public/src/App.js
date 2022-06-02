@@ -65,6 +65,10 @@ function App() {
     setTotalAmount(total_amount);
   };
 
+  const deleteFromCart = () => {
+    console.log('delete from cart')
+  }
+
   const initializeUser = async () => {
     let email = "admin@gmail.com";
     // let email = "foo@gmail.com";
@@ -127,6 +131,7 @@ function App() {
           cart={cart}
           handleSelected={handleSelected}
           totalAmount={totalAmount}
+          deleteFromCart={deleteFromCart}
         />
         {user ? (
           user.admin ? (
