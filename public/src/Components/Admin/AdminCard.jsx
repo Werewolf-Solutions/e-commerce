@@ -36,12 +36,6 @@ export default function AdminCard(props) {
       <div className="row">
         {/* side orders section header */}
         <div className="col-12">
-          <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
-            SIDE ORDERS
-          </h2>
-          <a href="#*" class="btn btn-info ms-3 btn-sm">
-            Edit Section header
-          </a>
           <button
             class="btn btn-sm ms-2 btn-warning"
             onClick={() => {

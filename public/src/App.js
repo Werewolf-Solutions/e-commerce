@@ -66,8 +66,8 @@ function App() {
   };
 
   const initializeUser = async () => {
-    let email = "admin@gmail.com";
-    // let email = "foo@gmail.com";
+    // let email = "admin@gmail.com";
+    let email = "foo@gmail.com";
     let password = "1234";
     let usr = await signIn(email, password);
     // in production get user logged in
@@ -90,9 +90,28 @@ function App() {
   };
 
   const initializeProducts = async () => {
-    let prods = await getProducts();
+    let p = await getProducts();
+    let prods = await createList(p)
     setProducts(prods);
   };
+
+  const createList = (list) => {
+    let result = list.reduce((acc, d) => {
+      const found = acc.find(a => a.category === d.category)
+      //const value = { category: d.category, val: d.value }
+      const value = d // the element in data property
+      if (!found) {
+        //acc.push(...value)
+        acc.push({category:d.category, products: [value]}) // not found, so need to add products property
+      }
+      else {
+        //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
+        found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
+      }
+      return acc
+    }, [])
+    return result
+  }
 
   useEffect(() => {
     initializeUser();

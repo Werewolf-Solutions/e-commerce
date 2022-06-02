@@ -51,8 +51,21 @@ export default function AdminMain(props) {
           : "loading"
         : props.selected === "products"
         ? props.products
-          ? props.products.map((product) => (
-              <AdminCard product={product} update={props.update} />
+          ? props.products.map(category => (
+              <div>
+                <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
+                  {category.category}
+                </h2>
+                <a class="btn btn-info ms-3 btn-sm">
+                  Edit Section header
+                </a>
+                {category.products.map(prod => (
+                  <AdminCard
+                    product={prod}
+                    update={props.update}
+                  />
+                ))}
+              </div>
             ))
           : "loading"
         : props.orders.map((order) =>

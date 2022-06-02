@@ -12,12 +12,18 @@ function Main(props) {
       ?
         props.products
         ? 
-          props.products.map(product => (
-            <Card
-              product={product}
-              update={props.update}
-              addToCart={props.addToCart}
-            />
+          props.products.map(category => (
+            <div>
+              <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
+                {category.category}
+              </h2>
+              {category.products.map(prod => (
+                <Card
+                  product={prod}
+                  update={props.update}
+                />
+              ))}
+            </div>
           ))
         : 'loading'
       : props.selected === 'user-orders'
