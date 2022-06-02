@@ -11,17 +11,24 @@ export default function UpdateProductDialog(props) {
     description: props.product.description,
     category: props.product.category,
     price: props.product.price,
-  });
-  const [file, setFile] = React.useState();
+  })
+  const [file, setFile] = React.useState()
+  const [img, setImg] = React.useState()
+  const [newImg, setNewImg] = React.useState(false)
 
   const handleChange = (e) => {
-    setProduct({ ...product, [e.target.id]: e.target.value });
-  };
-
+    setProduct({...product, [e.target.id]: e.target.value})
+  }
+  
   const onFileChange = (event) => {
     // Update the state
-    setFile(event.target.files[0]);
-  };
+    if (event.target.files[0]) {
+      setNewImg(true)
+      setFile(event.target.files[0])
+      let image = URL.createObjectURL(event.target.files[0])
+      setImg(image)
+    }
+  }
 
   return (
     <Dialog
@@ -37,7 +44,7 @@ export default function UpdateProductDialog(props) {
         <div class="container">
           <div class="row">
             <img
-              src={props.product.img.path}
+              src={newImg ? img : props.product.img.path}
               className="edit-image col-sm ms-2"
               alt=""
             />
