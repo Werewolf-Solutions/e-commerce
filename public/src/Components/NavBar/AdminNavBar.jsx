@@ -3,9 +3,24 @@ import "../../Styles/admin-nav-bar-styles.css";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import { signOut } from "../../apiCalls/userController";
 
+import CreateProductDialog from "../../Components/Admin/CreateProductDialog";
+import "../../Styles/admin-cards.css";
+
 export default function AdminNavBar(props) {
+  const [createProductDialog, setCreateProductDialog] = React.useState(false);
+
+  const handleCreateProductDialog = () => {
+    setCreateProductDialog(!createProductDialog);
+  };
+
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+      <CreateProductDialog
+        open={createProductDialog}
+        onClose={handleCreateProductDialog}
+        product={props.product}
+        update={props.update}
+      />
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
         <button
@@ -27,6 +42,17 @@ export default function AdminNavBar(props) {
               onClick={() => props.handleSelected("orders")}
             >
               users orders
+            </a>
+          </li>
+          <li className="nav-item">
+            <a
+              onClick={() => {
+                console.log("createProductDialog");
+                handleCreateProductDialog();
+              }}
+              className="nav-link adminNavLinks"
+            >
+              add products
             </a>
           </li>
           <li className="nav-item">
@@ -61,4 +87,16 @@ export default function AdminNavBar(props) {
       </div>
     </nav>
   );
+}
+
+{
+  /* <button
+class="btn btn-sm ms-2 btn-warning"
+onClick={() => {
+  console.log("createProductDialog");
+  handleCreateProductDialog();
+}}
+>
+create new product
+</button> */
 }
