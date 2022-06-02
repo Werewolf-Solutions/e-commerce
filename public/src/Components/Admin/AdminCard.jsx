@@ -1,20 +1,18 @@
 import React from "react";
 import "../../Styles/admin-cards.css";
-import { useStore } from "../../Hooks/Store";
-import curry from "../../Assets/pexels-asit-naskar-9809033.jpeg";
+
 import UpdateProductDialog from "./UpdateProductDialog";
+import CreateProductDialog from "./CreateProductDialog";
+
 import { deleteProduct } from "../../apiCalls/productController";
 
 export default function AdminCard(props) {
-  const setModal = useStore((store) => store.setModal);
-
   const [updateProductDialog, setUpdateProductDialog] = React.useState(false);
+  const [createProductDialog, setCreateProductDialog] = React.useState(false);
 
   const handleUpdateProductDialog = () => {
     setUpdateProductDialog(!updateProductDialog);
   };
-
-  const [createProductDialog, setCreateProductDialog] = React.useState(false);
 
   const handleCreateProductDialog = () => {
     setCreateProductDialog(!createProductDialog);
@@ -25,6 +23,12 @@ export default function AdminCard(props) {
       <UpdateProductDialog
         open={updateProductDialog}
         onClose={handleUpdateProductDialog}
+        product={props.product}
+        update={props.update}
+      />
+      <CreateProductDialog
+        open={createProductDialog}
+        onClose={handleCreateProductDialog}
         product={props.product}
         update={props.update}
       />
