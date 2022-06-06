@@ -2,6 +2,7 @@ import React from 'react'
 import "../../Styles/admin-orders-styles.css";
 
 export default function OrderBody(props) {
+  console.log(props.order)
     return (
         <div>
             <h5 class="card-title">Order number: {props.order.number}</h5>
@@ -12,9 +13,13 @@ export default function OrderBody(props) {
               {props.order.payment_method
               ?
                 <div>
-                  Payment Method: {props.order.payment_method.type}
+                  <p class="card-text">Payment Method: {props.order.payment_method.type}</p>
+                  <p class="card-text">Last4: {`xxxx-xxxx-xxxx-${props.order.payment_method.last4}`}</p>
                 </div>
-              : 'cash'
+              : 
+                <div>
+                  <p class="card-text">Payment Method: cash</p>
+                </div>
               }
             </p>
             <p class="card-text">Customer Name: {props.order.orderedBy.name}</p>
@@ -22,20 +27,27 @@ export default function OrderBody(props) {
             <p class="card-text">
               {props.order.shipping_method === 'delivery'
               ?
-                <div>
-                  Customer Address: {props.order.address.number}, {props.order.address.line1}, {props.order.address.city}, {props.order.address.country}, {props.order.address.postcode}
-                </div>
-              : 'pick-up'
+                props.order.address
+                ?
+                  <div>
+                    <p class="card-text">Customer Address: {props.order.address.number}, {props.order.address.line1}, {props.order.address.city}, {props.order.address.country}, {props.order.address.postcode}</p>
+                  </div>
+                : null
+              : null
               }
             </p>
             <p class="card-text">Order Details</p>
-            <ul>
-              <li>Chicken Tikka</li>
-              <li>Chicken Korma</li>
-              <li>Rice</li>
-              <li>coke</li>
-              <li>bottle of wine</li>
-            </ul>
+            {props.order.items
+            ?
+              props.order.items.map(item => (
+                <div>
+                  <ul>
+                    <li>{item.name} x {item.quantity}</li>
+                  </ul>
+                </div>
+              ))
+            : null
+            }
             <p class="card-text">Total Price: {props.order.total_amount}</p>
         </div>
     )

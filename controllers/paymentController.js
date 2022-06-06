@@ -58,6 +58,7 @@ const createPaymentIntent = async (req, res, next) => {
                 user.payment_intents.push(paymentIntent)
                 paymentIntent.card = card.card
                 paymentIntent.card.id = card.id
+                payment_method.type = 'card'
                 let order = new Order({
                     orderedBy: {
                         id: user._id,
@@ -73,6 +74,8 @@ const createPaymentIntent = async (req, res, next) => {
                     payment_method: payment_method,
                     status: 'to-be-accepted'
                 })
+                console.log(shipping_method)
+                console.log(payment_method)
                 await user.save()
                 await order.save()
                 res.send({user, paymentIntent, order, msg: 'Payment intent created.'})

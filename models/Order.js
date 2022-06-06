@@ -22,7 +22,7 @@ const OrderSchema = new mongoose.Schema({
     payment_intent: PaymentIntentSchema,
     payment_method: PaymentMethodSchema,
     address: AddressSchema,
-    details: [],
+    items: [],
     accepted: {
         type: Boolean,
         enum: [true, false],

@@ -105,21 +105,19 @@ function App() {
     let completed = []
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
-        console.log(`
-        id: ${orders[i]._id}
-        Accepted ${orders[i].accepted}
-        Ready: ${orders[i].ready}
-        Completed: ${orders[i].completed}
-        Status: ${orders[i].status}
-        \n\n`)
+        // console.log(`
+        // id: ${orders[i]._id}
+        // Accepted ${orders[i].accepted}
+        // Ready: ${orders[i].ready}
+        // Completed: ${orders[i].completed}
+        // Status: ${orders[i].status}
+        // \n\n`)
 
         // orders in - paid or pay at pick up || first column
         if (!orders[i].completed &&
           !orders[i].accepted &&
           orders[i].payment_intent.status == "succeeded" &&
           orders[i].status != "refunded") {
-            console.log('orders in, ready to be accepted')
-            console.log(orders[i])
             ordsIn.push(orders[i])
         }
 
@@ -128,8 +126,6 @@ function App() {
           !orders[i].ready &&
           !orders[i].completed &&
           orders[i].status != "refunded") {
-            console.log('order in preparation')
-            console.log(orders[i])
             accepted.push(orders[i])
         }
   
@@ -137,8 +133,6 @@ function App() {
         if (orders[i].ready &&
           !orders[i].completed &&
           orders[i].status != "refunded") {
-            console.log('order ready to be collected or delivered')
-            console.log(orders[i])
             completed.push(orders[i])
         }
   
