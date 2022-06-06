@@ -4,7 +4,7 @@ import { completeOrder } from '../../apiCalls/orderController'
 export default function ReadyOrder(props) {
   return (
     <div>
-      <div class="completed-orders col-sm-4">
+      <div>
           <p className="order-status mt-3 ms-4">orders completed</p>
           <p className="order-statussub ms-4  mb-2">
             Orders waiting for collection / delivery below...

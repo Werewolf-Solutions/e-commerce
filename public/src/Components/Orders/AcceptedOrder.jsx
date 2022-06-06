@@ -4,7 +4,7 @@ import { orderReady } from '../../apiCalls/orderController'
 export default function AcceptedOrder(props) {
     return (
         <div>
-            <div class="orders-in col-sm-4 ">
+            <div>
                 <p className="order-status mt-3 ms-4">orders in</p>
                 <p className="order-statussub ms-4  mb-2">
                     Orders accepted & in prep are listed below...

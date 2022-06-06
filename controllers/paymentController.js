@@ -70,7 +70,8 @@ const createPaymentIntent = async (req, res, next) => {
                     shipping_method: shipping_method,
                     address: shipping_address,
                     total_amount: total_amount,
-                    payment_method: payment_method
+                    payment_method: payment_method,
+                    status: 'to-be-accepted'
                 })
                 await user.save()
                 await order.save()
@@ -112,7 +113,8 @@ const createPaymentIntent = async (req, res, next) => {
                     items: cart,
                     payment_intent: paymentIntent,
                     payment_method: payment_method,
-                    total_amount: total_amount
+                    total_amount: total_amount,
+                    status: 'to-be-accepted'
                 })
                 // createOrder()
                 // console.log(order)

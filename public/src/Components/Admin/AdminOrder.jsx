@@ -6,13 +6,9 @@ import "../../Styles/admin-orders-styles.css";
 export default function AdminOrder(props) {
   console.log(props.order)
   return (
-    <div class="admin-orders row mt-2">
+    <div>
       {/* orders in prep */}
-      <div class="accepted-orders col-sm-4">
-        <p className="order-status mt-3 ms-4">orders accepted</p>
-        <p className="order-statussub ms-4  mb-2">
-          Accept or Decline orders below...
-        </p>
+      <div>
         {/* cards moved from orders in to here on accept */}
         <div class="card mb-3 ms-3 me-3">
           <div class="card-body">
