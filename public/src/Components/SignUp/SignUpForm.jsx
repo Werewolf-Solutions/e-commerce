@@ -60,7 +60,7 @@ export default function SignUpForm(props) {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}></Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "error.dark" }}></Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
@@ -134,6 +134,7 @@ export default function SignUpForm(props) {
               </Grid>
             </Grid>
             <Button
+              color="error"
               type="submit"
               fullWidth
               variant="contained"
