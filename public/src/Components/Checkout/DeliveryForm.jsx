@@ -8,12 +8,6 @@ import { Button } from '@mui/material'
 import { updateUser } from '../../apiCalls/userController'
 
 export default function DeliveryForm(props) {
-    const [address, setAddress] = React.useState()
-
-    const handleChange = (e) => {
-        setAddress({...address, [e.target.id]: e.target.value})
-    }
-
     return (
         <div>
             <Dialog
@@ -31,8 +25,7 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-number"
                                 variant="standard"
-                                // value={address.number}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={10}>
@@ -44,8 +37,7 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-line1"
                                 variant="standard"
-                                // value={address.line1}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -56,8 +48,7 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-line2"
                                 variant="standard"
-                                // value={address.line2}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -69,8 +60,7 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-city"
                                 variant="standard"
-                                // value={address.city}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -80,8 +70,7 @@ export default function DeliveryForm(props) {
                                 label="Region"
                                 fullWidth
                                 variant="standard"
-                                // value={address.region}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -93,8 +82,7 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping postal-code"
                                 variant="standard"
-                                // value={address.postcode}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -106,16 +94,13 @@ export default function DeliveryForm(props) {
                                 fullWidth
                                 autoComplete="shipping country"
                                 variant="standard"
-                                // value={address.country}
-                                onChange={handleChange}
+                                onChange={props.handleChange}
                             />
                         </Grid>
                         <Grid item>
                             <Button
                                 onClick={() => {
-                                    let user = props.user
-                                    user.address = address
-                                    updateUser(address).then(() => props.update())
+                                    updateUser(props.address).then(() => props.update())
                                     props.onClose()
                                 }}
                             >

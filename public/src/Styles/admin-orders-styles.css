@@ -1,13 +1,24 @@
-.orders-in {
+.accepted-orders {
   color: red;
 }
 
-.accepted-orders {
+.orders-in {
   color: blue;
 }
 
 .completed-orders {
   color: grey;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .order-status {

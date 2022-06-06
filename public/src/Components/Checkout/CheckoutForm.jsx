@@ -49,6 +49,11 @@ export default function CheckoutForm(props) {
   const [addPaymentMethod, setAddPaymentMethod] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState();
   const [shippingMethod, setShippingMethod] = React.useState();
+  const [address, setAddress] = React.useState()
+
+  const handleAddressChange = (e) => {
+      setAddress({...address, [e.target.id]: e.target.value})
+  }
 
   const handleShippingMethodSelect = (e) => {
     setShippingMethod(e.target.value);
@@ -172,6 +177,8 @@ export default function CheckoutForm(props) {
                 currency: "gbp",
                 payment_method: card,
                 customer: props.user.customer_id,
+                shipping_method: shippingMethod,
+                shipping_address: address ? address : props.user.address,
                 cart: props.cart,
               };
               let pi = await createPaymentIntent(payment_intent);
@@ -199,7 +206,8 @@ export default function CheckoutForm(props) {
         total_amount: props.totalAmount,
         currency: "gbp",
         payment_method: card,
-        // customer: 'user.customer_id', // optional
+        shipping_method: shippingMethod,
+        shipping_address: address,
         cart: props.cart,
       };
       let pi = await createPaymentIntent(payment_intent);
@@ -238,6 +246,7 @@ export default function CheckoutForm(props) {
             payment_method: "cash",
           },
           shipping_method: shippingMethod,
+          shipping_address: address,
           total_amount: props.totalAmount,
         };
         console.log(order);
