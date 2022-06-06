@@ -24,13 +24,14 @@ import NavBar from "./Components/NavBar/NavBar";
 function App() {
   const [cart, setCart] = React.useState([]);
   const [totalAmount, setTotalAmount] = React.useState(0);
-  const [state, setState] = React.useState({
-    cart: [],
-  });
   const [user, setUser] = React.useState();
   const [products, setProducts] = React.useState();
   const [orders, setOrders] = React.useState();
   const [selected, setSelected] = React.useState("products");
+
+  const [acceptedOrders, setAcceptedOrders] = React.useState([])
+  const [completedOrders, setCompletedOrders] = React.useState([])
+  const [ordersIn, setOrdersIn] = React.useState([])
 
   const handleSelected = (selection) => {
     setSelected(selection);
@@ -78,19 +79,18 @@ function App() {
     let usr = await getUser();
     console.log(usr);
     setUser(usr);
-    let ords = await getOrders(usr._id);
-    setOrders(ords);
+    let ords = await getOrders(usr._id)
+    console.log(ords)
+    if (usr.admin) {
+      initializeAdminOrders(ords)
+    }
+    setOrders(ords)
   };
 
   // function to be called every time to update user, orders, products
   const update = async () => {
-    let usr = await getUser();
-    console.log(usr);
-    setUser(usr);
-    let ords = await getOrders(usr._id);
-    setOrders(ords);
-    let prods = await getProducts();
-    setProducts(prods);
+    initializeUser();
+    initializeProducts();
   };
 
   const initializeProducts = async () => {
@@ -98,6 +98,57 @@ function App() {
     let prods = await createList(p);
     setProducts(prods);
   };
+
+  const initializeAdminOrders = (orders) => {
+    let accepted = []
+    let ordsIn = []
+    let completed = []
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        console.log(`
+        id: ${orders[i]._id}
+        Accepted ${orders[i].accepted}
+        Ready: ${orders[i].ready}
+        Completed: ${orders[i].completed}
+        Status: ${orders[i].status}
+        \n\n`)
+
+        // orders in - paid or pay at pick up || first column
+        if (!orders[i].completed &&
+          !orders[i].accepted &&
+          orders[i].payment_intent.status == "succeeded" &&
+          orders[i].status != "refunded") {
+            console.log('orders in, ready to be accepted')
+            console.log(orders[i])
+            ordsIn.push(orders[i])
+        }
+
+        // orders accepted - in preparation || second column
+        if (orders[i].accepted &&
+          !orders[i].ready &&
+          !orders[i].completed &&
+          orders[i].status != "refunded") {
+            console.log('order in preparation')
+            console.log(orders[i])
+            accepted.push(orders[i])
+        }
+  
+        // orders completed - ready to be collected or delivered || third column
+        if (orders[i].ready &&
+          !orders[i].completed &&
+          orders[i].status != "refunded") {
+            console.log('order ready to be collected or delivered')
+            console.log(orders[i])
+            completed.push(orders[i])
+        }
+  
+        
+      }
+      setAcceptedOrders(accepted)
+      setCompletedOrders(completed)
+      setOrdersIn(ordsIn)
+    }
+  }
 
   const createList = (list) => {
     let result = list.reduce((acc, d) => {
@@ -136,6 +187,9 @@ function App() {
         {user ? (
           user.admin ? (
             <AdminMain
+              acceptedOrders={acceptedOrders}
+              ordersIn={ordersIn}
+              completedOrders={completedOrders}
               orders={orders}
               products={products}
               update={update}
