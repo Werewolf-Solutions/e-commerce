@@ -2,7 +2,7 @@ import React from 'react'
 import "../../Styles/admin-orders-styles.css";
 
 export default function OrderBody(props) {
-  console.log(props.order)
+  // console.log(props.order)
     return (
         <div>
             <h5 class="card-title">Order number: {props.order.number}</h5>

@@ -215,10 +215,17 @@ const refundPaymentIntent = async (req, res, next) => {
     let {userId} = req.session
     let user = await User.findById(userId)
     let order_refunded = await Order.findOne({'payment_intent.id': payment_intent.id})
+    // console.log(order_refunded)
+    console.log(order_refunded.payment_intent
+        && order_refunded.payment_intent.status === 'succeeded'
+        // && order_refunded.payment_intent.charges.id
+        && order_refunded.payment_intent.payment_method != 'cash')
+    console.log(order_refunded.payment_intent.payment_method === 'cash')
     if (user && user.admin) {
         if (order_refunded.payment_intent
         && order_refunded.payment_intent.status === 'succeeded'
-        && order_refunded.payment_intent.charges.id) {
+        // && order_refunded.payment_intent.charges.id
+        && order_refunded.payment_intent.payment_method != 'cash') {
             console.log('Refund user payment')
             let refund = await stripe.refunds.create({
                 charge: order_refunded.payment_intent.charges.id,
@@ -229,12 +236,14 @@ const refundPaymentIntent = async (req, res, next) => {
             order_refunded.completed = false
             order_refunded.ready = false
             order_refunded.payment_intent = refund
-        } else {
+        } else if (order_refunded.payment_intent.payment_method === 'cash') {
+            console.log('Refund cash')
             order_refunded.accepted = false
             order_refunded.status = 'refunded'
             order_refunded.delivered = false
             order_refunded.completed = false
             order_refunded.ready = false
+            order_refunded.payment_intent.status = 'refunded'
         }
         await order_refunded.save()
         res.send({msg: 'Order refunded.', order_refunded})

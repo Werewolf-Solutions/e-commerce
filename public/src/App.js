@@ -71,8 +71,8 @@ function App() {
   };
 
   const initializeUser = async () => {
-    // let email = "admin@gmail.com";
-    let email = "foo@gmail.com";
+    let email = "admin@gmail.com";
+    // let email = "foo@gmail.com";
     let password = "1234";
     let usr = await signIn(email, password);
     // in production get user logged in
@@ -116,7 +116,7 @@ function App() {
         // orders in - paid or pay at pick up || first column
         if (!orders[i].completed &&
           !orders[i].accepted &&
-          orders[i].payment_intent.status == "succeeded" &&
+          orders[i].payment_intent.status === "succeeded" &&
           orders[i].status != "refunded") {
             ordsIn.push(orders[i])
         }

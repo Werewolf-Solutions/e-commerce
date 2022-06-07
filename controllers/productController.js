@@ -14,7 +14,7 @@ const User = require('../models/User')
  */
 const getProducts = async (req, res, next) => {
     let products = await Product.find()
-    console.log(products)
+    // console.log(products)
     if (products) {
         res.send({products})
     } else {
@@ -112,7 +112,7 @@ const deleteProduct = async (req, res, next) => {
  * @returns img path, mimetype, filename, msg
  */
 const uploadImg = async (req, res, next) => {
-    console.log(req.file)
+    // console.log(req.file)
     if (!req.file) {
       res.send({msg: 'No file uploaded'})
     } else {
