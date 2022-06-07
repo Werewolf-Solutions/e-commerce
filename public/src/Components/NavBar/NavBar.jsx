@@ -16,8 +16,8 @@ function NavBar(props) {
     setCheckoutDialog(!checkoutDialog);
   };
 
-  console.log(props.cart.length);
-  console.log(props.totalAmount);
+  // console.log(props.cart.length);
+  // console.log(props.totalAmount);
 
   const [signInDialog, setSignInDialog] = React.useState(false);
   const [signUpDialog, setSignUpDialog] = React.useState(false);
@@ -53,6 +53,7 @@ function NavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
+            emptyCart={props.emptyCart}
           />
           {props.user ? (
             props.user.admin ? (
@@ -68,12 +69,14 @@ function NavBar(props) {
                 user={props.user}
                 totalAmount={props.totalAmount}
                 deleteFromCart={props.deleteFromCart}
+                emptyCart={props.emptyCart}
               />
             )
           ) : (
             <GuestNavBar
               update={props.update}
               handleSelected={props.handleSelected}
+              emptyCart={props.emptyCart}
             />
           )}
           <ul className="navbar-nav ">

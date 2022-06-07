@@ -103,6 +103,7 @@ export default function UserNavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
+            emptyCart={props.emptyCart}
           />
           <CartDialog
             open={cartDialog}

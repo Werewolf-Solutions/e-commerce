@@ -130,8 +130,8 @@ export default function CheckoutForm(props) {
       setActiveStep(activeStep + 1);
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
-        console.log("Try sign in and if not existing sign up");
-        console.log(state);
+        // console.log("Try sign in and if not existing sign up");
+        // console.log(state);
 
         // sign up && update user
       } else {
@@ -147,15 +147,15 @@ export default function CheckoutForm(props) {
     // Payment form
     // FIXME: handle better create payment intent / method and go next step
     if (activeStep === 1 && props.user) {
-      console.log(addPaymentMethod);
-      console.log(paymentMethod);
-      console.log(card);
+      // console.log(addPaymentMethod);
+      // console.log(paymentMethod);
+      // console.log(card);
 
       // if a payment method is selected
       if (paymentMethod) {
         // if payment method === cash
         if (paymentMethod === "cash") {
-          console.log("Payment selected = cash. Go next.");
+          // console.log("Payment selected = cash. Go next.");
           setActiveStep(activeStep + 1);
         }
         // if payment method === card
@@ -169,7 +169,7 @@ export default function CheckoutForm(props) {
           }
           // if there's a card selected
           if (card) {
-            console.log("Card selected. Create payment intent. Go next.");
+            // console.log("Card selected. Create payment intent. Go next.");
             // TODO: create payment intent
             if (!paymentIntent) {
               let payment_intent = {
@@ -182,7 +182,7 @@ export default function CheckoutForm(props) {
                 cart: props.cart,
               };
               let pi = await createPaymentIntent(payment_intent);
-              console.log(pi);
+              // console.log(pi);
               setPaymentIntent(pi);
             }
             setActiveStep(activeStep + 1);
@@ -201,7 +201,7 @@ export default function CheckoutForm(props) {
       }
       // guest
     } else if (activeStep === 1 && !props.user && card) {
-      console.log("guest payment form => create payment intent");
+      // console.log("guest payment form => create payment intent");
       let payment_intent = {
         total_amount: props.totalAmount,
         currency: "gbp",
@@ -211,13 +211,13 @@ export default function CheckoutForm(props) {
         cart: props.cart,
       };
       let pi = await createPaymentIntent(payment_intent);
-      console.log(pi);
+      // console.log(pi);
       setPaymentIntent(pi);
       setActiveStep(activeStep + 1);
     }
 
     if (activeStep === steps.length - 1 && props.user) {
-      console.log(`active step === steps.length -1 = ${steps.length - 1}`);
+      // console.log(`active step === steps.length -1 = ${steps.length - 1}`);
       console.log(paymentIntent);
       if (paymentMethod === "card") {
         confirmPaymentIntent(paymentIntent);
@@ -235,8 +235,7 @@ export default function CheckoutForm(props) {
         // }
         // socket.emit('new_order', {order})
       } else if (paymentMethod === "cash") {
-        console.log("Add order to admin and user");
-        // TODO: save order to user and admin
+        // console.log("Add order to admin and user");
         let order = {
           orderedBy: props.user._id,
           address: props.user.address,
@@ -249,18 +248,19 @@ export default function CheckoutForm(props) {
           shipping_address: address,
           total_amount: props.totalAmount,
         };
-        console.log(order);
+        // console.log(order);
         createOrder(order);
         // socket.emit('new_order', {order})
       }
-      // props.emptyCart()
-      // props.updateProductsList()
       setActiveStep(activeStep + 1);
+      props.update();
+      props.emptyCart()
     } else if (activeStep === steps.length - 1 && !props.user) {
-      console.log("guest review order => confirm payment intent");
+      // console.log("guest review order => confirm payment intent");
       confirmPaymentIntent(paymentIntent);
       setActiveStep(activeStep + 1);
       props.update();
+      props.emptyCart()
     }
   };
 
