@@ -21,6 +21,10 @@ import {
 import { getOrders } from "./apiCalls/orderController";
 import NavBar from "./Components/NavBar/NavBar";
 
+import { io } from 'socket.io-client'
+
+const socket = io()
+
 function App() {
   const [cart, setCart] = React.useState([]);
   const [totalAmount, setTotalAmount] = React.useState(0);
@@ -91,7 +95,7 @@ function App() {
 
   const initializeUser = async () => {
     // let email = "admin@gmail.com";
-    // let email = "foo@gmail.com";
+    // let email = "foo5@gmail.com";
     // let password = "1234";
     // let usr = await signIn(email, password);
     // in production get user logged in
@@ -188,6 +192,22 @@ function App() {
   useEffect(() => {
     initializeUser();
     initializeProducts();
+
+    socket.on('new_order', ({order}) => {
+      console.log('new order')
+      console.log(order)
+      // setNotifications([...notifications, 'new order'])
+      // setNewOrders([...newOrders, order])
+      update()
+    })
+
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      // setNotifications([...notifications, 'order update'])
+      // setNewOrders([...newOrders, order])
+      update()
+    })
   }, []);
 
   return (
