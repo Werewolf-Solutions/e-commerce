@@ -2,6 +2,10 @@ import React from 'react'
 import OrderBody from "../Admin/OrderBody"
 import { completeOrder } from '../../apiCalls/orderController'
 
+import { io } from 'socket.io-client'
+
+const socket = io()
+
 export default function ReadyOrder(props) {
   return (
     <div>
@@ -9,7 +13,10 @@ export default function ReadyOrder(props) {
         <a
           class="btn btn-success btn-sm"
           onClick={() => {
-            completeOrder(props.order).then(() => props.update())
+            completeOrder(props.order).then((order) => {
+              props.update()
+              socket.emit('new_order', {order})
+            })
           }}
         >
           Clear Order

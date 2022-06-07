@@ -5,11 +5,12 @@ export default function UserAccount(props) {
   console.log(props.order)
   return (
     <div class="admin-orders row mt-2">
-      <div class="accepted-orders col-sm-4">
+      <div class="orders-in col-sm-4">
         <p className="order-status mt-3 ms-4">orders history</p>
         <div class="card mb-3 ms-3 me-3">
           <div class="card-body">
             <h5 class="card-title">Order number: {props.order.number}</h5>
+            <h5 class="card-title">Order status: {props.order.status}</h5>
             <h5 class="card-title">Order id: {props.order._id}</h5>
             <h5 class="card-title">Date: {props.order.date}</h5>
             <p class="card-text">Shipping Method: {props.order.shipping_method}</p>
