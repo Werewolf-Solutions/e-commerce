@@ -38,45 +38,64 @@ function App() {
   };
 
   const addToCart = (product) => {
-    let new_cart = cart;
-    let total_amount = 0;
+    let new_cart = cart
+    let total_amount = 0
+    let new_product = true
+    // check if it's in cart
+    for (let i = 0; i < new_cart.length; i++) {
+      console.log(new_cart[i]._id === product._id)
+      if (new_cart[i]._id === product._id) {
+        new_product = false
+        break
+      }
+    }
     // add first product
-    if (new_cart.length === 0) {
-      product.quantity = 1;
-      new_cart.push(product);
+    if (new_cart.length === 0 || new_product) {
+      console.log("product not in cart, add product")
+      product.quantity = 1
+      new_cart.push(product)
     } else {
       for (let i = 0; i < new_cart.length; i++) {
+        console.log(new_cart[i]._id === product._id)
         if (new_cart[i]._id === product._id) {
-          console.log("product in cart, add quantity");
+          console.log("product in cart, add quantity")
           // add quantity
-          new_cart[i].quantity++;
-          break;
-        } else {
-          // add product
-          console.log("product not in cart, add product");
-          product.quantity = 1;
-          new_cart.push(product);
-          break;
+          new_cart[i].quantity++
+          break
         }
       }
     }
-    console.log(new_cart);
-    new_cart.forEach((item) => (total_amount += item.quantity * item.price));
-    setCart(new_cart);
-    setTotalAmount(total_amount);
+    console.log(new_cart)
+    new_cart.forEach((item) => (total_amount += item.quantity * item.price))
+    setCart(new_cart)
+    setTotalAmount(total_amount)
   };
 
-  const deleteFromCart = () => {
-    console.log("delete from cart");
-  };
+  const deleteFromCart = (product) => {
+    let total_amount = 0
+    let a = cart.slice()
+    for (let i = 0; i < a.length; i++) {
+      if (a[i]._id === product._id) {
+        if (a[i].quantity === 1) {
+          a[i].quantity = 0
+          a.splice(cart.indexOf(product),1)
+        } else if (a[i].quantity > 1) {
+          a[i].quantity = a[i].quantity - 1
+        }
+      }
+    }
+    a.forEach((item) => (total_amount += item.quantity * item.price))
+    setCart(a)
+    setTotalAmount(total_amount)
+  }
 
   const initializeUser = async () => {
-    let email = "admin@gmail.com";
+    // let email = "admin@gmail.com";
     // let email = "foo@gmail.com";
-    let password = "1234";
-    let usr = await signIn(email, password);
+    // let password = "1234";
+    // let usr = await signIn(email, password);
     // in production get user logged in
-    // let usr = await getUser();
+    let usr = await getUser();
     console.log(usr);
     setUser(usr);
     let ords = await getOrders(usr._id)

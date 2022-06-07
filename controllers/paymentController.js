@@ -311,7 +311,7 @@ const createPaymentMethod = async (req, res, next) => {
                     card_name: card.card_name
                 })
                 await user.save()
-                res.send({user, paymentMethod: paymentMethod.id})
+                res.send({user, paymentMethod})
             }
         } catch (error) {
             res.send({msg: error.raw.message ? error.raw.message : error})
