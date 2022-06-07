@@ -64,8 +64,8 @@ export default function SignInForm(props) {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "primary.main" }}></Avatar>
-            <Typography component="h1" variant="h5">
+            <Avatar sx={{ m: 1, bgcolor: "error.dark" }}></Avatar>
+            <Typography component="h1" variant="h5" fontWeight="600">
               Sign in
             </Typography>
             <Box noValidate sx={{ mt: 1 }}>
@@ -96,6 +96,7 @@ export default function SignInForm(props) {
                 label="Remember me"
               />
               <Button
+                color="error"
                 type="submit"
                 fullWidth
                 variant="contained"

@@ -57,7 +57,11 @@ export default function AdminCard(props) {
           >
             Delete product
           </button>
-          <img src={props.product.img.path} className="img-fluid" alt="" />
+          <img
+            src={props.product.img.path}
+            className="admin-card-image-top"
+            alt=""
+          />
         </div>
         <h3>
           <a href="*" className="mt-4 text-danger">
