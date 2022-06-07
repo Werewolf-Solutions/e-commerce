@@ -1,4 +1,5 @@
 import React, {useEffect} from "react";
+import { updateCategory } from "../apiCalls/productController";
 import AdminCard from "../Components/Admin/AdminCard";
 import AdminOrder from "../Components/Admin/AdminOrder";
 import CreateProductDialog from "../Components/Admin/CreateProductDialog";
@@ -9,12 +10,22 @@ import "../Styles/admin-orders-styles.css";
 
 export default function AdminMain(props) {
   const [createProductDialog, setCreateProductDialog] = React.useState(false);
+  const [updateCategoryInput, setUpdateCategoryInput] = React.useState(false);
+  const [newCategory, setNewCategory] = React.useState();
 
   const handleCreateProductDialog = () => {
     setCreateProductDialog(!createProductDialog);
   };
 
-  console.log(props.order)
+  const handleUpdateCategoryInput = () => {
+    setUpdateCategoryInput(!updateCategoryInput);
+  };
+  
+  const handleChange = (e) => {
+    setNewCategory(e.target.value)
+  }
+
+  // console.log(props.order)
 
   if (props.selected === 'products') {
     if (props.products) {
@@ -31,7 +42,26 @@ export default function AdminMain(props) {
               <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
                 {category.category}
               </h2>
-              <a class="btn btn-info ms-3 btn-sm">Edit Section header</a>
+              {updateCategoryInput
+              ?
+                <div>
+                  <input onChange={handleChange}></input>
+                  <a
+                    onClick={
+                      () => updateCategory(category.category, newCategory).then(() => {
+                        props.update()
+                        handleUpdateCategoryInput()
+                      })
+                    }
+                    class="btn btn-info ms-3 btn-sm"
+                  >Confirm</a>
+                </div>
+              : null
+              }
+              <a
+                onClick={handleUpdateCategoryInput}
+                class="btn btn-info ms-3 btn-sm"
+              >Update category</a>
               <div className="container ">
                 <div className="row">
                   {category.products.map((prod) => (

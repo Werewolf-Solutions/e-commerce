@@ -129,10 +129,37 @@ const uploadImg = async (req, res, next) => {
     // await new_product.save()
 }
 
+/**
+ * 
+ * @desc    update category
+ * @route   POST /users/update-category
+ * @access  Private
+ * @params  category
+ * @returns products, msg
+ */
+ const updateCategory = async (req, res, next) => {
+    let {category, new_category} = req.body
+    let products = await Product.find({'category': category})
+    const { userId } = req.session
+    let user = await User.findById(userId)
+    if (user && user.admin) {
+        console.log('change all products category')
+        for (let i = 0; i < products.length; i++) {
+            products[i].category = new_category
+            await products[i].save()
+        }
+        // await products.save()
+        res.send({msg: 'Products updated!', products})
+    } else {
+        res.send({msg: "Please sign in as admin or make an account or missing product"})
+    }
+}
+
 module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
     getProducts,
-    uploadImg
+    uploadImg,
+    updateCategory
 }
