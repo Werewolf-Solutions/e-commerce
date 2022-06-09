@@ -1,41 +1,57 @@
-.App {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
+:root {
+  --navBackGround: #333;
+}
+
+.nav-link {
   color: white;
 }
 
-.Dark-theme {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
+body {
+  padding-top: 70px;
+}
+
+h1 {
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+}
+
+h2 {
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+}
+
+a {
+  font-family: "Roboto bold", sans-serif;
+  cursor: pointer;
+  text-transform: uppercase;
   color: white;
 }
 
-.Light-theme {
-  background-color: #282c34;
-  min-height: 100vh;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
-  color: white;
+button {
+  font-family: "Roboto bold", sans-serif;
+  text-transform: uppercase;
+  /* box-shadow: 5px 5px 5px rgba(110, 110, 110, 0.649); */
 }
 
-.Header {
-  background-color: #3b4457;
-  color: white;
+button:hover {
+  box-shadow: 5px 5px 5px rgba(58, 58, 58, 0.649);
 }
 
-.Menu-button {
-  float: right;
+.btn {
+  box-shadow: 2px 2px 2px rgba(110, 110, 110, 0.649);
 }
 
-.Body {
-  align-items: right;
+.btn:hover {
+  box-shadow: 2px 2px 2px rgba(58, 58, 58, 0.649);
 }
 
-.logo {
-  width: 50px;
-  height: 50px;
+.cartPopup {
+  width: 30vw;
 }

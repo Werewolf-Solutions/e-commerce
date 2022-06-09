@@ -1,4 +1,5 @@
 const passport = require('passport')
+const bcrypt = require('bcryptjs')
 
 // Stripe
 const { STRIPE_API_KEY } = process.env
@@ -12,7 +13,7 @@ const Order = require('../models/Order')
 
 /**
  * 
- * @desc Get user logged in 
+ * @desc get user logged in 
  * @route GET /users/
  * @access Public
  */
@@ -178,7 +179,7 @@ const signOut = (req, res, next) => {
 /**
  * 
  * @desc delete user
- * @route POST /users/delete-user
+ * @route GET /users/delete-user
  * @access Public
  */
 const deleteUser = async (req, res, next) => {
@@ -211,8 +212,8 @@ const updateUser = async (req, res, next) => {
         username,
         firstName,
         lastName,
-        address1,
-        address2,
+        line1,
+        line2,
         country,
         region,
         postcode,
@@ -231,11 +232,11 @@ const updateUser = async (req, res, next) => {
         if (lastName) {
             user.lastName = lastName
         }
-        if (address1) {
-            user.address.line1 = address1
+        if (line1) {
+            user.address.line1 = line1
         }
-        if (address2) {
-            user.address.line2 = address2
+        if (line2) {
+            user.address.line2 = line2
         }
         if (number) {
             user.address.number = number

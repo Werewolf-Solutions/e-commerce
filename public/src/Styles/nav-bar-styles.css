@@ -1,0 +1,14 @@
+.logo {
+  height: 4rem;
+}
+.user {
+  height: 3rem;
+}
+.checkoutButton {
+  background-color: unset;
+  border: unset;
+}
+
+.cartIcon {
+  width: 3rem;
+}

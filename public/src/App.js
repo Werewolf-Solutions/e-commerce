@@ -1,329 +1,270 @@
-import React, {useEffect} from 'react'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { Grid } from '@mui/material'
-import axios from 'axios'
-import './App.css'
-import Header from './Components/Layout/Header/Header'
-import Body from './Components/Layout/Body/Body'
-import Footer from './Components/Layout/Footer/Footer'
-import SignInDialog from './Components/Forms/SignInDialog'
-import SignUpDialog from './Components/Forms/SignUpDialog'
+import * as React from "react";
+import "./App.css";
+import { ModalContainer } from "./Components/ModalContainer";
+import Main from "./Pages/Main";
+import AdminMain from "./Pages/AdminMain";
+import Footer from "./Components/Footer";
+import { useEffect } from "react";
 
-import { io } from 'socket.io-client'
+// Import user controller
+import { getUser, signIn } from "./apiCalls/userController";
 
-import {user_demo} from './js/user_demo'
-import {admin_demo} from './js/admin_demo'
-import { Paper } from '@mui/material'
+// Import product controller
+import {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "./apiCalls/productController";
 
-const socket = io()
+// Import order controller
+import { getOrders } from "./apiCalls/orderController";
+import NavBar from "./Components/NavBar/NavBar";
+
+import {SocketContext, socket} from "./service/socket";
 
 function App() {
-  const [state, setState] = React.useState({
-    user: null
-  })
-  const [orders, setOrders] = React.useState()
-  const [theme, setTheme] = React.useState('dark')
-  const [currency, setCurrency] = React.useState('GBP')
-  const [demo, setDemo] = React.useState('live-account')
-  const [productsList, setProductsList] = React.useState([])
-  const [categories, setCategories] = React.useState([])
-  const [cart, setCart] = React.useState([])
-  const [selected, setSelected] = React.useState('products')
-  const [menuList, setMenuList] = React.useState(false)
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const [signUpDialog, setSignUpDialog] = React.useState(false)
-  const [signInDialog, setSignInDialog] = React.useState(false)
-  const [chat, setChat] = React.useState([])
-  const [newOrders, setNewOrders] = React.useState([])
-  const [notifications, setNotifications] = React.useState([])
+  const [cart, setCart] = React.useState([]);
+  const [totalAmount, setTotalAmount] = React.useState(0);
+  const [user, setUser] = React.useState();
+  const [products, setProducts] = React.useState();
+  const [orders, setOrders] = React.useState();
+  const [selected, setSelected] = React.useState("products");
 
-  const myTheme = createTheme({
-    palette: {
-      mode: theme === 'dark'
-      ? 'dark'
-      : 'light'
-    },
-  })
+  const [acceptedOrders, setAcceptedOrders] = React.useState([])
+  const [completedOrders, setCompletedOrders] = React.useState([])
+  const [ordersIn, setOrdersIn] = React.useState([])
 
-  const handleSignInDialog = () => {
-    setSignInDialog(!signInDialog)
-  }
+  const handleSelected = (selection) => {
+    setSelected(selection);
+  };
 
-  const handleSignUpDialog = () => {
-    setSignUpDialog(!signUpDialog)
-  }
-
-  const handleMenuList = (e) => {
-    setMenuList(!menuList)
-    setAnchorEl(e.currentTarget)
-  }
-
-  const handleSelected = (elm) => {
-    setSelected(elm)
-    setMenuList(false)
-  }
-
-  const createList = (productsList) => {
-    let result = productsList.reduce((acc, d) => {
-      const found = acc.find(a => a.category === d.category)
-      //const value = { category: d.category, val: d.value }
-      const value = d // the element in data property
-      if (!found) {
-        //acc.push(...value)
-        acc.push({category:d.category, products: [value]}) // not found, so need to add products property
+  const addToCart = (product) => {
+    let new_cart = cart
+    let total_amount = 0
+    let new_product = true
+    // check if it's in cart
+    for (let i = 0; i < new_cart.length; i++) {
+      console.log(new_cart[i]._id === product._id)
+      if (new_cart[i]._id === product._id) {
+        new_product = false
+        break
       }
-      else {
-        //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
-        found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
-      }
-      return acc
-    }, [])
-    return result
-  }
-
-  const updateProductsList = async () => {
-    let res = await axios.get('/users/products')
-    let categories = getCategories(res.data.products)
-    let list = createList(res.data.products)
-    console.log(list)
-    setCategories(categories)
-    setProductsList(list)
-  }
-
-  const updateUserOrders = async () => {
-    let res = await axios.get('/user/orders')
-    console.log(res.data)
-    setOrders(res.data.orders)
-  }
-
-  const updateUser = async () => {
-    if (demo === 'user-demo') {
-      setState({...state, user: user_demo})
-    } else if (demo === 'admin-demo') {
-      setState({...state, user: admin_demo})
+    }
+    // add first product
+    if (new_cart.length === 0 || new_product) {
+      console.log("product not in cart, add product")
+      product.quantity = 1
+      new_cart.push(product)
     } else {
-      let res = await axios.get('/users/')
-      console.log(res.data)
-      // updateUserOrders()
-      setOrders(res.data.orders)
-      setState({...state, user: res.data.user})
-    }
-  }
-
-  const signIn = async () => {
-    let { email, password } = state
-    let res = await axios.post('/users/sign-in', {email, password})
-    let { user } = res.data
-    console.log(user)
-    if (user) {
-      setState({...state, user:user})
-      handleSignInDialog()
-      setMenuList(false)
-    }
-  }
-
-  const signUp = async () => {
-    let { email, password, password2 } = state
-    let res = await axios.post('/users/sign-up', {email, password, password2})
-    let { user } = res.data
-    if (user) {
-      setState({...state, user:user})
-      handleSignUpDialog()
-      setMenuList(false)
-      handleSignUpDialog()
-    }
-  }
-
-  const signOut = async () => {
-    let res = await axios.get('/users/sign-out')
-    setState({user:null})
-    setSelected('products')
-    setMenuList(false)
-  }
-
-  const handleChange = (e) => {
-    setState({...state, [e.target.id]: e.target.value})
-  }
-
-  const addToCart = async (item) => {
-    let a = cart.slice()
-    console.log(item)
-    if (a.length === 0 || !item.quantity) {
-      item.quantity = 1
-      a.push(item)
-    } else {
-      for (let i = 0; i < a.length; i++) {
-        console.log(i, a[i]._id === item._id)
-        if (a[i]._id === item._id) {
-          a[i].quantity++
+      for (let i = 0; i < new_cart.length; i++) {
+        console.log(new_cart[i]._id === product._id)
+        if (new_cart[i]._id === product._id) {
+          console.log("product in cart, add quantity")
+          // add quantity
+          new_cart[i].quantity++
+          break
         }
       }
     }
-    let total_cart = totalAmountCart(a)
-    a.total_cart = total_cart
-    setCart(a)
-  }
+    console.log(new_cart)
+    new_cart.forEach((item) => (total_amount += item.quantity * item.price))
+    setCart(new_cart)
+    setTotalAmount(total_amount)
+  };
 
-  const deleteFromCart = (item) => {
+  const deleteFromCart = (product) => {
+    let total_amount = 0
     let a = cart.slice()
     for (let i = 0; i < a.length; i++) {
-      if (a[i]._id === item._id) {
+      if (a[i]._id === product._id) {
         if (a[i].quantity === 1) {
           a[i].quantity = 0
-          a.splice(cart.indexOf(item),1)
+          a.splice(cart.indexOf(product),1)
         } else if (a[i].quantity > 1) {
           a[i].quantity = a[i].quantity - 1
         }
       }
     }
-    let total_cart = totalAmountCart(a)
-    a.total_cart = total_cart
+    a.forEach((item) => (total_amount += item.quantity * item.price))
     setCart(a)
+    setTotalAmount(total_amount)
   }
 
-  const totalAmountCart = (cart) => {
-    let total_cart = 0
-    cart.forEach(item => total_cart = total_cart + (item.quantity * item.price))
-    return total_cart
+  const initializeUser = async () => {
+    // let email = "admin@gmail.com";
+    // let email = "foo@gmail.com";
+    // let password = "1234";
+    // let usr = await signIn(email, password);
+    // in production get user logged in
+    let usr = await getUser();
+    // console.log(usr);
+    setUser(usr);
+    let ords = await getOrders(usr._id)
+    // console.log(ords)
+    if (usr.admin) {
+      initializeAdminOrders(ords)
+    }
+    setOrders(ords)
+  };
+
+  // function to be called every time to update user, orders, products
+  const update = async () => {
+    let usr = await getUser();
+    setUser(usr);
+    let ords = await getOrders(usr._id)
+    if (usr.admin) {
+      initializeAdminOrders(ords)
+    }
+    setOrders(ords)
+    initializeProducts();
+  };
+
+  const initializeProducts = async () => {
+    let p = await getProducts();
+    let prods = await createList(p);
+    setProducts(prods);
+  };
+
+  const initializeAdminOrders = (orders) => {
+    let accepted = []
+    let ordsIn = []
+    let completed = []
+    if (orders) {
+      for (let i = 0; i < orders.length; i++) {
+        // console.log(`
+        // id: ${orders[i]._id}
+        // Accepted ${orders[i].accepted}
+        // Ready: ${orders[i].ready}
+        // Completed: ${orders[i].completed}
+        // Status: ${orders[i].status}
+        // \n\n`)
+
+        // orders in - paid or pay at pick up || first column
+        if (!orders[i].completed &&
+          !orders[i].accepted &&
+          orders[i].payment_intent.status === "succeeded" &&
+          orders[i].status != "refunded") {
+            ordsIn.push(orders[i])
+        }
+
+        // orders accepted - in preparation || second column
+        if (orders[i].accepted &&
+          !orders[i].ready &&
+          !orders[i].completed &&
+          orders[i].status != "refunded") {
+            accepted.push(orders[i])
+        }
+  
+        // orders completed - ready to be collected or delivered || third column
+        if (orders[i].ready &&
+          !orders[i].completed &&
+          orders[i].status != "refunded") {
+            completed.push(orders[i])
+        }
+  
+        
+      }
+      setAcceptedOrders(accepted)
+      setCompletedOrders(completed)
+      setOrdersIn(ordsIn)
+    }
   }
+
+  const createList = (list) => {
+    let result = list.reduce((acc, d) => {
+      const found = acc.find((a) => a.category === d.category);
+      //const value = { category: d.category, val: d.value }
+      const value = d; // the element in data property
+      if (!found) {
+        //acc.push(...value)
+        acc.push({ category: d.category, products: [value] }); // not found, so need to add products property
+      } else {
+        //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
+        found.products.push(value); // if found, that means products property exists, so just push new element to found.data.
+      }
+      return acc;
+    }, []);
+    return result;
+  };
 
   const emptyCart = () => {
     setCart([])
-  }
-
-  const getCategories = (productsList) => {
-    let result = []
-    productsList.forEach(product => {
-        if (result.length === 0) {
-            result.push(product.category)
-        } else if (result[result.length -1] != product .category) {
-            result.push(product.category)
-        }
-    })
-    return result
-  }
-
-  const handleDemo = (e) => {
-    setDemo(e.target.value)
-  }
-
-  const handleCurrency = (e) => {
-    // TODO: change amount based on currency, ex: GBP -> USD
-    setCurrency(e.target.value)
-  }
-
-  const handleTheme = (e) => {
-    setTheme(e.target.value)
+    setTotalAmount(0)
   }
 
   useEffect(() => {
-    updateProductsList()
-    updateUser()
-
-    socket.on("connect_error", (err) => {
-      console.log(`connect_error due to ${err.message}`)
-      console.log(err)
-    })
+    initializeUser();
+    initializeProducts();
 
     socket.on('new_order', ({order}) => {
       console.log('new order')
       console.log(order)
-      setNotifications([...notifications, 'new order'])
+      // setNotifications([...notifications, 'new order'])
       // setNewOrders([...newOrders, order])
-      updateUser()
+      update()
     })
 
-    socket.on('order_update', ({order}) => {
-      console.log('order update')
-      console.log(order)
-      setNotifications([...notifications, 'order update'])
-      // setNewOrders([...newOrders, order])
-      updateUser()
-    })
-
-    socket.on('message', ({sentBy, text}) => {
-      setNotifications([...notifications, 'new message from user in orders'])
-      setChat([...chat, {sentBy, text}])
-    })
-  }, [demo, selected, notifications])
+    // socket.on('order_update', ({order}) => {
+    //   console.log('order update')
+    //   console.log(order)
+    //   // setNotifications([...notifications, 'order update'])
+    //   // setNewOrders([...newOrders, order])
+    //   update()
+    // })
+  }, []);
 
   return (
-    <div >
-      <ThemeProvider theme={myTheme}>
-
-        <SignInDialog
-          open={signInDialog}
-          handleChange={handleChange}
-          onClose={handleSignInDialog}
-          handleSignInDialog={handleSignInDialog}
-          handleSignUpDialog={handleSignUpDialog}
-          signIn={signIn}
-        />
-        <SignUpDialog
-          open={signUpDialog}
-          handleChange={handleChange}
-          onClose={handleSignUpDialog}
-          handleSignInDialog={handleSignInDialog}
-          handleSignUpDialog={handleSignUpDialog}
-          signUp={signUp}
-        />
-        <Paper>
-          <Grid container direction='column'>
-            <Grid item>
-              <Header
-                user={state.user}
-                signOut={signOut}
-                handleSelected={handleSelected}
-                handleMenuList={handleMenuList}
-                anchorEl={anchorEl}
-                menuList={menuList}
-                handleSignInDialog={handleSignInDialog}
-                handleSignUpDialog={handleSignUpDialog}
-                updateUser={updateUser}
-                cart={cart}
-                emptyCart={emptyCart}
-                handleDemo={handleDemo}
-                demo={demo}
-                currency={currency}
-                handleCurrency={handleCurrency}
-                theme={theme}
-                handleTheme={handleTheme}
-                notifications={notifications}
-              />
-
-            </Grid>
-            <Grid item>
-              <Body
-                productsList={productsList}
-                categories={categories}
-                selected={selected}
-                handleChange={handleChange}          
-                user={state.user}
-                cart={cart}
-                addToCart={addToCart}
-                deleteFromCart={deleteFromCart}
-                handleSelected={handleSelected}
-                updateUser={updateUser}
-                updateProductsList={updateProductsList}
-                handleSignInDialog={handleSignInDialog}
-                currency={currency}
+    <SocketContext.Provider value={socket}>
+      <>
+        <div></div>
+        <div className="App">
+          <NavBar
+            user={user}
+            update={update}
+            cart={cart}
+            handleSelected={handleSelected}
+            totalAmount={totalAmount}
+            deleteFromCart={deleteFromCart}
+            emptyCart={emptyCart}
+          />
+          {user ? (
+            user.admin ? (
+              <AdminMain
+                acceptedOrders={acceptedOrders}
+                ordersIn={ordersIn}
+                completedOrders={completedOrders}
                 orders={orders}
-                chat={chat}
-                newOrders={newOrders}
+                products={products}
+                update={update}
+                selected={selected}
               />
-              
-            </Grid>
-            <Grid item>
-              <Footer
-                handleSelected={handleSelected}
+            ) : (
+              <Main
+                products={products}
+                user={user}
+                orders={orders}
+                update={update}
+                addToCart={addToCart}
+                selected={selected}
               />
-              
-            </Grid>
-          </Grid>
-        </Paper>
-      </ThemeProvider>
-    </div>
-  )
+            )
+          ) : (
+            <Main
+              products={products}
+              orders={orders}
+              user={user}
+              update={update}
+              addToCart={addToCart}
+              selected={selected}
+            />
+          )}
+          <Footer />
+        </div>
+        <ModalContainer />
+      </>
+    </SocketContext.Provider>
+  );
 }
 
-export default App
+export default App;

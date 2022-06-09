@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage })
 
-// Import user controllers
+// Import user controller
 const {
   getUser,
   signIn,
@@ -28,30 +28,35 @@ const {
   sendMsg,
 } = require('../controllers/userController')
 
-// Import admin controllers
+// Imnport product controller
 const {
-  addProduct,
+  createProduct,
   updateProduct,
   deleteProduct,
-  acceptOrder,
-  declineOrder,
-  startDelivery,
-  endDelivery,
-  getProducts
-} = require('../controllers/adminController')
+  getProducts,
+  uploadImg,
+  updateCategory
+} = require('../controllers/productController')
 
-// Import payment controllers
+// Import payment controller
 const {
   createPaymentIntent,
   confirmPaymentIntent,
-  addPaymentMethod,
+  createPaymentMethod,
   detachPaymentMethod,
   refundPaymentIntent
 } = require('../controllers/paymentController')
 
 const {
   createOrder,
-  deleteOrder
+  deleteOrder,
+  acceptOrder,
+  declineOrder,
+  startDelivery,
+  endDelivery,
+  getOrders,
+  completeOrder,
+  orderReady
 } = require('../controllers/orderController')
 
 const imgPath = '/home/lorenzo/projects/e-commerce/public/src/files/pizza-margherita.jpeg'
@@ -114,10 +119,6 @@ router.get('/delete-user', deleteUser)
 
 router.post('/update-user', updateUser)
 
-router.post('/add-order', createOrder)
-
-router.post('/delete-order', deleteOrder)
-
 /**
  * PAYMENT endpoints
  */
@@ -135,7 +136,7 @@ router.post('/confirm-payment-intent', confirmPaymentIntent)
 /**
  * Public
  */
-router.post('/add-payment-method', addPaymentMethod)
+router.post('/create-payment-method', createPaymentMethod)
 
 /**
  * Public
@@ -202,50 +203,42 @@ router.post('/list-payment-methods', async (req, res, next) => {
 })
 
 /**
- * ADMIN endpoints
+ * PRODUCT endpoints
  */
 
 router.get('/products', getProducts)
 
-router.post('/add-product', addProduct)
+router.post('/create-product', createProduct)
 
-/**
- * POST - TEST how to save img in mongoDB
- * 
- * /upload-img
- * 
- * admin can add img to product
- */
-// 
-router.post('/upload-img', upload.single('file'), async (req, res, next) => {
-  console.log(req.file)
-  if (!req.file) {
-    res.send({msg: 'No file uploaded'})
-  } else {
-    res.send({msg: 'Image uploaded', img: {
-      path: req.file.path,
-      mimetype: req.file.mimetype,
-      filename: req.file.filename
-    }})
-  }
-  // let buffer = fs.readFileSync(imgPath)
-  // let new_product = await Product.findById(product._id)
-  // new_product.img.data = buffer
-  // new_product.img.contentType = 'image/png'
-  // await new_product.save()
-})
-
-// TODO: change api call in front-end
 router.post('/update-product', updateProduct)
+
+router.post('/update-category', updateCategory)
 
 router.post('/delete-product', deleteProduct)
 
+router.post('/upload-img', upload.single('file'), uploadImg)
+
+
+/**
+ * ORDER endpoints
+ */
+
+router.post('/orders', getOrders)
+
+router.post('/create-order', createOrder)
+
 router.post('/accept-order', acceptOrder)
 
+router.post('/order-ready', orderReady)
+
 router.post('/decline-order', declineOrder)
+
+router.post('/delete-order', deleteOrder)
 
 router.post('/start-delivery', startDelivery)
 
 router.post('/end-delivery', endDelivery)
+
+router.post('/complete-order', completeOrder)
 
 module.exports = router
