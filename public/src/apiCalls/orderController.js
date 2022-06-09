@@ -21,9 +21,11 @@ export async function getOrders(orderedBy) {
  * @params  order
  * @returns order, msg
  */
-export async function createOrder(order) {
-    let res = await axios.post('users/create-order', {order})
+export async function createOrder(new_order) {
+    console.log('create order')
+    let res = await axios.post('users/create-order', {order: new_order})
     console.log(res.data)
+    return {order:res.data.order, msg: res.data.msg}
 }
 
 /**

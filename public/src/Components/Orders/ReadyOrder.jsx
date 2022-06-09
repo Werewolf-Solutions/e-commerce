@@ -2,9 +2,9 @@ import React from 'react'
 import OrderBody from "../Admin/OrderBody"
 import { completeOrder } from '../../apiCalls/orderController'
 
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 
-const socket = io()
+// const socket = io()
 
 export default function ReadyOrder(props) {
   return (
@@ -15,7 +15,7 @@ export default function ReadyOrder(props) {
           onClick={() => {
             completeOrder(props.order).then((order) => {
               props.update()
-              socket.emit('new_order', {order})
+              // socket.emit('order_update', {order})
             })
           }}
         >

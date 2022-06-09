@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -19,18 +19,22 @@ import {
   confirmPaymentIntent,
 } from "../../apiCalls/paymentController";
 
-import { io } from 'socket.io-client'
 
-import axios from "axios";
 import { createOrder } from "../../apiCalls/orderController";
 
-const socket = io()
+import {SocketContext} from '../../service/socket';
+
+// import { io } from 'socket.io-client'
+// const socket = io()
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
 const theme = createTheme();
 
 export default function CheckoutForm(props) {
+
+  const socket = useContext(SocketContext);
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [state, setState] = React.useState({
     email: "",
@@ -50,9 +54,12 @@ export default function CheckoutForm(props) {
   const [paymentMethod, setPaymentMethod] = React.useState();
   const [shippingMethod, setShippingMethod] = React.useState();
   const [address, setAddress] = React.useState()
+  const [newOrder, setNewOrder] = React.useState()
+
+  
 
   const handleAddressChange = (e) => {
-      setAddress({...address, [e.target.id]: e.target.value})
+    setAddress({...address, [e.target.id]: e.target.value})
   }
 
   const handleShippingMethodSelect = (e) => {
@@ -218,11 +225,10 @@ export default function CheckoutForm(props) {
 
     if (activeStep === steps.length - 1 && props.user) {
       // console.log(`active step === steps.length -1 = ${steps.length - 1}`);
-      console.log(paymentIntent);
+      // console.log(paymentIntent);
       if (paymentMethod === "card") {
-        let order = await confirmPaymentIntent(paymentIntent);
-        console.log(order)
-        // let order = {
+        let {order} = await confirmPaymentIntent(paymentIntent);
+        // let new_order = {
         //     orderedBy: props.user._id,
         //     payment_method: card,
         //     address: props.user.address,
@@ -234,23 +240,25 @@ export default function CheckoutForm(props) {
         //     items: props.cart,
         //     total_cart: props.cart.total_cart
         // }
-        socket.emit('new_order', {order})
+        console.log(order)
+        setNewOrder(order)
+        // socket.emit('new_order', {new_order})
       } else if (paymentMethod === "cash") {
         // console.log("Add order to admin and user");
-        let order = {
+        let new_order = {
           orderedBy: props.user._id,
+          payment_method: card,
           address: props.user.address,
-          items: props.cart,
-          payment_intent: {
-            status: "succeeded",
-            payment_method: "cash",
-          },
           shipping_method: shippingMethod,
-          shipping_address: address,
-          total_amount: props.totalAmount,
-        };
-        // console.log(order);
-        createOrder(order);
+          payment_method: {
+            type: paymentMethod
+          },
+          items: props.cart,
+          total_amount: props.totalAmount
+        }
+        let {order} = await createOrder(new_order);
+        console.log(order)
+        setNewOrder(order)
         socket.emit('new_order', {order})
       }
       setActiveStep(activeStep + 1);
@@ -258,12 +266,12 @@ export default function CheckoutForm(props) {
       props.emptyCart()
     } else if (activeStep === steps.length - 1 && !props.user) {
       // console.log("guest review order => confirm payment intent");
-      let order = await confirmPaymentIntent(paymentIntent);
-      console.log(order)
-      socket.emit('new_order', {order})
+      let {order} = await confirmPaymentIntent(paymentIntent);
+      setNewOrder(order)
       setActiveStep(activeStep + 1);
       props.update();
       props.emptyCart()
+      // socket.emit('new_order', {order})
     }
   };
 
@@ -360,7 +368,7 @@ export default function CheckoutForm(props) {
                   Thank you for your order.
                 </Typography>
                 <Typography variant="subtitle1" color="error">
-                  Your order number is #2001539. We have emailed your order
+                  Your order number is {newOrder.number}, id {newOrder._id}. We have emailed your order
                   confirmation, and will send you an update when your order has
                   shipped.
                 </Typography>

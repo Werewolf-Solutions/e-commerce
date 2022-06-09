@@ -21,9 +21,7 @@ import {
 import { getOrders } from "./apiCalls/orderController";
 import NavBar from "./Components/NavBar/NavBar";
 
-import { io } from 'socket.io-client'
-
-const socket = io()
+import {SocketContext, socket} from "./service/socket";
 
 function App() {
   const [cart, setCart] = React.useState([]);
@@ -95,15 +93,15 @@ function App() {
 
   const initializeUser = async () => {
     // let email = "admin@gmail.com";
-    // let email = "foo5@gmail.com";
+    // let email = "foo@gmail.com";
     // let password = "1234";
     // let usr = await signIn(email, password);
     // in production get user logged in
     let usr = await getUser();
-    console.log(usr);
+    // console.log(usr);
     setUser(usr);
     let ords = await getOrders(usr._id)
-    console.log(ords)
+    // console.log(ords)
     if (usr.admin) {
       initializeAdminOrders(ords)
     }
@@ -112,7 +110,13 @@ function App() {
 
   // function to be called every time to update user, orders, products
   const update = async () => {
-    initializeUser();
+    let usr = await getUser();
+    setUser(usr);
+    let ords = await getOrders(usr._id)
+    if (usr.admin) {
+      initializeAdminOrders(ords)
+    }
+    setOrders(ords)
     initializeProducts();
   };
 
@@ -201,63 +205,65 @@ function App() {
       update()
     })
 
-    socket.on('order_update', ({order}) => {
-      console.log('order update')
-      console.log(order)
-      // setNotifications([...notifications, 'order update'])
-      // setNewOrders([...newOrders, order])
-      update()
-    })
+    // socket.on('order_update', ({order}) => {
+    //   console.log('order update')
+    //   console.log(order)
+    //   // setNotifications([...notifications, 'order update'])
+    //   // setNewOrders([...newOrders, order])
+    //   update()
+    // })
   }, []);
 
   return (
-    <>
-      <div></div>
-      <div className="App">
-        <NavBar
-          user={user}
-          update={update}
-          cart={cart}
-          handleSelected={handleSelected}
-          totalAmount={totalAmount}
-          deleteFromCart={deleteFromCart}
-          emptyCart={emptyCart}
-        />
-        {user ? (
-          user.admin ? (
-            <AdminMain
-              acceptedOrders={acceptedOrders}
-              ordersIn={ordersIn}
-              completedOrders={completedOrders}
-              orders={orders}
-              products={products}
-              update={update}
-              selected={selected}
-            />
+    <SocketContext.Provider value={socket}>
+      <>
+        <div></div>
+        <div className="App">
+          <NavBar
+            user={user}
+            update={update}
+            cart={cart}
+            handleSelected={handleSelected}
+            totalAmount={totalAmount}
+            deleteFromCart={deleteFromCart}
+            emptyCart={emptyCart}
+          />
+          {user ? (
+            user.admin ? (
+              <AdminMain
+                acceptedOrders={acceptedOrders}
+                ordersIn={ordersIn}
+                completedOrders={completedOrders}
+                orders={orders}
+                products={products}
+                update={update}
+                selected={selected}
+              />
+            ) : (
+              <Main
+                products={products}
+                user={user}
+                orders={orders}
+                update={update}
+                addToCart={addToCart}
+                selected={selected}
+              />
+            )
           ) : (
             <Main
               products={products}
-              user={user}
               orders={orders}
+              user={user}
               update={update}
               addToCart={addToCart}
               selected={selected}
             />
-          )
-        ) : (
-          <Main
-            products={products}
-            orders={orders}
-            user={user}
-            update={update}
-            addToCart={addToCart}
-            selected={selected}
-          />
-        )}
-        <Footer />
-      </div>
-      <ModalContainer />
-    </>
+          )}
+          <Footer />
+        </div>
+        <ModalContainer />
+      </>
+    </SocketContext.Provider>
   );
 }
 

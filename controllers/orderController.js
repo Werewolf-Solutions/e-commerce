@@ -53,14 +53,16 @@ const getOrders = async (req, res, next) => {
  */
 let number = 0
 const createOrder = async (req, res, next) => {
+    console.log('create order')
     let {order} = req.body
     const { userId } = req.session
     let user = await User.findById(userId)
     // check total_cart is correct
     let t_c = 0
-    order.items.forEach(item => t_c = t_c + item.price*item.quantity)
-    console.log(t_c, order.total_amount)
-    if (user && t_c === order.total_amount) {
+    // order.items.forEach(item => t_c = t_c + item.price*item.quantity)
+    // console.log(t_c, order.total_amount)
+    //  && t_c === order.total_amount
+    if (user) {
         number++
         try {
             order.orderedBy = {
@@ -80,8 +82,8 @@ const createOrder = async (req, res, next) => {
             let new_order = new Order(order)
             startCountdown()
             await new_order.save()
-            let orders = await Order.find({orderedBy: user._id})
-            res.send({order: new_order})
+            // let orders = await Order.find({orderedBy: user._id})
+            res.send({order: new_order, msg: 'Order successfully created'})
         } catch (error) {
             console.log(error)
             res.send({msg: error.raw ? error.raw.message : error})
