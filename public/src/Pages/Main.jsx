@@ -4,7 +4,6 @@ import Card from "../Components/Card";
 import UserAccount from "../Components/UserAccount";
 
 function Main(props) {
-  console.log(props.orders);
   return (
     <div className="main">
       <HeroImage />

@@ -34,7 +34,8 @@ const {
   updateProduct,
   deleteProduct,
   getProducts,
-  uploadImg
+  uploadImg,
+  updateCategory
 } = require('../controllers/productController')
 
 // Import payment controller
@@ -210,6 +211,8 @@ router.get('/products', getProducts)
 router.post('/create-product', createProduct)
 
 router.post('/update-product', updateProduct)
+
+router.post('/update-category', updateCategory)
 
 router.post('/delete-product', deleteProduct)
 

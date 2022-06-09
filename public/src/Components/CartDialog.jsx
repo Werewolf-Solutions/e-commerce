@@ -25,17 +25,17 @@ export default function CartDialog(props) {
               <u className="">ITEMS IN YOUR CART</u>
             </p>
             {props.cart.length != 0
-              ? props.cart.map((item) => (
+              ? props.cart.map((product) => (
                   <div className="container cartPopup p-3 mt-3">
                     <Typography className="mb-1 text-light">
-                      Name: {item.name}
+                      Name: {product.name}
                     </Typography>
                     <Typography className="mb-1 text-light">
-                      Quantity: {item.quantity}
+                      Quantity: {product.quantity}
                     </Typography>
                     <button
                       className="btn btn-sm mt-1 mb-2 btn-danger"
-                      onClick={props.deleteFromCart}
+                      onClick={() => props.deleteFromCart(product)}
                     >
                       delete from cart
                     </button>

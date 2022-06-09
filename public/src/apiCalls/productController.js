@@ -83,3 +83,17 @@ export async function uploadImg(file, product) {
     let response = await axios.post('/users/update-product', {product})
     console.log(response.data)
 }
+
+
+/**
+ * 
+ * @desc    update category
+ * @route   POST /users/update-category
+ * @access  Private
+ * @params  category
+ * @returns products, msg
+ */
+ export async function updateCategory(category, new_category) {
+    let res = await axios.post('users/update-category', {category, new_category})
+    console.log(res.data)
+}

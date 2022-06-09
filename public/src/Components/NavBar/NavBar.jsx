@@ -1,6 +1,7 @@
 import React from "react";
 import "../../Styles/nav-bar-styles.css";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
+import cartIcon from "../../Assets/icons8-buying-96.png";
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 
 import AdminNavBar from "./AdminNavBar";
@@ -8,16 +9,22 @@ import UserNavBar from "./UserNavBar";
 import GuestNavBar from "./GuestNavBar";
 import SignInDialog from "../SignIn/SignInDialog";
 import SignUpDialog from "../SignUp/SignUpDialog";
+import CartDialog from "../CartDialog";
 
 function NavBar(props) {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false);
+  const [cartDialog, setCartDialog] = React.useState(false);
+
+  const handleCartDialog = () => {
+    setCartDialog(!cartDialog);
+  };
 
   const handleCheckoutDialog = () => {
     setCheckoutDialog(!checkoutDialog);
   };
 
-  console.log(props.cart.length);
-  console.log(props.totalAmount);
+  // console.log(props.cart.length);
+  // console.log(props.totalAmount);
 
   const [signInDialog, setSignInDialog] = React.useState(false);
   const [signUpDialog, setSignUpDialog] = React.useState(false);
@@ -53,6 +60,7 @@ function NavBar(props) {
             cart={props.cart}
             totalAmount={props.totalAmount}
             update={props.update}
+            emptyCart={props.emptyCart}
           />
           {props.user ? (
             props.user.admin ? (
@@ -68,12 +76,14 @@ function NavBar(props) {
                 user={props.user}
                 totalAmount={props.totalAmount}
                 deleteFromCart={props.deleteFromCart}
+                emptyCart={props.emptyCart}
               />
             )
           ) : (
             <GuestNavBar
               update={props.update}
               handleSelected={props.handleSelected}
+              emptyCart={props.emptyCart}
             />
           )}
           <ul className="navbar-nav ">
@@ -123,14 +133,31 @@ function NavBar(props) {
               <a className="nav-link">Total Price: {props.totalAmount}</a>
             </li>
             {props.cart.length !== 0 ? (
-              <li className="nav-item">
-                <button
-                  onClick={handleCheckoutDialog}
-                  className="nav-link text-danger checkoutButton"
-                >
-                  checkout
-                </button>
-              </li>
+              <div>
+                <li className="nav-item">
+                  <button
+                    onClick={handleCheckoutDialog}
+                    className="nav-link text-danger checkoutButton"
+                  >
+                    checkout
+                  </button>
+                </li>
+                {/* cart icon */}
+                <li className="nav-item me-3">
+                  <img
+                    className="cartIcon"
+                    onClick={handleCartDialog}
+                    src={cartIcon}
+                    alt=""
+                  />
+                </li>
+                <CartDialog
+                  open={cartDialog}
+                  onClose={handleCartDialog}
+                  cart={props.cart}
+                  deleteFromCart={props.deleteFromCart}
+                />
+              </div>
             ) : null}
 
             <div>

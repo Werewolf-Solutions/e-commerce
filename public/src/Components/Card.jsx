@@ -17,7 +17,7 @@ export default function Card(props) {
       <h3 className="price text-danger">PRICE: {props.product.price}</h3>
 
       <div className="btn-group" role="group" aria-label="Basic example">
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <button
             className="btn btn-sm btn-danger float-right dropdown-toggle me-1"
             type="button"
@@ -49,7 +49,7 @@ export default function Card(props) {
               </a>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <a
           className="btn btn-sm btn-danger float-right"

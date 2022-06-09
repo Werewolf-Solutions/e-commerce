@@ -21,6 +21,8 @@ import {
 import { getOrders } from "./apiCalls/orderController";
 import NavBar from "./Components/NavBar/NavBar";
 
+import {SocketContext, socket} from "./service/socket";
+
 function App() {
   const [cart, setCart] = React.useState([]);
   const [totalAmount, setTotalAmount] = React.useState(0);
@@ -38,37 +40,56 @@ function App() {
   };
 
   const addToCart = (product) => {
-    let new_cart = cart;
-    let total_amount = 0;
+    let new_cart = cart
+    let total_amount = 0
+    let new_product = true
+    // check if it's in cart
+    for (let i = 0; i < new_cart.length; i++) {
+      console.log(new_cart[i]._id === product._id)
+      if (new_cart[i]._id === product._id) {
+        new_product = false
+        break
+      }
+    }
     // add first product
-    if (new_cart.length === 0) {
-      product.quantity = 1;
-      new_cart.push(product);
+    if (new_cart.length === 0 || new_product) {
+      console.log("product not in cart, add product")
+      product.quantity = 1
+      new_cart.push(product)
     } else {
       for (let i = 0; i < new_cart.length; i++) {
+        console.log(new_cart[i]._id === product._id)
         if (new_cart[i]._id === product._id) {
-          console.log("product in cart, add quantity");
+          console.log("product in cart, add quantity")
           // add quantity
-          new_cart[i].quantity++;
-          break;
-        } else {
-          // add product
-          console.log("product not in cart, add product");
-          product.quantity = 1;
-          new_cart.push(product);
-          break;
+          new_cart[i].quantity++
+          break
         }
       }
     }
-    console.log(new_cart);
-    new_cart.forEach((item) => (total_amount += item.quantity * item.price));
-    setCart(new_cart);
-    setTotalAmount(total_amount);
+    console.log(new_cart)
+    new_cart.forEach((item) => (total_amount += item.quantity * item.price))
+    setCart(new_cart)
+    setTotalAmount(total_amount)
   };
 
-  const deleteFromCart = () => {
-    console.log("delete from cart");
-  };
+  const deleteFromCart = (product) => {
+    let total_amount = 0
+    let a = cart.slice()
+    for (let i = 0; i < a.length; i++) {
+      if (a[i]._id === product._id) {
+        if (a[i].quantity === 1) {
+          a[i].quantity = 0
+          a.splice(cart.indexOf(product),1)
+        } else if (a[i].quantity > 1) {
+          a[i].quantity = a[i].quantity - 1
+        }
+      }
+    }
+    a.forEach((item) => (total_amount += item.quantity * item.price))
+    setCart(a)
+    setTotalAmount(total_amount)
+  }
 
   const initializeUser = async () => {
     // let email = "admin@gmail.com";
@@ -77,10 +98,10 @@ function App() {
     // let usr = await signIn(email, password);
     // in production get user logged in
     let usr = await getUser();
-    console.log(usr);
+    // console.log(usr);
     setUser(usr);
     let ords = await getOrders(usr._id)
-    console.log(ords)
+    // console.log(ords)
     if (usr.admin) {
       initializeAdminOrders(ords)
     }
@@ -89,7 +110,13 @@ function App() {
 
   // function to be called every time to update user, orders, products
   const update = async () => {
-    initializeUser();
+    let usr = await getUser();
+    setUser(usr);
+    let ords = await getOrders(usr._id)
+    if (usr.admin) {
+      initializeAdminOrders(ords)
+    }
+    setOrders(ords)
     initializeProducts();
   };
 
@@ -116,7 +143,7 @@ function App() {
         // orders in - paid or pay at pick up || first column
         if (!orders[i].completed &&
           !orders[i].accepted &&
-          orders[i].payment_intent.status == "succeeded" &&
+          orders[i].payment_intent.status === "succeeded" &&
           orders[i].status != "refunded") {
             ordsIn.push(orders[i])
         }
@@ -161,58 +188,82 @@ function App() {
     return result;
   };
 
+  const emptyCart = () => {
+    setCart([])
+    setTotalAmount(0)
+  }
+
   useEffect(() => {
     initializeUser();
     initializeProducts();
+
+    socket.on('new_order', ({order}) => {
+      console.log('new order')
+      console.log(order)
+      // setNotifications([...notifications, 'new order'])
+      // setNewOrders([...newOrders, order])
+      update()
+    })
+
+    // socket.on('order_update', ({order}) => {
+    //   console.log('order update')
+    //   console.log(order)
+    //   // setNotifications([...notifications, 'order update'])
+    //   // setNewOrders([...newOrders, order])
+    //   update()
+    // })
   }, []);
 
   return (
-    <>
-      <div></div>
-      <div className="App">
-        <NavBar
-          user={user}
-          update={update}
-          cart={cart}
-          handleSelected={handleSelected}
-          totalAmount={totalAmount}
-          deleteFromCart={deleteFromCart}
-        />
-        {user ? (
-          user.admin ? (
-            <AdminMain
-              acceptedOrders={acceptedOrders}
-              ordersIn={ordersIn}
-              completedOrders={completedOrders}
-              orders={orders}
-              products={products}
-              update={update}
-              selected={selected}
-            />
+    <SocketContext.Provider value={socket}>
+      <>
+        <div></div>
+        <div className="App">
+          <NavBar
+            user={user}
+            update={update}
+            cart={cart}
+            handleSelected={handleSelected}
+            totalAmount={totalAmount}
+            deleteFromCart={deleteFromCart}
+            emptyCart={emptyCart}
+          />
+          {user ? (
+            user.admin ? (
+              <AdminMain
+                acceptedOrders={acceptedOrders}
+                ordersIn={ordersIn}
+                completedOrders={completedOrders}
+                orders={orders}
+                products={products}
+                update={update}
+                selected={selected}
+              />
+            ) : (
+              <Main
+                products={products}
+                user={user}
+                orders={orders}
+                update={update}
+                addToCart={addToCart}
+                selected={selected}
+              />
+            )
           ) : (
             <Main
               products={products}
-              user={user}
               orders={orders}
+              user={user}
               update={update}
               addToCart={addToCart}
               selected={selected}
             />
-          )
-        ) : (
-          <Main
-            products={products}
-            orders={orders}
-            user={user}
-            update={update}
-            addToCart={addToCart}
-            selected={selected}
-          />
-        )}
-        <Footer />
-      </div>
-      <ModalContainer />
-    </>
+          )}
+          <Footer />
+        </div>
+        <ModalContainer />
+      </>
+    </SocketContext.Provider>
   );
 }
 

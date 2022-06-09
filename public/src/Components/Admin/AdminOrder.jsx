@@ -4,6 +4,10 @@ import { refundPaymentIntent } from "../../apiCalls/paymentController";
 import "../../Styles/admin-orders-styles.css";
 import OrderBody from "./OrderBody"
 
+// import { io } from 'socket.io-client'
+
+// const socket = io()
+
 export default function AdminOrder(props) {
   // console.log(props.order)
   return (
@@ -20,7 +24,10 @@ export default function AdminOrder(props) {
       </a>
       <a
         onClick={() => {
-          acceptOrder(props.order).then(() => props.update())
+          acceptOrder(props.order).then((order) => {
+            props.update()
+            // socket.emit('order_update', {order})
+          })
         }}
         class="btn btn-danger btn-sm"
       >
