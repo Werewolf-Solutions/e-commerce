@@ -205,13 +205,13 @@ function App() {
       update()
     })
 
-    // socket.on('order_update', ({order}) => {
-    //   console.log('order update')
-    //   console.log(order)
-    //   // setNotifications([...notifications, 'order update'])
-    //   // setNewOrders([...newOrders, order])
-    //   update()
-    // })
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      // setNotifications([...notifications, 'order update'])
+      // setNewOrders([...newOrders, order])
+      update()
+    })
   }, []);
 
   return (
