@@ -41,6 +41,18 @@ function NavBar(props) {
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
+        <li className="nav-item">
+          <a className="nav-link text-danger" onClick={handleCartDialog}>
+            Cart {props.cart.length} | £{props.totalAmount}
+          </a>
+        </li>
+        {props.cart.length !== 0 ? (
+          <li className="nav-item">
+            <a className="nav-link text-danger" onClick={handleCheckoutDialog}>
+              Checkout
+            </a>
+          </li>
+        ) : null}
         <button
           className="navbar-toggler"
           type="button"
@@ -61,6 +73,12 @@ function NavBar(props) {
             totalAmount={props.totalAmount}
             update={props.update}
             emptyCart={props.emptyCart}
+          />
+          <CartDialog
+            open={cartDialog}
+            onClose={handleCartDialog}
+            cart={props.cart}
+            deleteFromCart={props.deleteFromCart}
           />
           {props.user ? (
             props.user.admin ? (
@@ -87,52 +105,7 @@ function NavBar(props) {
             />
           )}
           <ul className="navbar-nav ">
-            <li className="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                role="button"
-                data-bs-toggle="dropdown"
-              >
-                Menu
-              </a>
-              {/* <img
-                src={user}
-                className="img-fluid nav-link dropdown-toggle user"
-                role="button"
-                data-bs-toggle="dropdown"
-                alt=""
-              /> */}
-              <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#sideorders">
-                    SIDE ORDERS
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#mains">
-                    MAINS
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#deserts">
-                    DESERTS
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#drinks">
-                    DRINKS
-                  </a>
-                </li>
-              </ul>
-            </li>
-
-            <li className="nav-item">
-              <a className="nav-link">Items in my Cart : {props.cart.length}</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link">Total Price: {props.totalAmount}</a>
-            </li>
-            {props.cart.length !== 0 ? (
+            {/* {props.cart.length !== 0 ? (
               <div>
                 <li className="nav-item">
                   <button
@@ -142,7 +115,6 @@ function NavBar(props) {
                     checkout
                   </button>
                 </li>
-                {/* cart icon */}
                 <li className="nav-item me-3">
                   <img
                     className="cartIcon"
@@ -151,14 +123,8 @@ function NavBar(props) {
                     alt=""
                   />
                 </li>
-                <CartDialog
-                  open={cartDialog}
-                  onClose={handleCartDialog}
-                  cart={props.cart}
-                  deleteFromCart={props.deleteFromCart}
-                />
               </div>
-            ) : null}
+            ) : null} */}
 
             <div>
               <SignInDialog
