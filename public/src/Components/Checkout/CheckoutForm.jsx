@@ -242,7 +242,7 @@ export default function CheckoutForm(props) {
         // }
         console.log(order)
         setNewOrder(order)
-        // socket.emit('new_order', {new_order})
+        socket.emit('new_order', {order})
       } else if (paymentMethod === "cash") {
         // console.log("Add order to admin and user");
         let new_order = {
