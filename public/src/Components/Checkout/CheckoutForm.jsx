@@ -323,6 +323,7 @@ export default function CheckoutForm(props) {
             currency={props.currency}
             user={props.user}
             update={props.update}
+            totalAmount={props.totalAmount}
           />
         );
       default:
@@ -351,7 +352,7 @@ export default function CheckoutForm(props) {
         <Container
           component="main"
           maxWidth="sm"
-          className="container"
+          className="p-3 loginContainer"
         >
           <Typography component="h1" variant="h4" align="center" color="error">
             Checkout
@@ -369,7 +370,7 @@ export default function CheckoutForm(props) {
                 <Typography color="error" variant="h5" gutterBottom>
                   Thank you for your order.
                 </Typography>
-                <Typography variant="subtitle1" color="error">
+                <Typography variant="subtitle1" color="white">
                   Your order number is {newOrder.number}, id {newOrder._id}. We have emailed your order
                   confirmation, and will send you an update when your order has
                   shipped.
