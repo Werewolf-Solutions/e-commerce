@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
+import "../../Styles/admin-cards.css"
 
 import {
   createPaymentIntent,
@@ -346,11 +347,11 @@ export default function CheckoutForm(props) {
 
   return (
     <div>
-      <ThemeProvider theme={darkTheme}>
+      {/* <ThemeProvider theme={darkTheme}> */}
         <Container
           component="main"
           maxWidth="sm"
-          className="p-3 loginContainer"
+          className="container"
         >
           <Typography component="h1" variant="h4" align="center" color="error">
             Checkout
@@ -362,9 +363,9 @@ export default function CheckoutForm(props) {
               </Step>
             ))}
           </Stepper>
-          <React.Fragment>
+          <React.Fragment className="container">
             {activeStep === steps.length ? (
-              <React.Fragment>
+              <React.Fragment className="container">
                 <Typography color="error" variant="h5" gutterBottom>
                   Thank you for your order.
                 </Typography>
@@ -378,9 +379,9 @@ export default function CheckoutForm(props) {
                 </button>
               </React.Fragment>
             ) : (
-              <React.Fragment>
+              <React.Fragment className="container">
                 {getStepContent(activeStep)}
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }} className="container">
                   {activeStep !== 0 && (
                     <Button
                       color="error"
@@ -404,7 +405,7 @@ export default function CheckoutForm(props) {
             )}
           </React.Fragment>
         </Container>
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </div>
   );
 }
