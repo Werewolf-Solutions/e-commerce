@@ -57,6 +57,13 @@ export default function Card(props) {
         >
           ADD TO CART
         </a>
+        {/* TODO: show delete from cart only if product is in cart*/}
+        {/* <a
+          className="btn btn-sm btn-danger float-right"
+          onClick={() => props.deleteFromCart(props.product)}
+        >
+          DELETE FROM CART
+        </a> */}
       </div>
     </div>
   );

@@ -251,6 +251,7 @@ function App() {
                 orders={orders}
                 update={update}
                 addToCart={addToCart}
+                deleteFromCart={deleteFromCart}
                 selected={selected}
                 acceptedOrders={acceptedOrders}
                 ordersIn={ordersIn}
@@ -264,6 +265,7 @@ function App() {
               user={user}
               update={update}
               addToCart={addToCart}
+              deleteFromCart={deleteFromCart}
               selected={selected}
             />
           )}

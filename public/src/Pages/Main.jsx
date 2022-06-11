@@ -21,6 +21,7 @@ function Main(props) {
                     product={prod}
                     update={props.update}
                     addToCart={props.addToCart}
+                    deleteFromCart={props.deleteFromCart}
                   />
                 ))}
               </div>
