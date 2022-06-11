@@ -10,7 +10,7 @@ const { createOrder } = require('./orderController')
 const { STRIPE_API_KEY } = process.env
 const stripe = require('stripe')(STRIPE_API_KEY)
 
-let guest_number = 0
+var guest_number = 0
 /**
  * 
  * @desc    create payment intent

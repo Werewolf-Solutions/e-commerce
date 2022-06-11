@@ -266,7 +266,8 @@ export default function CheckoutForm(props) {
       props.emptyCart()
     } else if (activeStep === steps.length - 1 && !props.user) {
       // console.log("guest review order => confirm payment intent");
-      let {order} = await confirmPaymentIntent(paymentIntent);
+      let {order} = await confirmPaymentIntent(paymentIntent)
+      console.log(order)
       setNewOrder(order)
       setActiveStep(activeStep + 1);
       props.update();
