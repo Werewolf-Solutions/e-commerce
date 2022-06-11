@@ -10,7 +10,7 @@ const { createOrder } = require('./orderController')
 const { STRIPE_API_KEY } = process.env
 const stripe = require('stripe')(STRIPE_API_KEY)
 
-var guest_number = 0
+var order_number = 0
 /**
  * 
  * @desc    create payment intent
@@ -44,6 +44,7 @@ const createPaymentIntent = async (req, res, next) => {
                 res.send({msg: 'Add a payment method first'})
             } else {
                 // create payment intent
+                order_number++
                 console.log(payment_method)
                 const paymentIntent = await stripe.paymentIntents.create({
                     amount: total_amount*100,
@@ -67,6 +68,7 @@ const createPaymentIntent = async (req, res, next) => {
                     },
                     address: user.address,
                     items: cart,
+                    number: order_number,
                     payment_intent: paymentIntent,
                     shipping_method: shipping_method,
                     address: shipping_address,
@@ -95,7 +97,7 @@ const createPaymentIntent = async (req, res, next) => {
              * 
              */
             let order
-            guest_number++
+            order_number++
             if (payment_method) {
                 // create payment intent
                 const paymentIntent = await stripe.paymentIntents.create({
@@ -106,11 +108,11 @@ const createPaymentIntent = async (req, res, next) => {
                 // save new order
                 order = new Order({
                     orderedBy: {
-                        name: `guest${guest_number}`,
+                        name: `guest${order_number}`,
                         mobile: '077226264',
-                        id: `guest${guest_number}`
+                        id: `guest${order_number}`
                     },
-                    number: guest_number,
+                    number: order_number,
                     address: shipping_address,
                     shipping_method: shipping_method,
                     items: cart,
@@ -383,11 +385,11 @@ const stripePayInStore = async (payment_method, total_amount, cart, shipping_met
         orderedBy: {
             name: `guest${payment_method.table_number
                 ? payment_method.table_number
-                : guest_number}`,
+                : order_number}`,
             mobile: '077226264',
             id: `guest${payment_method.table_number
                 ? payment_method.table_number
-                : guest_number}`
+                : order_number}`
         },
         items: cart,
         payment_intent: paymentIntent,
@@ -419,9 +421,9 @@ const stripePayDelivery = async (payment_method, total_amount, shipping_address,
     // save new order
     order = new Order({
         orderedBy: {
-            name: `guest${guest_number}`,
+            name: `guest${order_number}`,
             mobile: '077226264',
-            id: `guest${guest_number}`
+            id: `guest${order_number}`
         },
         address: shipping_address,
         shipping_method: shipping_method,
