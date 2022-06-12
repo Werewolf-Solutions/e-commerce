@@ -10,6 +10,8 @@ const { createOrder } = require('./orderController')
 const { STRIPE_API_KEY } = process.env
 const stripe = require('stripe')(STRIPE_API_KEY)
 
+var addNumber = require('../utils/utils.js')
+
 var order_number = 0
 /**
  * 
@@ -36,7 +38,7 @@ const createPaymentIntent = async (req, res, next) => {
     // NOTES: amount 1.00 = 100 for Stripe
     let t_c = 0
     cart.forEach(item => t_c = t_c + item.price*item.quantity)
-    console.log(t_c, total_amount)
+    // console.log(t_c, total_amount)
     if (user && t_c === total_amount) {
         console.log('user create payment intent')
         try {
@@ -45,7 +47,8 @@ const createPaymentIntent = async (req, res, next) => {
             } else {
                 // create payment intent
                 order_number++
-                console.log(payment_method)
+                let orders_number = addNumber()
+                // console.log(payment_method)
                 const paymentIntent = await stripe.paymentIntents.create({
                     amount: total_amount*100,
                     currency: 'gbp',
@@ -68,7 +71,7 @@ const createPaymentIntent = async (req, res, next) => {
                     },
                     address: user.address,
                     items: cart,
-                    number: order_number,
+                    number: orders_number,
                     payment_intent: paymentIntent,
                     shipping_method: shipping_method,
                     address: shipping_address,
@@ -76,8 +79,8 @@ const createPaymentIntent = async (req, res, next) => {
                     payment_method: payment_method,
                     status: 'to-be-accepted'
                 })
-                console.log(shipping_method)
-                console.log(payment_method)
+                // console.log(shipping_method)
+                // console.log(payment_method)
                 await user.save()
                 await order.save()
                 res.send({user, paymentIntent, order, msg: 'Payment intent created.'})
@@ -97,7 +100,7 @@ const createPaymentIntent = async (req, res, next) => {
              * 
              */
             let order
-            order_number++
+            let orders_number = addNumber()
             if (payment_method) {
                 // create payment intent
                 const paymentIntent = await stripe.paymentIntents.create({
@@ -108,11 +111,11 @@ const createPaymentIntent = async (req, res, next) => {
                 // save new order
                 order = new Order({
                     orderedBy: {
-                        name: `guest${order_number}`,
+                        name: `guest${orders_number}`,
                         mobile: '077226264',
-                        id: `guest${order_number}`
+                        id: `guest${orders_number}`
                     },
-                    number: order_number,
+                    number: orders_number,
                     address: shipping_address,
                     shipping_method: shipping_method,
                     items: cart,
