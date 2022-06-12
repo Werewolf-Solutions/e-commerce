@@ -1,0 +1,30 @@
+.active-orders {
+  color: red;
+}
+
+.refunded-orders {
+  color: blue;
+}
+
+.completed-orders {
+  color: grey;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.order-status {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+}
+.order-statussub {
+  color: black;
+}

@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
+import "../../Styles/admin-cards.css"
 
 import {
   createPaymentIntent,
@@ -242,7 +243,7 @@ export default function CheckoutForm(props) {
         // }
         console.log(order)
         setNewOrder(order)
-        // socket.emit('new_order', {new_order})
+        socket.emit('new_order', {order})
       } else if (paymentMethod === "cash") {
         // console.log("Add order to admin and user");
         let new_order = {
@@ -266,7 +267,8 @@ export default function CheckoutForm(props) {
       props.emptyCart()
     } else if (activeStep === steps.length - 1 && !props.user) {
       // console.log("guest review order => confirm payment intent");
-      let {order} = await confirmPaymentIntent(paymentIntent);
+      let {order} = await confirmPaymentIntent(paymentIntent)
+      console.log(order)
       setNewOrder(order)
       setActiveStep(activeStep + 1);
       props.update();
@@ -321,6 +323,7 @@ export default function CheckoutForm(props) {
             currency={props.currency}
             user={props.user}
             update={props.update}
+            totalAmount={props.totalAmount}
           />
         );
       default:
@@ -345,7 +348,7 @@ export default function CheckoutForm(props) {
 
   return (
     <div>
-      <ThemeProvider theme={darkTheme}>
+      {/* <ThemeProvider theme={darkTheme}> */}
         <Container
           component="main"
           maxWidth="sm"
@@ -361,13 +364,13 @@ export default function CheckoutForm(props) {
               </Step>
             ))}
           </Stepper>
-          <React.Fragment>
+          <React.Fragment className="container">
             {activeStep === steps.length ? (
-              <React.Fragment>
+              <React.Fragment className="container">
                 <Typography color="error" variant="h5" gutterBottom>
                   Thank you for your order.
                 </Typography>
-                <Typography variant="subtitle1" color="error">
+                <Typography variant="subtitle1" color="white">
                   Your order number is {newOrder.number}, id {newOrder._id}. We have emailed your order
                   confirmation, and will send you an update when your order has
                   shipped.
@@ -377,9 +380,9 @@ export default function CheckoutForm(props) {
                 </button>
               </React.Fragment>
             ) : (
-              <React.Fragment>
+              <React.Fragment className="container">
                 {getStepContent(activeStep)}
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }} className="container">
                   {activeStep !== 0 && (
                     <Button
                       color="error"
@@ -403,7 +406,7 @@ export default function CheckoutForm(props) {
             )}
           </React.Fragment>
         </Container>
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </div>
   );
 }

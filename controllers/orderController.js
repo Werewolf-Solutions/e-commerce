@@ -4,6 +4,9 @@ const Order = require('../models/Order')
 // Load User model
 const User = require('../models/User')
 
+var addNumber = require('../utils/utils.js')
+
+
 // TODO: change it like below
 const order = {
     all: () => {
@@ -63,7 +66,7 @@ const createOrder = async (req, res, next) => {
     // console.log(t_c, order.total_amount)
     //  && t_c === order.total_amount
     if (user) {
-        number++
+        let orders_number = addNumber()
         try {
             order.orderedBy = {
                 id: user._id,
@@ -71,14 +74,14 @@ const createOrder = async (req, res, next) => {
                 mobile: 'user.mobile'
             },
             order.total_amount = order.total_amount*100
-            order.number = number
+            order.number = orders_number
             order.payment_intent = {
                 status: 'succeeded',
                 payment_method: 'cash'
             }
             order.status = 'to-be-accepted'
-            console.log(order.shipping_method)
-            console.log(order.payment_method)
+            // console.log(order.shipping_method)
+            // console.log(order.payment_method)
             let new_order = new Order(order)
             startCountdown()
             await new_order.save()
