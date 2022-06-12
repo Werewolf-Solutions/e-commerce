@@ -5,6 +5,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import "../../Styles/admin-cards.css"
 
 const bull = (
     <Box
@@ -17,12 +18,13 @@ const bull = (
 
 export default function OutlinedCard(props) {
     return (
-        <Box sx={{ minWidth: 275 }}>
+        <Box sx={{ minWidth: 275 }} className="container">
             <Card
                 variant="outlined"
+                className="container"
             >
-                <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <CardContent className="container">
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" >
                         Address details
                     </Typography>
                     {props.user

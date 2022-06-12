@@ -102,10 +102,11 @@ function App() {
     setUser(usr);
     let ords = await getOrders(usr._id)
     // console.log(ords)
+    initializeAdminOrders(ords)
     if (usr.admin) {
-      initializeAdminOrders(ords)
+    } else {
+      setOrders(ords)
     }
-    setOrders(ords)
   };
 
   // function to be called every time to update user, orders, products
@@ -113,10 +114,11 @@ function App() {
     let usr = await getUser();
     setUser(usr);
     let ords = await getOrders(usr._id)
+    initializeAdminOrders(ords)
     if (usr.admin) {
-      initializeAdminOrders(ords)
+    } else {
+      setOrders(ords)
     }
-    setOrders(ords)
     initializeProducts();
   };
 
@@ -130,6 +132,8 @@ function App() {
     let accepted = []
     let ordsIn = []
     let completed = []
+    let refunded = []
+    let active = []
     if (orders) {
       for (let i = 0; i < orders.length; i++) {
         // console.log(`
@@ -162,9 +166,10 @@ function App() {
           orders[i].status != "refunded") {
             completed.push(orders[i])
         }
-  
-        
       }
+      // console.log(accepted)
+      // console.log(completed)
+      // console.log(ordsIn)
       setAcceptedOrders(accepted)
       setCompletedOrders(completed)
       setOrdersIn(ordsIn)
@@ -205,13 +210,13 @@ function App() {
       update()
     })
 
-    // socket.on('order_update', ({order}) => {
-    //   console.log('order update')
-    //   console.log(order)
-    //   // setNotifications([...notifications, 'order update'])
-    //   // setNewOrders([...newOrders, order])
-    //   update()
-    // })
+    socket.on('order_update', ({order}) => {
+      console.log('order update')
+      console.log(order)
+      // setNotifications([...notifications, 'order update'])
+      // setNewOrders([...newOrders, order])
+      update()
+    })
   }, []);
 
   return (
@@ -246,7 +251,11 @@ function App() {
                 orders={orders}
                 update={update}
                 addToCart={addToCart}
+                deleteFromCart={deleteFromCart}
                 selected={selected}
+                acceptedOrders={acceptedOrders}
+                ordersIn={ordersIn}
+                completedOrders={completedOrders}
               />
             )
           ) : (
@@ -256,6 +265,7 @@ function App() {
               user={user}
               update={update}
               addToCart={addToCart}
+              deleteFromCart={deleteFromCart}
               selected={selected}
             />
           )}
