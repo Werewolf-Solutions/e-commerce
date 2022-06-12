@@ -60,12 +60,12 @@ export default function UpdateProductDialog(props) {
                 </button>
               </label>
 
-              <button
+              {/* <button
                 className="mt-1 mb-2 ms-1  btn-sm btn btn-danger uploadbttn"
                 onClick={() => uploadImg(file, props.product)}
               >
                 Upload!
-              </button>
+              </button> */}
             </div>
             <div class="col-sm"> </div>
           </div>
@@ -126,7 +126,10 @@ export default function UpdateProductDialog(props) {
         <button
           className="ms-2 me-2 mt-4 btn btn-danger"
           onClick={() => {
-            updateProduct(product).then(() => props.update());
+            updateProduct(product).then(() => {
+              uploadImg(file, props.product)
+              props.update()
+            });
             props.onClose();
           }}
         >

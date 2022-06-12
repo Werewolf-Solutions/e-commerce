@@ -1,10 +1,12 @@
-import React from "react";
+import * as React from "react";
 import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
 import CheckoutDialog from "../Checkout/CheckoutDialog";
 import { signOut } from "../../apiCalls/userController";
 import CartDialog from "../CartDialog";
 import cart from "../../Assets/icons8-buying-96.png";
 import "../../Styles/nav-bar-styles.css";
+
+import {ShoppingCart} from '@mui/icons-material'
 
 export default function UserNavBar(props) {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false);
@@ -59,6 +61,9 @@ export default function UserNavBar(props) {
             <a className="nav-link">Items in my Cart : {props.cart.length}</a>
           </li>
           {/* cart icon */}
+          <li >
+            <ShoppingCart />
+          </li>
           <li className="nav-item me-3">
             <img
               className="cartIcon"
@@ -69,7 +74,6 @@ export default function UserNavBar(props) {
           </li>
           {/* total price */}
           <li className="nav-item">
-            {/* cart item dialog */}
             {props.cart.length !== 0 ? (
               <button
                 onClick={handleCheckoutDialog}

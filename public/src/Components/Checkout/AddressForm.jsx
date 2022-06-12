@@ -25,7 +25,7 @@ export default function AddressForm(props) {
         console.log(props.user)
     }, [])
     return (
-        <div>
+        <div className="container">
             <DeliveryForm
                 open={deliveryFormDialog}
                 onClose={handleDeliveryFormDialog}
@@ -52,7 +52,7 @@ export default function AddressForm(props) {
             ?
                 props.shippingMethod === 'delivery'
                 ?
-                <div>
+                <div className="container">
                     <AddressCard
                         user={props.user}
                         handleDeliveryFormDialog={handleDeliveryFormDialog}
@@ -64,7 +64,7 @@ export default function AddressForm(props) {
                 <div>
                     <button onClick={props.handleSignInDialog}>sign in</button>
                 </div>
-            }<br/>
+            }
             {!props.user && props.shippingMethod === 'delivery'
             ?
             <div>

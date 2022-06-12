@@ -47,12 +47,12 @@ export default function CreateProductDialog(props) {
                 </button>
               </label>
 
-              <button
+              {/* <button
                 className="mt-1 mb-2 ms-2 btn-sm btn btn-danger uploadbttn"
                 onClick={() => uploadImg(file, props.product)}
               >
                 Upload!
-              </button>
+              </button> */}
             </div>
             <div class="col-sm"> </div>
           </div>
