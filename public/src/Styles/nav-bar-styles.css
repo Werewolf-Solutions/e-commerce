@@ -12,3 +12,19 @@
 .cartIcon {
   width: 3rem;
 }
+
+@media screen and (max-width: 600px) {
+  .cartText {
+    font-size: 10px;
+  }
+  .checkoutText {
+    font-size: 10px;
+  }
+  .logo {
+    height: 3rem;
+  }
+  .navbar-toggler-icon {
+    width: 1em;
+    height: 1em;
+  }
+}
