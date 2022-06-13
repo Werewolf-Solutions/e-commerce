@@ -113,7 +113,7 @@ export default function CheckoutForm(props) {
         state.number != ""
       ) {
         // TODO: sign up with user's details or call /users/edit-user
-        console.log("Try sign in and if not existing sign up");
+        // console.log("Try sign in and if not existing sign up")
         let shipping_address = {
           line1: state.address1,
           number: state.number,
@@ -123,6 +123,7 @@ export default function CheckoutForm(props) {
         }
         console.log(shipping_address)
         setAddress(shipping_address)
+        setActiveStep(activeStep + 1)
 
         // sign up
       } else {
@@ -140,10 +141,11 @@ export default function CheckoutForm(props) {
     } else if (
       shippingMethod === "pick-up" &&
       !props.user &&
-      activeStep === 0
+      activeStep === 0 &&
+      state.email != ''
     ) {
       console.log('pick-up, guest')
-      // setActiveStep(activeStep + 1)
+      setActiveStep(activeStep + 1)
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
         // console.log("Try sign in and if not existing sign up");
