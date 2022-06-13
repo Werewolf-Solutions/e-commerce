@@ -141,16 +141,6 @@ export default function AddressForm(props) {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                id="region"
-                                name="region"
-                                label="Region"
-                                fullWidth
-                                variant="standard"
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
                                 required
                                 id="postcode"
                                 name="postcode"
