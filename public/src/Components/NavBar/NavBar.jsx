@@ -42,13 +42,19 @@ function NavBar(props) {
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
         <li className="nav-item">
-          <a className="nav-link text-danger" onClick={handleCartDialog}>
+          <a
+            className="nav-link text-danger cartText"
+            onClick={handleCartDialog}
+          >
             Cart {props.cart.length} | £{props.totalAmount}
           </a>
         </li>
         {props.cart.length !== 0 ? (
           <li className="nav-item">
-            <a className="nav-link text-danger" onClick={handleCheckoutDialog}>
+            <a
+              className="nav-link text-danger checkoutText"
+              onClick={handleCheckoutDialog}
+            >
               Checkout
             </a>
           </li>
