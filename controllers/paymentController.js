@@ -30,7 +30,8 @@ const createPaymentIntent = async (req, res, next) => {
         cart,
         shipping_method,
         shipping_address,
-        gateway
+        gateway,
+        email
     } = req.body
     const { userId } = req.session
     let user = await User.findById(userId)
@@ -113,7 +114,8 @@ const createPaymentIntent = async (req, res, next) => {
                     orderedBy: {
                         name: `guest${orders_number}`,
                         mobile: '077226264',
-                        id: `guest${orders_number}`
+                        id: `guest${orders_number}`,
+                        email: email
                     },
                     number: orders_number,
                     address: shipping_address,

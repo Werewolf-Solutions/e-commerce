@@ -24,6 +24,7 @@ import {
 import { createOrder } from "../../apiCalls/orderController";
 
 import {SocketContext} from '../../service/socket';
+import { SettingsSystemDaydreamOutlined } from "@mui/icons-material";
 
 // import { io } from 'socket.io-client'
 // const socket = io()
@@ -105,10 +106,7 @@ export default function CheckoutForm(props) {
       // sign up user
       if (
         state.email != "" &&
-        state.password != "" &&
-        state.password2 != "" &&
         state.address1 != "" &&
-        state.address2 != "" &&
         state.postcode != "" &&
         state.city != "" &&
         state.country != "" &&
@@ -116,7 +114,15 @@ export default function CheckoutForm(props) {
       ) {
         // TODO: sign up with user's details or call /users/edit-user
         console.log("Try sign in and if not existing sign up");
-        console.log(state);
+        let shipping_address = {
+          line1: state.address1,
+          number: state.number,
+          city: state.city,
+          postcode: state.postcode,
+          country: state.country,
+        }
+        console.log(shipping_address)
+        setAddress(shipping_address)
 
         // sign up
       } else {
@@ -129,7 +135,7 @@ export default function CheckoutForm(props) {
       activeStep === 0
     ) {
       console.log('delivery, user')
-      // setActiveStep(activeStep + 1)
+      setActiveStep(activeStep + 1)
       // if shipping method is pick-up & there's no user signed in
     } else if (
       shippingMethod === "pick-up" &&
@@ -153,7 +159,7 @@ export default function CheckoutForm(props) {
       // TODO: edit only if user's details are different from DB ones
       // updateUser()
       console.log('user, pick-up')
-      // setActiveStep(activeStep + 1)
+      setActiveStep(activeStep + 1)
     }
     // Payment form
     // FIXME: handle better create payment intent / method and go next step
@@ -220,7 +226,8 @@ export default function CheckoutForm(props) {
         shipping_method: shippingMethod,
         shipping_address: address,
         cart: props.cart,
-      };
+        email: state.email
+      }
       let pi = await createPaymentIntent(payment_intent);
       // console.log(pi);
       setPaymentIntent(pi);
