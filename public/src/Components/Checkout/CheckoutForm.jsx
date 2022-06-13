@@ -128,18 +128,20 @@ export default function CheckoutForm(props) {
       props.user &&
       activeStep === 0
     ) {
-      setActiveStep(activeStep + 1);
+      console.log('delivery, user')
+      // setActiveStep(activeStep + 1)
       // if shipping method is pick-up & there's no user signed in
     } else if (
       shippingMethod === "pick-up" &&
       !props.user &&
       activeStep === 0
     ) {
-      setActiveStep(activeStep + 1);
+      console.log('pick-up, guest')
+      // setActiveStep(activeStep + 1)
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
         // console.log("Try sign in and if not existing sign up");
-        // console.log(state);
+        console.log(state);
 
         // sign up && update user
       } else {
@@ -150,7 +152,8 @@ export default function CheckoutForm(props) {
       // edit user signed in
       // TODO: edit only if user's details are different from DB ones
       // updateUser()
-      setActiveStep(activeStep + 1);
+      console.log('user, pick-up')
+      // setActiveStep(activeStep + 1)
     }
     // Payment form
     // FIXME: handle better create payment intent / method and go next step
