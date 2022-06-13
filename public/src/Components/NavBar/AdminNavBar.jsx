@@ -76,7 +76,10 @@ export default function AdminNavBar(props) {
             <a
               className="nav-link adminNavLinks text-danger"
               onClick={() => {
-                signOut().then(() => props.update());
+                signOut().then(() => {
+                  props.update()
+                  props.handleSelected("products")
+                });
               }}
             >
               logout
