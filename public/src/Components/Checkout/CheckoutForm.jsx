@@ -124,6 +124,7 @@ export default function CheckoutForm(props) {
         console.log(shipping_address)
         setAddress(shipping_address)
         setActiveStep(activeStep + 1)
+        handleAddPaymentMethod()
 
         // sign up
       } else {
@@ -146,6 +147,7 @@ export default function CheckoutForm(props) {
     ) {
       console.log('pick-up, guest')
       setActiveStep(activeStep + 1)
+      handleAddPaymentMethod()
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
         // console.log("Try sign in and if not existing sign up");
