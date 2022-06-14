@@ -100,10 +100,10 @@ function App() {
     let usr = await getUser();
     // console.log(usr);
     setUser(usr);
-    let ords = await getOrders(usr._id)
-    console.log(ords)
-    initializeAdminOrders(ords)
-    setOrders(ords)
+    let res = await getOrders(usr._id)
+    // console.log(res)
+    initializeAdminOrders(res)
+    setOrders(res.orders)
   };
 
   // function to be called every time to update user, orders, products
@@ -111,7 +111,7 @@ function App() {
     let usr = await getUser();
     setUser(usr);
     let res = await getOrders(usr._id)
-    console.log(res.orders)
+    // console.log(res.orders)
     initializeAdminOrders(res)
     setOrders(res.orders)
     initializeProducts();
