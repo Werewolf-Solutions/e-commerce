@@ -2,8 +2,24 @@ import React from "react";
 import HeroImage from "../Components/HeroImage";
 import Card from "../Components/Card";
 import UserOrders from "../Components/Orders/UserOrders";
+import { getOrders } from "../apiCalls/orderController";
+import OrderBody from "../Components/Admin/OrderBody";
 
 function Main(props) {
+
+  const [guestOrders, setGuestOrders] = React.useState([])
+  const [email, setEmail] = React.useState([])
+
+  const getGuestOrders = async () => {
+    let orderedBy = {email: email}
+    let {orders} = await getOrders(orderedBy)
+    setGuestOrders(orders)
+  }
+
+  const handleChange = (e) => {
+    setEmail(e.target.value)
+  }
+
   if (props.selected === "products") {
     if (props.products) {
       return(
@@ -33,7 +49,7 @@ function Main(props) {
   }
 
   if (props.selected === "user-orders") {
-    if (props.orders) {
+    if (props.orders && props.user) {
       return(
         <div class="user-orders row mt-2">
           <div class="orders-in column">
@@ -74,6 +90,30 @@ function Main(props) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )
+    } else if (!props.user) {
+      return(
+        <div class="user-orders row mt-2">
+          <div class="orders-in column">
+            <p className="order-status mt-3 ms-4">Search order</p>
+            <p className="order-statussub ms-4  mb-2">
+              Enter email below
+            </p>
+            <input onChange={handleChange}></input>
+            <a onClick={getGuestOrders}>search</a>
+            {guestOrders.length != 0
+            ? 
+              guestOrders.map(order => (
+                <div class="card mb-3 ms-3 me-3">
+                  <div class="card-body">
+                    <OrderBody order={order} />
+                  </div>
+                </div>
+              ))
+            : null
+            }
           </div>
         </div>
       )

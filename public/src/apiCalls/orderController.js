@@ -10,7 +10,8 @@ import axios from 'axios'
  */
 export async function getOrders(orderedBy) {
     let res = await axios.post('users/orders', {orderedBy})
-    return res.data.orders
+    // console.log(res.data.orders)
+    return {orders: res.data.orders}
 }
 
 /**

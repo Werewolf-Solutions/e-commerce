@@ -243,6 +243,7 @@ function App() {
                 products={products}
                 update={update}
                 selected={selected}
+                handleSelected={handleSelected}
               />
             ) : (
               <Main
@@ -256,6 +257,7 @@ function App() {
                 acceptedOrders={acceptedOrders}
                 ordersIn={ordersIn}
                 completedOrders={completedOrders}
+                handleSelected={handleSelected}
               />
             )
           ) : (
@@ -267,6 +269,7 @@ function App() {
               addToCart={addToCart}
               deleteFromCart={deleteFromCart}
               selected={selected}
+              handleSelected={handleSelected}
             />
           )}
           <Footer />
