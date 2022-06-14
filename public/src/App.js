@@ -28,7 +28,7 @@ function App() {
   const [totalAmount, setTotalAmount] = React.useState(0);
   const [user, setUser] = React.useState();
   const [products, setProducts] = React.useState();
-  const [orders, setOrders] = React.useState();
+  const [orders, setOrders] = React.useState([]);
   const [selected, setSelected] = React.useState("products");
 
   const [acceptedOrders, setAcceptedOrders] = React.useState([])
@@ -101,24 +101,19 @@ function App() {
     // console.log(usr);
     setUser(usr);
     let ords = await getOrders(usr._id)
-    // console.log(ords)
+    console.log(ords)
     initializeAdminOrders(ords)
-    if (usr.admin) {
-    } else {
-      setOrders(ords)
-    }
+    setOrders(ords)
   };
 
   // function to be called every time to update user, orders, products
   const update = async () => {
     let usr = await getUser();
     setUser(usr);
-    let ords = await getOrders(usr._id)
-    initializeAdminOrders(ords)
-    if (usr.admin) {
-    } else {
-      setOrders(ords)
-    }
+    let res = await getOrders(usr._id)
+    console.log(res.orders)
+    initializeAdminOrders(res)
+    setOrders(res.orders)
     initializeProducts();
   };
 

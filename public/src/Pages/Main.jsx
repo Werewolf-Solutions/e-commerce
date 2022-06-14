@@ -7,6 +7,8 @@ import OrderBody from "../Components/Admin/OrderBody";
 
 function Main(props) {
 
+  console.log(props.orders)
+
   const [guestOrders, setGuestOrders] = React.useState([])
   const [email, setEmail] = React.useState([])
 

@@ -68,6 +68,14 @@ function NavBar(props) {
             my orders
           </a>
         </li>
+        <li className="nav-item">
+          <a
+            className="nav-link adminNavLinks"
+            onClick={() => props.handleSelected("products")}
+          >
+            products
+          </a>
+        </li>
         <button
           className="navbar-toggler"
           type="button"
