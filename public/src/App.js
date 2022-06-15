@@ -45,7 +45,6 @@ function App() {
     let new_product = true
     // check if it's in cart
     for (let i = 0; i < new_cart.length; i++) {
-      console.log(new_cart[i]._id === product._id)
       if (new_cart[i]._id === product._id) {
         new_product = false
         break
@@ -53,21 +52,20 @@ function App() {
     }
     // add first product
     if (new_cart.length === 0 || new_product) {
-      console.log("product not in cart, add product")
+      // console.log("product not in cart, add product")
       product.quantity = 1
       new_cart.push(product)
     } else {
       for (let i = 0; i < new_cart.length; i++) {
-        console.log(new_cart[i]._id === product._id)
         if (new_cart[i]._id === product._id) {
-          console.log("product in cart, add quantity")
+          // console.log("product in cart, add quantity")
           // add quantity
           new_cart[i].quantity++
           break
         }
       }
     }
-    console.log(new_cart)
+    // console.log(new_cart)
     new_cart.forEach((item) => (total_amount += item.quantity * item.price))
     setCart(new_cart)
     setTotalAmount(total_amount)

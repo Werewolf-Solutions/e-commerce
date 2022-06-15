@@ -1,8 +1,11 @@
-import React from "react";
-import "../Styles/footer-styles.css";
+import React from "react"
+import "../Styles/footer-styles.css"
 
 function Footer() {
-  return <div className="footer">Footer info to go here - socials ? </div>;
+  return 
+    <div className="footer">
+      Mobile
+    </div>
 }
 
-export default Footer;
+export default Footer
