@@ -29,10 +29,10 @@ function Main(props) {
         <HeroImage />
         {props.products.map((category) => (
           <div>
-            <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
+            <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
               {category.category}
             </h2>
-            <div className="container ">
+            <div className="container">
               <div className="row">
                 {category.products.map((prod) => (
                   <Card
