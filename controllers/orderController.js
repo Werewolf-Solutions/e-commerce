@@ -33,14 +33,19 @@ const getOrders = async (req, res, next) => {
     const { userId } = req.session
     let user = await User.findById(userId)
     let orders
-    if (user.admin) {
+    if (user && user.admin) {
         // if admin get all orders
         orders = await Order.find()
         // console.log(orders)
         res.send({orders})
-    } else if (orderedBy) {
+    } else if (user) {
         // else get user's orders
         orders = await Order.find({'orderedBy.id': orderedBy})
+        // console.log(orders)
+        res.send({orders})
+    } else if (orderedBy) {
+        // else get user's orders
+        orders = await Order.find({'orderedBy.email': orderedBy.email})
         // console.log(orders)
         res.send({orders})
     }

@@ -21,6 +21,7 @@ export default function Review(props) {
             <ListItem key={product._id} sx={{ py: 1, px: 0 }}>
                 <ListItemText primary={`${product.name} - x${product.quantity}`}/>
                 <Typography variant="body2">£ {product.quantity*product.price}</Typography>
+                <img src={product.img.path} className="cart-image-top" alt=""/>
             </ListItem>
             )) : null}
 
