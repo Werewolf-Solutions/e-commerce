@@ -53,6 +53,42 @@ function Main(props) {
   if (props.selected === "orders") {
     if (props.orders && props.user) {
       return(
+        // <div class="container">
+        //   <div class="row orders-in">
+        //     <div class="col-sm">
+        //       1st column orders in
+        //     </div>
+        //     <div class="col-sm">
+        //       2nd column orders in
+        //     </div>
+        //     <div class="col-sm">
+        //       3rd column orders in
+        //     </div>
+        //   </div>
+        //   <div class="row accepted-orders">
+        //     <div class="col-sm">
+        //       1st column accepted orders
+        //     </div>
+        //     <div class="col-sm">
+        //       2nd column accepted orders
+        //     </div>
+        //     <div class="col-sm">
+        //       3rd column accepted orders
+        //     </div>
+        //   </div>
+        //   <div class="row completed-orders">
+        //     <div class="col-sm">
+        //       1st column completed orders
+        //     </div>
+        //     <div class="col-sm">
+        //       2nd column completed orders
+        //     </div>
+        //     <div class="col-sm">
+        //       3rd column completed orders
+        //     </div>
+        //   </div>
+        // </div>
+
         <div class="user-orders row mt-2">
           <div class="orders-in column">
             <p className="order-status mt-3 ms-4">Active orders</p>
@@ -60,7 +96,7 @@ function Main(props) {
               Orders to be accepted below...
             </p>
             {props.ordersIn.map(order => (
-              <div class="card mb-3 ms-3 me-3">
+              <div class="card mb-3 ms-3 me-3 col-sm">
                 <div class="card-body">
                   <UserOrders order={order} />
                 </div>
@@ -73,7 +109,7 @@ function Main(props) {
               Orders accepted below...
             </p>
             {props.acceptedOrders.map(order => (
-              <div class="card mb-3 ms-3 me-3">
+              <div class="card mb-3 ms-3 me-3 col-sm">
                 <div class="card-body">
                   <UserOrders order={order} />
                 </div>
@@ -86,7 +122,7 @@ function Main(props) {
               Orders completed are listed below ...
             </p>
             {props.orders.map(order => (
-              <div class="card mb-3 ms-3 me-3">
+              <div class="card mb-3 ms-3 me-3 col-sm">
                 <div class="card-body">
                   <UserOrders order={order} />
                 </div>
