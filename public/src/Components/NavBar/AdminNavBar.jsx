@@ -33,7 +33,7 @@ export default function AdminNavBar(props) {
               className="nav-link adminNavLinks"
               onClick={() => props.handleSelected("orders")}
             >
-              users orders
+              orders
             </a>
           </li>
           <li className="nav-item">
@@ -44,7 +44,7 @@ export default function AdminNavBar(props) {
               }}
               className="nav-link adminNavLinks"
             >
-              add products
+              add product
             </a>
           </li>
           <li className="nav-item">

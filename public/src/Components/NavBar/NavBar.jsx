@@ -1,42 +1,48 @@
-import React from "react";
-import "../../Styles/nav-bar-styles.css";
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
-import cartIcon from "../../Assets/icons8-buying-96.png";
-import CheckoutDialog from "../Checkout/CheckoutDialog";
+import React from "react"
+import "../../Styles/nav-bar-styles.css"
+import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png"
+import cartIcon from "../../Assets/icons8-buying-96.png"
+import CheckoutDialog from "../Checkout/CheckoutDialog"
 
-import AdminNavBar from "./AdminNavBar";
-import UserNavBar from "./UserNavBar";
-import GuestNavBar from "./GuestNavBar";
-import SignInDialog from "../SignIn/SignInDialog";
-import SignUpDialog from "../SignUp/SignUpDialog";
-import CartDialog from "../CartDialog";
-import { signOut } from "../../apiCalls/userController";
+import AdminNavBar from "./AdminNavBar"
+import UserNavBar from "./UserNavBar"
+import GuestNavBar from "./GuestNavBar"
+import SignInDialog from "../SignIn/SignInDialog"
+import SignUpDialog from "../SignUp/SignUpDialog"
+import CartDialog from "../CartDialog"
+import { signOut } from "../../apiCalls/userController"
+import CreateProductDialog from "../Admin/CreateProductDialog"
 
 function NavBar(props) {
-  const [checkoutDialog, setCheckoutDialog] = React.useState(false);
-  const [cartDialog, setCartDialog] = React.useState(false);
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false)
+  const [cartDialog, setCartDialog] = React.useState(false)
+  const [createProductDialog, setCreateProductDialog] = React.useState(false)
+
+  const handleCreateProductDialog = () => {
+    setCreateProductDialog(!createProductDialog)
+  }
 
   const handleCartDialog = () => {
-    setCartDialog(!cartDialog);
-  };
+    setCartDialog(!cartDialog)
+  }
 
   const handleCheckoutDialog = () => {
-    setCheckoutDialog(!checkoutDialog);
-  };
+    setCheckoutDialog(!checkoutDialog)
+  }
 
-  // console.log(props.cart.length);
-  // console.log(props.totalAmount);
+  // console.log(props.cart.length)
+  // console.log(props.totalAmount)
 
-  const [signInDialog, setSignInDialog] = React.useState(false);
-  const [signUpDialog, setSignUpDialog] = React.useState(false);
+  const [signInDialog, setSignInDialog] = React.useState(false)
+  const [signUpDialog, setSignUpDialog] = React.useState(false)
 
   const handleSignInDialog = () => {
-    setSignInDialog(!signInDialog);
-  };
+    setSignInDialog(!signInDialog)
+  }
 
   const handleSignUpDialog = () => {
-    setSignUpDialog(!signUpDialog);
-  };
+    setSignUpDialog(!signUpDialog)
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -60,24 +66,22 @@ function NavBar(props) {
             </a>
           </li>
         ) : null}
-        {/* from here */}
-        <li className="nav-item">
-          <a
-            className="nav-link text-danger cartText"
-            onClick={() => props.handleSelected("user-orders")}
-          >
-            my orders
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link text-danger cartText"
-            onClick={() => props.handleSelected("products")}
-          >
-            products
-          </a>
-        </li>
-        {props.user
+        {props.user && props.user.admin
+        ?
+          <li className="nav-item">
+            <a
+              onClick={() => {
+                console.log("createProductDialog")
+                handleCreateProductDialog()
+              }}
+              className="nav-link text-danger checkoutText"
+            >
+              add product
+            </a>
+          </li>
+        : null
+        }
+        {/* {props.user
         ?
           <li className="nav-item">
             <a
@@ -101,8 +105,7 @@ function NavBar(props) {
               LOGIN
             </a>
           </li>
-        }
-        {/* to here goes in the footer */}
+        } */}
         <div
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
@@ -128,7 +131,11 @@ function NavBar(props) {
             <GuestNavBar
               update={props.update}
               handleSelected={props.handleSelected}
+              cart={props.cart}
+              totalAmount={props.totalAmount}
+              deleteFromCart={props.deleteFromCart}
               emptyCart={props.emptyCart}
+              handleSignInDialog={handleSignInDialog}
             />
           )}
           <div>
@@ -159,6 +166,12 @@ function NavBar(props) {
               cart={props.cart}
               deleteFromCart={props.deleteFromCart}
             />
+            <CreateProductDialog
+              open={createProductDialog}
+              onClose={handleCreateProductDialog}
+              product={props.product}
+              update={props.update}
+            />
           </div>
         </div>
       </div>
@@ -166,4 +179,4 @@ function NavBar(props) {
   )
 }
 
-export default NavBar;
+export default NavBar

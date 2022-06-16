@@ -265,7 +265,11 @@ function App() {
               handleSelected={handleSelected}
             />
           )}
-          <Footer />
+          <Footer
+            user={user}
+            update={update}
+            handleSelected={handleSelected}
+          />
         </div>
         <ModalContainer />
       </>

@@ -48,7 +48,7 @@ function Main(props) {
     }
   }
 
-  if (props.selected === "user-orders") {
+  if (props.selected === "orders") {
     if (props.orders && props.user) {
       return(
         <div class="user-orders row mt-2">
