@@ -12,6 +12,7 @@ function Main(props) {
   const [email, setEmail] = React.useState([])
 
   const getGuestOrders = async () => {
+    // TODO: sort/filter orders
     let orderedBy = {email: email}
     let {orders} = await getOrders(orderedBy)
     setGuestOrders(orders)
