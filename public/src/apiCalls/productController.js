@@ -23,7 +23,7 @@ export async function getProducts() {
  */
 export async function createProduct(product) {
     let res = await axios.post('users/create-product', {product})
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.product
 }
 
@@ -37,7 +37,7 @@ export async function createProduct(product) {
  */
 export async function updateProduct(product) {
     let res = await axios.post('users/update-product', {product})
-    console.log(res.data)
+    // console.log(res.data)
 }
 
 /**
@@ -50,7 +50,7 @@ export async function updateProduct(product) {
  */
 export async function deleteProduct(product) {
     let res = await axios.post('users/delete-product', {product})
-    console.log(res.data)
+    // console.log(res.data)
 }
 
 /**
@@ -66,7 +66,7 @@ export async function uploadImg(file, product) {
     const formData = new FormData()
 
     // Details of the uploaded file
-    console.log(file)
+    // console.log(file)
 
     // Update the formData object
     formData.append("file", file, file.name)
@@ -76,12 +76,12 @@ export async function uploadImg(file, product) {
     // let res = await axios.post("/users/upload-img",
     //     {product: props.product, file, formData})
     let res = await axios.post("/users/upload-img", formData)
-    console.log(res.data)
+    // console.log(res.data)
     let {img} = res.data
     product.img = img
-    console.log(product)
+    // console.log(product)
     let response = await axios.post('/users/update-product', {product})
-    console.log(response.data)
+    // console.log(response.data)
 }
 
 
@@ -95,5 +95,5 @@ export async function uploadImg(file, product) {
  */
  export async function updateCategory(category, new_category) {
     let res = await axios.post('users/update-category', {category, new_category})
-    console.log(res.data)
+    // console.log(res.data)
 }

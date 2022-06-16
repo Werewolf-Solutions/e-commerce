@@ -11,7 +11,7 @@ const axios = require('axios')
 // TODO: handle guest or user
 export async function createPaymentIntent(payment_intent) {
     let res = await axios.post('users/create-payment-intent', payment_intent)
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.paymentIntent
 }
 
@@ -25,7 +25,7 @@ export async function createPaymentIntent(payment_intent) {
  */
 export async function confirmPaymentIntent(payment_intent) {
     let res = await axios.post('users/confirm-payment-intent', {payment_intent})
-    console.log(res.data)
+    // console.log(res.data)
     let {user, order, paymentIntent, msg} = res.data
     return {order: res.data.order, msg: res.data.msg}
 }
@@ -40,7 +40,7 @@ export async function confirmPaymentIntent(payment_intent) {
  */
 export async function refundPaymentIntent(payment_intent) {
     let res = await axios.post('users/refund-payment-intent', {payment_intent})
-    console.log(res.data)
+    // console.log(res.data)
 }
 
 /**
@@ -53,7 +53,7 @@ export async function refundPaymentIntent(payment_intent) {
  */
  export async function createPaymentMethod(type, card) {
     let res = await axios.post('users/create-payment-method', {type, card})
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.paymentMethod
 }
 
@@ -72,5 +72,5 @@ export async function refundPaymentIntent(payment_intent) {
         card: {details: 'card'}
     }
     let res = await axios.post('users/detach-payment-method', {payment_method})
-    console.log(res.data)
+    // console.log(res.data)
 }

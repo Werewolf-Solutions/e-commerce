@@ -24,6 +24,7 @@ import {
 import { createOrder } from "../../apiCalls/orderController";
 
 import {SocketContext} from '../../service/socket';
+import { SettingsSystemDaydreamOutlined } from "@mui/icons-material";
 
 // import { io } from 'socket.io-client'
 // const socket = io()
@@ -105,18 +106,25 @@ export default function CheckoutForm(props) {
       // sign up user
       if (
         state.email != "" &&
-        state.password != "" &&
-        state.password2 != "" &&
         state.address1 != "" &&
-        state.address2 != "" &&
         state.postcode != "" &&
         state.city != "" &&
         state.country != "" &&
         state.number != ""
       ) {
         // TODO: sign up with user's details or call /users/edit-user
-        console.log("Try sign in and if not existing sign up");
-        console.log(state);
+        // console.log("Try sign in and if not existing sign up")
+        let shipping_address = {
+          line1: state.address1,
+          number: state.number,
+          city: state.city,
+          postcode: state.postcode,
+          country: state.country,
+        }
+        console.log(shipping_address)
+        setAddress(shipping_address)
+        setActiveStep(activeStep + 1)
+        handleAddPaymentMethod()
 
         // sign up
       } else {
@@ -128,18 +136,22 @@ export default function CheckoutForm(props) {
       props.user &&
       activeStep === 0
     ) {
-      setActiveStep(activeStep + 1);
+      console.log('delivery, user')
+      setActiveStep(activeStep + 1)
       // if shipping method is pick-up & there's no user signed in
     } else if (
       shippingMethod === "pick-up" &&
       !props.user &&
-      activeStep === 0
+      activeStep === 0 &&
+      state.email != ''
     ) {
-      setActiveStep(activeStep + 1);
+      console.log('pick-up, guest')
+      setActiveStep(activeStep + 1)
+      handleAddPaymentMethod()
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
         // console.log("Try sign in and if not existing sign up");
-        // console.log(state);
+        console.log(state);
 
         // sign up && update user
       } else {
@@ -150,7 +162,8 @@ export default function CheckoutForm(props) {
       // edit user signed in
       // TODO: edit only if user's details are different from DB ones
       // updateUser()
-      setActiveStep(activeStep + 1);
+      console.log('user, pick-up')
+      setActiveStep(activeStep + 1)
     }
     // Payment form
     // FIXME: handle better create payment intent / method and go next step
@@ -217,7 +230,8 @@ export default function CheckoutForm(props) {
         shipping_method: shippingMethod,
         shipping_address: address,
         cart: props.cart,
-      };
+        email: state.email
+      }
       let pi = await createPaymentIntent(payment_intent);
       // console.log(pi);
       setPaymentIntent(pi);

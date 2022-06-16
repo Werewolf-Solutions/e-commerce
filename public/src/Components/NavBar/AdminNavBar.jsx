@@ -23,14 +23,6 @@ export default function AdminNavBar(props) {
       />
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapsibleNavbar"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
@@ -41,7 +33,7 @@ export default function AdminNavBar(props) {
               className="nav-link adminNavLinks"
               onClick={() => props.handleSelected("orders")}
             >
-              users orders
+              orders
             </a>
           </li>
           <li className="nav-item">
@@ -52,7 +44,7 @@ export default function AdminNavBar(props) {
               }}
               className="nav-link adminNavLinks"
             >
-              add products
+              add product
             </a>
           </li>
           <li className="nav-item">
@@ -60,7 +52,7 @@ export default function AdminNavBar(props) {
               onClick={() => props.handleSelected("products")}
               className="nav-link adminNavLinks"
             >
-              edit products
+              products
             </a>
           </li>
 
@@ -76,7 +68,10 @@ export default function AdminNavBar(props) {
             <a
               className="nav-link adminNavLinks text-danger"
               onClick={() => {
-                signOut().then(() => props.update());
+                signOut().then(() => {
+                  props.update()
+                  props.handleSelected("products")
+                });
               }}
             >
               logout

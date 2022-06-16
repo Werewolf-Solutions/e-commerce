@@ -10,7 +10,7 @@ const axios = require('axios')
  */
 export async function getUser() {
     let res = await axios.get('users/')
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.user
 }
 
@@ -24,7 +24,7 @@ export async function getUser() {
  */
 export async function signIn(email, password) {
     let res = await axios.post('/users/sign-in', {email, password})
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.user
 }
 
@@ -38,7 +38,7 @@ export async function signIn(email, password) {
  */
 export async function signUp(email, password, password2) {
     let res = await axios.post('users/sign-up', {email, password, password2})
-    console.log(res.data)
+    // console.log(res.data)
     return res.data.user
 }
 
@@ -53,7 +53,7 @@ export async function signUp(email, password, password2) {
  */
 export async function signOut(email, password) {
     let res = await axios.get('users/sign-out')
-    console.log(res.data)
+    // console.log(res.data)
 }
 
 /**
@@ -66,7 +66,7 @@ export async function signOut(email, password) {
  */
 export async function deleteUser(email, password) {
     let res = await axios.get('users/delete-user')
-    console.log(res.data)
+    // console.log(res.data)
 }
 
 /**
@@ -79,5 +79,5 @@ export async function deleteUser(email, password) {
  */
 export async function updateUser(user) {
     let res = await axios.post('users/update-user', user)
-    console.log(res.data)
+    // console.log(res.data)
 }

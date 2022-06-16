@@ -28,7 +28,7 @@ function App() {
   const [totalAmount, setTotalAmount] = React.useState(0);
   const [user, setUser] = React.useState();
   const [products, setProducts] = React.useState();
-  const [orders, setOrders] = React.useState();
+  const [orders, setOrders] = React.useState([]);
   const [selected, setSelected] = React.useState("products");
 
   const [acceptedOrders, setAcceptedOrders] = React.useState([])
@@ -45,7 +45,6 @@ function App() {
     let new_product = true
     // check if it's in cart
     for (let i = 0; i < new_cart.length; i++) {
-      console.log(new_cart[i]._id === product._id)
       if (new_cart[i]._id === product._id) {
         new_product = false
         break
@@ -53,21 +52,20 @@ function App() {
     }
     // add first product
     if (new_cart.length === 0 || new_product) {
-      console.log("product not in cart, add product")
+      // console.log("product not in cart, add product")
       product.quantity = 1
       new_cart.push(product)
     } else {
       for (let i = 0; i < new_cart.length; i++) {
-        console.log(new_cart[i]._id === product._id)
         if (new_cart[i]._id === product._id) {
-          console.log("product in cart, add quantity")
+          // console.log("product in cart, add quantity")
           // add quantity
           new_cart[i].quantity++
           break
         }
       }
     }
-    console.log(new_cart)
+    // console.log(new_cart)
     new_cart.forEach((item) => (total_amount += item.quantity * item.price))
     setCart(new_cart)
     setTotalAmount(total_amount)
@@ -100,25 +98,20 @@ function App() {
     let usr = await getUser();
     // console.log(usr);
     setUser(usr);
-    let ords = await getOrders(usr._id)
-    // console.log(ords)
-    initializeAdminOrders(ords)
-    if (usr.admin) {
-    } else {
-      setOrders(ords)
-    }
+    let res = await getOrders(usr._id)
+    // console.log(res)
+    initializeAdminOrders(res)
+    setOrders(res.orders)
   };
 
   // function to be called every time to update user, orders, products
   const update = async () => {
     let usr = await getUser();
     setUser(usr);
-    let ords = await getOrders(usr._id)
-    initializeAdminOrders(ords)
-    if (usr.admin) {
-    } else {
-      setOrders(ords)
-    }
+    let res = await getOrders(usr._id)
+    // console.log(res.orders)
+    initializeAdminOrders(res)
+    setOrders(res.orders)
     initializeProducts();
   };
 
@@ -243,6 +236,7 @@ function App() {
                 products={products}
                 update={update}
                 selected={selected}
+                handleSelected={handleSelected}
               />
             ) : (
               <Main
@@ -256,6 +250,7 @@ function App() {
                 acceptedOrders={acceptedOrders}
                 ordersIn={ordersIn}
                 completedOrders={completedOrders}
+                handleSelected={handleSelected}
               />
             )
           ) : (
@@ -267,9 +262,14 @@ function App() {
               addToCart={addToCart}
               deleteFromCart={deleteFromCart}
               selected={selected}
+              handleSelected={handleSelected}
             />
           )}
-          <Footer />
+          <Footer
+            user={user}
+            update={update}
+            handleSelected={handleSelected}
+          />
         </div>
         <ModalContainer />
       </>
