@@ -1,10 +1,11 @@
-import React from "react";
-import HeroImage from "../Components/HeroImage";
-import Card from "../Components/Card";
-import UserOrders from "../Components/Orders/UserOrders";
-import { getOrders } from "../apiCalls/orderController";
-import OrderBody from "../Components/Admin/OrderBody";
-import "../Styles/admin-orders-styles.css";
+import React from "react"
+import HeroImage from "../Components/HeroImage"
+import Card from "../Components/Card"
+import UserOrders from "../Components/Orders/UserOrders"
+import { getOrders } from "../apiCalls/orderController"
+import OrderBody from "../Components/Admin/OrderBody"
+import "../Styles/admin-orders-styles.css"
+import "../Styles/card-styles.css"
 
 function Main(props) {
 
@@ -29,11 +30,11 @@ function Main(props) {
         <HeroImage />
         {props.products.map((category) => (
           <div>
-            <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
+            <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4r">
               {category.category}
             </h2>
             <div className="container">
-              <div className="row">
+              <div className="row justify-content-center">
                 {category.products.map((prod) => (
                   <Card
                     product={prod}
@@ -159,4 +160,4 @@ function Main(props) {
   }
 }
 
-export default Main;
+export default Main

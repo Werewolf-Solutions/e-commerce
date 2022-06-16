@@ -10,12 +10,6 @@
   height: auto;
 }
 
-.card {
-  margin: 0 auto; /* Added */
-  float: none; /* Added */
-  margin-bottom: 10px; /* Added */
-}
-
 .card-box .card-thumbnail {
   max-height: 450px;
   overflow: hidden;
