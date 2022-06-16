@@ -52,7 +52,7 @@ export default function AdminNavBar(props) {
               onClick={() => props.handleSelected("products")}
               className="nav-link adminNavLinks"
             >
-              edit products
+              products
             </a>
           </li>
 
