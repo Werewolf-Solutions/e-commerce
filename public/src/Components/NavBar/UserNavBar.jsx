@@ -35,7 +35,7 @@ export default function UserNavBar(props) {
               className="nav-link text-danger checkoutButton"
               onClick={() => props.handleSelected("orders")}
             >
-              my orders
+              orders
             </a>
           </li>
           {/* products */}
