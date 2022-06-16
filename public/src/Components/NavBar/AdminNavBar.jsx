@@ -23,14 +23,6 @@ export default function AdminNavBar(props) {
       />
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapsibleNavbar"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"

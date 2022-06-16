@@ -10,6 +10,7 @@ import GuestNavBar from "./GuestNavBar";
 import SignInDialog from "../SignIn/SignInDialog";
 import SignUpDialog from "../SignUp/SignUpDialog";
 import CartDialog from "../CartDialog";
+import { signOut } from "../../apiCalls/userController";
 
 function NavBar(props) {
   const [checkoutDialog, setCheckoutDialog] = React.useState(false);
@@ -59,10 +60,10 @@ function NavBar(props) {
             </a>
           </li>
         ) : null}
-        {/* my orders */}
+        {/* from here */}
         <li className="nav-item">
           <a
-            className="nav-link adminNavLinks"
+            className="nav-link text-danger cartText"
             onClick={() => props.handleSelected("user-orders")}
           >
             my orders
@@ -70,39 +71,42 @@ function NavBar(props) {
         </li>
         <li className="nav-item">
           <a
-            className="nav-link adminNavLinks"
+            className="nav-link text-danger cartText"
             onClick={() => props.handleSelected("products")}
           >
             products
           </a>
         </li>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapsibleNavbar"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        {props.user
+        ?
+          <li className="nav-item">
+            <a
+              className="nav-link text-danger cartText"
+              onClick={() => {
+                signOut().then(() => {
+                  props.update()
+                  props.handleSelected("products")
+                })
+              }}
+            >
+              LOGOUT
+            </a>
+          </li>
+        :
+          <li className="nav-item">
+            <a
+              className="nav-link text-danger cartText"
+              onClick={handleSignInDialog}
+            >
+              LOGIN
+            </a>
+          </li>
+        }
+        {/* to here goes in the footer */}
         <div
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
         >
-          <CheckoutDialog
-            open={checkoutDialog}
-            onClose={handleCheckoutDialog}
-            user={props.user}
-            cart={props.cart}
-            totalAmount={props.totalAmount}
-            update={props.update}
-            emptyCart={props.emptyCart}
-          />
-          <CartDialog
-            open={cartDialog}
-            onClose={handleCartDialog}
-            cart={props.cart}
-            deleteFromCart={props.deleteFromCart}
-          />
           {props.user ? (
             props.user.admin ? (
               <AdminNavBar
@@ -127,59 +131,39 @@ function NavBar(props) {
               emptyCart={props.emptyCart}
             />
           )}
-          <ul className="navbar-nav ">
-            {/* {props.cart.length !== 0 ? (
-              <div>
-                <li className="nav-item">
-                  <button
-                    onClick={handleCheckoutDialog}
-                    className="nav-link text-danger checkoutButton"
-                  >
-                    checkout
-                  </button>
-                </li>
-                <li className="nav-item me-3">
-                  <img
-                    className="cartIcon"
-                    onClick={handleCartDialog}
-                    src={cartIcon}
-                    alt=""
-                  />
-                </li>
-              </div>
-            ) : null} */}
-
-            <div>
-              <SignInDialog
-                open={signInDialog}
-                onClose={handleSignInDialog}
-                update={props.update}
-                handleSignUpDialog={handleSignUpDialog}
-              />
-              <SignUpDialog
-                open={signUpDialog}
-                onClose={handleSignUpDialog}
-                update={props.update}
-                handleSignInDialog={handleSignInDialog}
-              />
-
-              <li className="nav-item dropdown dropleft me-3">
-                <a
-                  className="nav-link text-danger"
-                  clbuttonss="nav-link dropdown-toggle"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  onClick={handleSignInDialog}
-                >
-                  LOGIN
-                </a>
-              </li>
-            </div>
-          </ul>
+          <div>
+            <SignInDialog
+              open={signInDialog}
+              onClose={handleSignInDialog}
+              update={props.update}
+              handleSignUpDialog={handleSignUpDialog}
+            />
+            <SignUpDialog
+              open={signUpDialog}
+              onClose={handleSignUpDialog}
+              update={props.update}
+              handleSignInDialog={handleSignInDialog}
+            />
+            <CheckoutDialog
+              open={checkoutDialog}
+              onClose={handleCheckoutDialog}
+              user={props.user}
+              cart={props.cart}
+              totalAmount={props.totalAmount}
+              update={props.update}
+              emptyCart={props.emptyCart}
+            />
+            <CartDialog
+              open={cartDialog}
+              onClose={handleCartDialog}
+              cart={props.cart}
+              deleteFromCart={props.deleteFromCart}
+            />
+          </div>
         </div>
       </div>
     </nav>
-  );
+  )
 }
 
 export default NavBar;

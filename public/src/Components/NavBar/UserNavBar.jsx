@@ -25,14 +25,6 @@ export default function UserNavBar(props) {
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top p-3">
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapsibleNavbar"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div
           className="collapse navbar-collapse justify-content-end"
           id="collapsibleNavbar"
@@ -40,7 +32,7 @@ export default function UserNavBar(props) {
           {/* my orders */}
           <li className="nav-item">
             <a
-              className="nav-link adminNavLinks"
+              className="nav-link text-danger checkoutButton"
               onClick={() => props.handleSelected("user-orders")}
             >
               my orders
@@ -49,7 +41,7 @@ export default function UserNavBar(props) {
           {/* products */}
           <li className="nav-item">
             <a
-              className="nav-link adminNavLinks"
+              className="nav-link text-danger checkoutButton"
               onClick={() => props.handleSelected("products")}
             >
               products
@@ -58,19 +50,12 @@ export default function UserNavBar(props) {
 
           {/* items in my cart */}
           <li className="nav-item">
-            <a className="nav-link">Items in my Cart : {props.cart.length}</a>
-          </li>
-          {/* cart icon */}
-          <li >
-            <ShoppingCart />
-          </li>
-          <li className="nav-item me-3">
-            <img
-              className="cartIcon"
+            <a
+              className="nav-link text-danger checkoutButton"
               onClick={handleCartDialog}
-              src={cart}
-              alt=""
-            />
+            >
+              Cart {props.cart.length} | £{props.totalAmount}
+            </a>
           </li>
           {/* total price */}
           <li className="nav-item">
@@ -83,12 +68,6 @@ export default function UserNavBar(props) {
               </button>
             ) : null}
           </li>
-
-          {/* total price */}
-          <li className="nav-item">
-            <a className="nav-link">Total Price: {props.totalAmount}</a>
-          </li>
-
           {/* logout */}
           <li className="nav-item">
             <a
@@ -97,7 +76,7 @@ export default function UserNavBar(props) {
                 signOut().then(() => {
                   props.update()
                   props.handleSelected("products")
-                });
+                })
               }}
             >
               logout
