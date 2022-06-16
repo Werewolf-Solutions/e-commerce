@@ -4,6 +4,7 @@ import Card from "../Components/Card";
 import UserOrders from "../Components/Orders/UserOrders";
 import { getOrders } from "../apiCalls/orderController";
 import OrderBody from "../Components/Admin/OrderBody";
+import "../Styles/admin-orders-styles.css";
 
 function Main(props) {
 
@@ -95,18 +96,18 @@ function Main(props) {
       )
     } else if (!props.user) {
       return(
-        <div class="user-orders row mt-2">
-          <div class="orders-in column">
-            <p className="order-status mt-3 ms-4">Search order</p>
-            <p className="order-statussub ms-4  mb-2">
-              Enter email below
-            </p>
-            <input onChange={handleChange}></input>
-            <a onClick={getGuestOrders}>search</a>
+        <div class="orders-in">
+          <p className="order-status mt-3 ms-4">Search order</p>
+          <p className="order-status sub ms-4 mb-2">
+            Enter email below
+          </p>
+          <input onChange={handleChange}></input>
+          <a onClick={getGuestOrders}>search</a>
+          <div class="row">
             {guestOrders.length != 0
             ? 
               guestOrders.map(order => (
-                <div class="card mb-3 ms-3 me-3">
+                <div class="card mb-3 ms-3 me-3 col-sm">
                   <div class="card-body">
                     <OrderBody order={order} />
                   </div>
