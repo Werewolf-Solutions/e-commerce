@@ -91,11 +91,11 @@ function App() {
 
   const initializeUser = async () => {
     // let email = "admin@gmail.com";
-    // let email = "foo@gmail.com";
-    // let password = "1234";
-    // let usr = await signIn(email, password);
+    let email = "foo@gmail.com";
+    let password = "1234";
+    let usr = await signIn(email, password);
     // in production get user logged in
-    let usr = await getUser();
+    // let usr = await getUser();
     // console.log(usr);
     setUser(usr);
     let res = await getOrders(usr._id)
