@@ -14,3 +14,9 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.cart-image-top {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
