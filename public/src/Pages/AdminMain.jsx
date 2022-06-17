@@ -157,7 +157,7 @@ export default function AdminMain(props) {
     )
   }
 
-  if (props.selected === 'dashboard') {
+  if (props.selected === "orders-history") {
     return (
       <div class="admin-orders row mt-2">
         {props.orders.map((order) =>

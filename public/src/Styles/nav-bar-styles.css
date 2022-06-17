@@ -13,6 +13,10 @@
   width: 3rem;
 }
 
+.text {
+  color: white;
+}
+
 @media screen and (max-width: 600px) {
   .cartText {
     font-size: 10px;

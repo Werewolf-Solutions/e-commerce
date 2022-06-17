@@ -48,18 +48,33 @@ function NavBar(props) {
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
       <div className="container-fluid align-items-end">
         <img src={logo} className="img-fluid logo" alt="" />
-        <li className="nav-item">
-          <a
-            className="nav-link text-danger cartText"
-            onClick={handleCartDialog}
-          >
-            Cart {props.cart.length} | £{props.totalAmount}
-          </a>
-        </li>
+        {props.user && props.user.admin
+        ?
+          <li className="nav-item">
+            <a
+              onClick={() => {
+                console.log("createProductDialog");
+                props.handleSelected("orders-history")
+              }}
+              className="nav-link cartText text"
+            >
+              orders history
+            </a>
+          </li>
+        :
+          <li className="nav-item">
+            <a
+              className="nav-link cartText text"
+              onClick={handleCartDialog}
+            >
+              Cart {props.cart.length} | £{props.totalAmount}
+            </a>
+          </li>
+        }
         {props.cart.length !== 0 ? (
           <li className="nav-item">
             <a
-              className="nav-link text-danger checkoutText"
+              className="nav-link text checkoutText"
               onClick={handleCheckoutDialog}
             >
               Checkout
@@ -74,7 +89,7 @@ function NavBar(props) {
                 console.log("createProductDialog")
                 handleCreateProductDialog()
               }}
-              className="nav-link text-danger checkoutText"
+              className="nav-link text checkoutText"
             >
               add product
             </a>
@@ -85,7 +100,7 @@ function NavBar(props) {
         ?
           <li className="nav-item">
             <a
-              className="nav-link text-danger cartText"
+              className="nav-link text cartText"
               onClick={() => {
                 signOut().then(() => {
                   props.update()
@@ -99,7 +114,7 @@ function NavBar(props) {
         :
           <li className="nav-item">
             <a
-              className="nav-link text-danger cartText"
+              className="nav-link text cartText"
               onClick={handleSignInDialog}
             >
               LOGIN
