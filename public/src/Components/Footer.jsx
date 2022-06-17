@@ -34,7 +34,7 @@ export default function Footer(props) {
             <div class="row footer">
                 <div class="col">
                     <a
-                        className="nav-link text-danger cartText"
+                        className="nav-link text cartText"
                         onClick={() => props.handleSelected("orders")}
                     >
                         orders
@@ -42,7 +42,7 @@ export default function Footer(props) {
                 </div>
                 <div class="col">
                     <a
-                        className="nav-link text-danger cartText"
+                        className="nav-link text cartText"
                         onClick={() => props.handleSelected("products")}
                     >
                         products
