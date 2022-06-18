@@ -93,7 +93,7 @@ function Main(props) {
         <div class="user-orders row mt-2">
           <div class="orders-in column">
             <p className="order-status mt-3 ms-4">Active orders</p>
-            <p className="order-statussub ms-4  mb-2">
+            <p className="order-statussub ms-4 mb-2">
               Orders to be accepted below...
             </p>
             {props.ordersIn.map(order => (
@@ -134,25 +134,27 @@ function Main(props) {
       )
     } else if (!props.user) {
       return(
-        <div class="orders-in">
-          <p className="order-status mt-3 ms-4">Search order</p>
-          <p className="order-status sub ms-4 mb-2">
-            Enter email below
-          </p>
-          <input onChange={handleChange}></input>
-          <a onClick={getGuestOrders}>search</a>
-          <div class="row">
-            {guestOrders.length != 0
-            ? 
-              guestOrders.map(order => (
-                <div class="card mb-3 ms-3 me-3 col-sm">
-                  <div class="card-body">
-                    <OrderBody order={order} />
+        <div className="user-orders orders">
+          <div className="orders-in">
+            <p className="order-status mt-3 ms-4">Search order</p>
+            <p className="order-status sub ms-4 mb-2">
+              Enter email below
+            </p>
+            <input onChange={handleChange}></input>
+            <a onClick={getGuestOrders}>search</a>
+            <div class="row">
+              {guestOrders.length != 0
+              ? 
+                guestOrders.map(order => (
+                  <div class="card mb-3 ms-3 me-3 col-sm">
+                    <div class="card-body">
+                      <OrderBody order={order} />
+                    </div>
                   </div>
-                </div>
-              ))
-            : null
-            }
+                ))
+              : null
+              }
+            </div>
           </div>
         </div>
       )

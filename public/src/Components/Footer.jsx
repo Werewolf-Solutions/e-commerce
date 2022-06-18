@@ -18,7 +18,7 @@ export default function Footer(props) {
     }
 
     return (
-        <div class="container">
+        <div className="footer">
             <SignInDialog
                 open={signInDialog}
                 onClose={handleSignInDialog}
@@ -31,7 +31,7 @@ export default function Footer(props) {
               update={props.update}
               handleSignInDialog={handleSignInDialog}
             />
-            <div class="row footer">
+            <div class="row">
                 <div class="col">
                     <a
                         className="nav-link text cartText"

@@ -1,6 +1,5 @@
 import * as React from "react";
 import "./App.css";
-import { ModalContainer } from "./Components/ModalContainer";
 import Main from "./Pages/Main";
 import AdminMain from "./Pages/AdminMain";
 import Footer from "./Components/Footer";
@@ -214,65 +213,49 @@ function App() {
 
   return (
     <SocketContext.Provider value={socket}>
-      <>
-        <div></div>
-        <div className="App">
-          <NavBar
-            user={user}
-            update={update}
-            cart={cart}
-            handleSelected={handleSelected}
-            totalAmount={totalAmount}
-            deleteFromCart={deleteFromCart}
-            emptyCart={emptyCart}
-          />
-          {user ? (
-            user.admin ? (
-              <AdminMain
-                acceptedOrders={acceptedOrders}
-                ordersIn={ordersIn}
-                completedOrders={completedOrders}
-                orders={orders}
-                products={products}
-                update={update}
-                selected={selected}
-                handleSelected={handleSelected}
-              />
-            ) : (
-              <Main
-                products={products}
-                user={user}
-                orders={orders}
-                update={update}
-                addToCart={addToCart}
-                deleteFromCart={deleteFromCart}
-                selected={selected}
-                acceptedOrders={acceptedOrders}
-                ordersIn={ordersIn}
-                completedOrders={completedOrders}
-                handleSelected={handleSelected}
-              />
-            )
+      <div className="App">
+        <NavBar
+          user={user}
+          update={update}
+          cart={cart}
+          handleSelected={handleSelected}
+          totalAmount={totalAmount}
+          deleteFromCart={deleteFromCart}
+          emptyCart={emptyCart}
+        />
+        {user && user.admin ? (
+            <AdminMain
+              acceptedOrders={acceptedOrders}
+              ordersIn={ordersIn}
+              completedOrders={completedOrders}
+              orders={orders}
+              products={products}
+              update={update}
+              selected={selected}
+              handleSelected={handleSelected}
+            />
           ) : (
             <Main
               products={products}
-              orders={orders}
               user={user}
+              orders={orders}
               update={update}
               addToCart={addToCart}
               deleteFromCart={deleteFromCart}
               selected={selected}
+              acceptedOrders={acceptedOrders}
+              ordersIn={ordersIn}
+              completedOrders={completedOrders}
               handleSelected={handleSelected}
             />
-          )}
-          <Footer
-            user={user}
-            update={update}
-            handleSelected={handleSelected}
-          />
-        </div>
-        <ModalContainer />
-      </>
+          )
+        }
+        <Footer
+          user={user}
+          update={update}
+          handleSelected={handleSelected}
+        />
+      </div>
     </SocketContext.Provider>
   );
 }
