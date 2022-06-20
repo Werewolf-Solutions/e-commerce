@@ -130,43 +130,43 @@ function App() {
         console.log('initialize orders')
         console.log(orders)
         if (orders) {
-        for (let i = 0; i < orders.length; i++) {
-            // console.log(`
-            // id: ${orders[i]._id}
-            // Accepted ${orders[i].accepted}
-            // Ready: ${orders[i].ready}
-            // Completed: ${orders[i].completed}
-            // Status: ${orders[i].status}`)
+            for (let i = 0; i < orders.length; i++) {
+                // console.log(`
+                // id: ${orders[i]._id}
+                // Accepted ${orders[i].accepted}
+                // Ready: ${orders[i].ready}
+                // Completed: ${orders[i].completed}
+                // Status: ${orders[i].status}`)
 
-            // orders in - paid or pay at pick up || first column
-            if (!orders[i].completed &&
-            !orders[i].accepted &&
-            orders[i].payment_intent.status === "succeeded" &&
-            orders[i].status != "refunded") {
-                ordsIn.push(orders[i])
-            }
+                // orders in - paid or pay at pick up || first column
+                if (!orders[i].completed &&
+                !orders[i].accepted &&
+                orders[i].payment_intent.status === "succeeded" &&
+                orders[i].status != "refunded") {
+                    ordsIn.push(orders[i])
+                }
 
-            // orders accepted - in preparation || second column
-            if (orders[i].accepted &&
-            !orders[i].ready &&
-            !orders[i].completed &&
-            orders[i].status != "refunded") {
-                accepted.push(orders[i])
+                // orders accepted - in preparation || second column
+                if (orders[i].accepted &&
+                !orders[i].ready &&
+                !orders[i].completed &&
+                orders[i].status != "refunded") {
+                    accepted.push(orders[i])
+                }
+        
+                // orders completed - ready to be collected or delivered || third column
+                if (orders[i].ready &&
+                !orders[i].completed &&
+                orders[i].status != "refunded") {
+                    completed.push(orders[i])
+                }
             }
-    
-            // orders completed - ready to be collected or delivered || third column
-            if (orders[i].ready &&
-            !orders[i].completed &&
-            orders[i].status != "refunded") {
-                completed.push(orders[i])
-            }
-        }
-        // console.log(accepted)
-        // console.log(completed)
-        // console.log(ordsIn)
-        setAcceptedOrders(accepted)
-        setCompletedOrders(completed)
-        setOrdersIn(ordsIn)
+            // console.log(accepted)
+            // console.log(completed)
+            // console.log(ordsIn)
+            setAcceptedOrders(accepted)
+            setCompletedOrders(completed)
+            setOrdersIn(ordsIn)
         }
     }
 
@@ -194,17 +194,17 @@ function App() {
 
     const createList = (list) => {
         let result = list.reduce((acc, d) => {
-        const found = acc.find((a) => a.category === d.category)
-        //const value = { category: d.category, val: d.value }
-        const value = d // the element in data property
-        if (!found) {
-            //acc.push(...value)
-            acc.push({ category: d.category, products: [value] }) // not found, so need to add products property
-        } else {
-            //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
-            found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
-        }
-        return acc
+            const found = acc.find((a) => a.category === d.category)
+            //const value = { category: d.category, val: d.value }
+            const value = d // the element in data property
+            if (!found) {
+                //acc.push(...value)
+                acc.push({ category: d.category, products: [value] }) // not found, so need to add products property
+            } else {
+                //acc.push({ category: d.category, products: [{ value: d.value }, { name: d.name }] })
+                found.products.push(value) // if found, that means products property exists, so just push new element to found.data.
+            }
+            return acc
         }, [])
         return result
     }
@@ -219,19 +219,19 @@ function App() {
         initializeProducts()
 
         socket.on('new_order', ({order}) => {
-        console.log('new order')
-        console.log(order)
-        // setNotifications([...notifications, 'new order'])
-        // setNewOrders([...newOrders, order])
-        update()
+            console.log('new order')
+            console.log(order)
+            // setNotifications([...notifications, 'new order'])
+            // setNewOrders([...newOrders, order])
+            update()
         })
 
         socket.on('order_update', ({order}) => {
-        console.log('order update')
-        console.log(order)
-        // setNotifications([...notifications, 'order update'])
-        // setNewOrders([...newOrders, order])
-        update()
+            console.log('order update')
+            console.log(order)
+            // setNotifications([...notifications, 'order update'])
+            // setNewOrders([...newOrders, order])
+            update()
         })
     }, [])
 
@@ -257,6 +257,8 @@ function App() {
                     update={update}
                     selected={selected}
                     handleSelected={handleSelected}
+                    ordersSelected={ordersSelected}
+                    handleOrdersSelected={handleOrdersSelected}
                 />
             ) : (
                 <Main
