@@ -69,13 +69,17 @@ export default function AdminMain(props) {
                         }
                         class="btn btn-info ms-3 btn-sm"
                     >Confirm</a>
+                    <a
+                        onClick={handleUpdateCategoryInput}
+                        class="btn btn-info ms-3 btn-sm"
+                    >Cancel</a>
                     </div>
-                : null
+                :
+                    <a
+                        onClick={handleUpdateCategoryInput}
+                        class="btn btn-info ms-3 btn-sm"
+                    >Edit category</a>
                 }
-                <a
-                    onClick={handleUpdateCategoryInput}
-                    class="btn btn-info ms-3 btn-sm"
-                >Update category</a>
                 <div className="container ">
                     <div className="row">
                     {category.products.map((prod) => (
