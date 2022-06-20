@@ -9,7 +9,7 @@ import { updateCategory } from "../apiCalls/productController"
 import AdminCard from "../Components/Admin/AdminCard"
 import AdminOrder from "../Components/Admin/AdminOrder"
 import CreateProductDialog from "../Components/Admin/CreateProductDialog"
-import Dashboard from "../Components/Admin/Dashboard"
+import OrdersHistory from "../Components/Admin/OrdersHistory"
 import AcceptedOrder from "../Components/Orders/AcceptedOrder"
 import ReadyOrder from "../Components/Orders/ReadyOrder"
 import OrderBody from "../Components/Admin/OrderBody"
@@ -217,13 +217,22 @@ export default function AdminMain(props) {
 
     if (props.selected === "orders-history") {
         return (
-        <div class="admin-orders row mt-2">
-            {props.orders.map((order) =>
-                order.accepted && order.ready && order.completed ? (
-                    <Dashboard order={order} update={props.update} />
-                ) : null
-            )}
-        </div>
+            <div className="orders">
+                <p className="order-status mt-3 ms-4">orders history</p>
+                <div className="orders-in">
+                    <div class="row">
+                    {props.orders.map((order) =>
+                        order.accepted && order.ready && order.completed ? (
+                            <div class="card mb-3 ms-3 me-3 col-sm">
+                                <div class="card-body">
+                                    <OrdersHistory order={order} update={props.update} />
+                                </div>
+                            </div>
+                        ) : null
+                    )}
+                    </div>
+                </div>
+			</div>
         )
     }
 }
