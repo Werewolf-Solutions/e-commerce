@@ -95,7 +95,7 @@ export default function AdminMain(props) {
     if (props.selected === 'orders') {
         if (isMobile) {
             return(
-                <div className="container"><br/>
+                <div className="container orders"><br/>
                     <FormControl>
                         <InputLabel id="demo-simple-select-label">Orders</InputLabel>
                         <Select

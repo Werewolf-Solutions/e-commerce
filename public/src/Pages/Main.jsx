@@ -40,7 +40,7 @@ function Main(props) {
 		if (props.orders && props.user) {
 			if (isMobile) {
 				return(
-					<div class="container"><br/>
+					<div class="container orders"><br/>
 						<FormControl>
                             <InputLabel id="demo-simple-select-label">Orders</InputLabel>
                             <Select

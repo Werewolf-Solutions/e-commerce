@@ -1,5 +1,6 @@
 .orders {
-  min-height: 100vh;
+  min-height: 100%;
+  margin-bottom: 50px;
 }
 
 .accepted-orders {
