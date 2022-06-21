@@ -36,10 +36,10 @@ export default function AddressCard(props) {
                 </div>
             : null
             }
+            {/* <Typography variant="body2">
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                 First and Last name
             </Typography>
-            <Typography variant="body2">
                 {props.user
                 ?
                 <div>
@@ -47,7 +47,7 @@ export default function AddressCard(props) {
                 </div>
                 : null
                 }
-            </Typography>
+            </Typography> */}
         </div>
     )
 }

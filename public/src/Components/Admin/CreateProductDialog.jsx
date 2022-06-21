@@ -114,7 +114,7 @@ export default function CreateProductDialog(props) {
           className="ms-2 me-2 mt-4 btn btn-danger"
           onClick={() => {
             createProduct(product).then((prod) => {
-              console.log(prod);
+              // console.log(prod)
               uploadImg(file, prod).then(() => props.update());
             });
             props.onClose();

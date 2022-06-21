@@ -32,7 +32,7 @@ export default function GuestNavBar(props) {
 				{/* my orders */}
 				<li className="nav-item">
 					<a
-						className="nav-link text-danger checkoutButton"
+						className="nav-link text checkoutButton"
 						onClick={() => props.handleSelected("orders")}
 					>
 						orders
@@ -41,7 +41,7 @@ export default function GuestNavBar(props) {
 				{/* products */}
 				<li className="nav-item">
 					<a
-						className="nav-link text-danger checkoutButton"
+						className="nav-link text checkoutButton"
 						onClick={() => props.handleSelected("products")}
 					>
 						products
@@ -51,7 +51,7 @@ export default function GuestNavBar(props) {
 				{/* items in my cart */}
 				<li className="nav-item">
 					<a
-						className="nav-link text-danger checkoutButton"
+						className="nav-link text checkoutButton"
 						onClick={handleCartDialog}
 					>
 						Cart {props.cart.length} | £{props.totalAmount}
@@ -62,7 +62,7 @@ export default function GuestNavBar(props) {
 					{props.cart.length !== 0 ? (
 					<button
 						onClick={handleCheckoutDialog}
-						className="nav-link text-danger checkoutButton"
+						className="nav-link text checkoutButton"
 					>
 						checkout
 					</button>

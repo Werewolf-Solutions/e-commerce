@@ -59,9 +59,9 @@ export default function AdminNavBar(props) {
           <li className="nav-item">
             <a
               className="nav-link adminNavLinks"
-              onClick={() => props.handleSelected("dashboard")}
+              onClick={() => props.handleSelected("orders-history")}
             >
-              dashboard
+              orders history
             </a>
           </li>
           <li className="nav-item">
