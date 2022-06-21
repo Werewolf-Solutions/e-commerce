@@ -23,7 +23,7 @@ export async function getOrders(orderedBy) {
  * @returns order, msg
  */
 export async function createOrder(new_order) {
-    console.log('create order')
+    // console.log('create order')
     let res = await axios.post('users/create-order', {order: new_order})
     // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
