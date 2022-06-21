@@ -35,11 +35,11 @@ export default function AdminMain(props) {
 
     // console.log(props.order)
 
-        useEffect(() => {
-            if (window.innerWidth <= 500) {
-                setIsMobile(true)
-            }
-        }, [])
+    useEffect(() => {
+        if (window.innerWidth <= 500) {
+            setIsMobile(true)
+        }
+    }, [])
 
     if (props.selected === 'products') {
         if (props.products) {
@@ -53,40 +53,42 @@ export default function AdminMain(props) {
             />
             {props.products.map((category) => (
                 <div>
-                <h2 id="sideorders" className=" cardMenuHeader mt-4 mb-4 ms-4">
-                    {category.category}
-                </h2>
-                {updateCategoryInput
-                ?
-                    <div>
-                    <input onChange={handleChange}></input>
-                    <a
-                        onClick={
-                        () => updateCategory(category.category, newCategory).then(() => {
-                            props.update()
-                            handleUpdateCategoryInput()
-                        })
+                    <div className="card-text">
+                        <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
+                            {category.category}
+                        </h2>
+                        {updateCategoryInput
+                        ?
+                            <div>
+                                <input onChange={handleChange}></input>
+                                <a
+                                    onClick={
+                                        () => updateCategory(category.category, newCategory).then(() => {
+                                            props.update()
+                                            handleUpdateCategoryInput()
+                                        })
+                                    }
+                                    class="btn btn-info ms-3 btn-sm"
+                                >Confirm</a>
+                                <a
+                                    onClick={handleUpdateCategoryInput}
+                                    class="btn btn-info ms-3 btn-sm"
+                                >Cancel</a>
+                            </div>
+                        :
+                            <a
+                                onClick={handleUpdateCategoryInput}
+                                class="btn btn-info ms-3 btn-sm"
+                            >Edit category</a>
                         }
-                        class="btn btn-info ms-3 btn-sm"
-                    >Confirm</a>
-                    <a
-                        onClick={handleUpdateCategoryInput}
-                        class="btn btn-info ms-3 btn-sm"
-                    >Cancel</a>
                     </div>
-                :
-                    <a
-                        onClick={handleUpdateCategoryInput}
-                        class="btn btn-info ms-3 btn-sm"
-                    >Edit category</a>
-                }
-                <div className="container ">
-                    <div className="row">
-                    {category.products.map((prod) => (
-                        <AdminCard product={prod} update={props.update} />
-                    ))}
+                    <div className="container ">
+                        <div className="row justify-content-center">
+                            {category.products.map((prod) => (
+                                <AdminCard product={prod} update={props.update} />
+                            ))}
+                        </div>
                     </div>
-                </div>
                 </div>
             ))}
             </div>
