@@ -10,6 +10,10 @@
   height: auto;
 }
 
+.card-text {
+  text-align: center;
+}
+
 .card-box .card-thumbnail {
   max-height: 450px;
   overflow: hidden;
@@ -40,6 +44,7 @@
 .cardMenuHeader {
   color: black;
   scroll-margin-top: 20vh;
+  text-align: center;
 }
 
 .card-image-top {

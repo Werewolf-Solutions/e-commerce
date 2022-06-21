@@ -149,24 +149,26 @@ function Main(props) {
 	if (props.selected === "products") {
 		if (props.products) {
 		return(
-		<div className="card-deck">
+		<div>
 			<HeroImage />
 			{props.products.map((category) => (
 			<div>
-				<h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4r">
-				{category.category}
-				</h2>
+                <div className="card-text">
+                    <h2 id={category.category} className="cardMenuHeader mt-4 mb-4 ms-4r">
+                        {category.category}
+                    </h2>
+                </div>
 				<div className="container">
-				<div className="row justify-content-center">
-					{category.products.map((prod) => (
-					<Card
-						product={prod}
-						update={props.update}
-						addToCart={props.addToCart}
-						deleteFromCart={props.deleteFromCart}
-					/>
-					))}
-				</div>
+					<div className="row justify-content-center">
+						{category.products.map((prod) => (
+							<Card
+								product={prod}
+								update={props.update}
+								addToCart={props.addToCart}
+								deleteFromCart={props.deleteFromCart}
+							/>
+						))}
+					</div>
 				</div>
 			</div>
 			))}
