@@ -1,3 +1,8 @@
+.orders {
+  min-height: 100%;
+  margin-bottom: 50px;
+}
+
 .accepted-orders {
   color: red;
 }

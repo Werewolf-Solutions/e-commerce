@@ -18,7 +18,7 @@ export default function AdminOrder(props) {
       <OrderBody order={props.order}/>
       <a
         onClick={() => {
-          console.log(props.order.payment_intent)
+          // console.log(props.order.payment_intent)
           refundPaymentIntent(props.order.payment_intent).then(() => props.update())
         }}
         class="btn btn-warning me-2 btn-sm"

@@ -41,9 +41,8 @@ export default function AdminCard(props) {
         <div className="card-thumbnail">
           <button
             onClick={() => {
-              console.log("updateProductDialog");
-              handleUpdateProductDialog();
-              // setModal("EditCardModal");
+              // console.log("updateProductDialog")
+              handleUpdateProductDialog()
             }}
             className="btn btn-danger mb-3 me-3"
           >

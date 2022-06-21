@@ -21,11 +21,11 @@ export default function AddressForm(props) {
     }
 
     useEffect(() => {
-        console.log(props.state)
-        console.log(props.user)
+        // console.log(props.state)
+        // console.log(props.user)
     }, [])
     return (
-        <div className="container">
+        <div>
             <DeliveryForm
                 open={deliveryFormDialog}
                 onClose={handleDeliveryFormDialog}
@@ -60,10 +60,7 @@ export default function AddressForm(props) {
                     <Button size="small" onClick={handleDeliveryFormDialog}>Use another address</Button>
                 </div>
                 : null
-            : 
-                <div>
-                    <button onClick={props.handleSignInDialog}>sign in</button>
-                </div>
+            : null
             }
             {!props.user && props.shippingMethod === 'delivery'
             ?
@@ -79,35 +76,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="email"
                                 variant="standard"
-                                value={props.state.email}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                id="password"
-                                name="password"
-                                label="Password"
-                                type="password"
-                                fullWidth
-                                autoComplete="password"
-                                variant="standard"
-                                value={props.state.password}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                id="password2"
-                                name="password2"
-                                label="Password2"
-                                type="password"
-                                fullWidth
-                                autoComplete="password2"
-                                variant="standard"
-                                value={props.state.password2}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -120,7 +88,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="first-name"
                                 variant="standard"
-                                value={props.state.firstName}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -133,7 +100,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="last-name"
                                 variant="standard"
-                                value={props.state.lastName}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -146,7 +112,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-number"
                                 variant="standard"
-                                value={props.state.number}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -155,23 +120,10 @@ export default function AddressForm(props) {
                                 required
                                 id="address1"
                                 name="address1"
-                                label="Address line 1"
+                                label="Address line"
                                 fullWidth
-                                autoComplete="shipping address-line1"
+                                autoComplete="shipping address-line"
                                 variant="standard"
-                                value={props.state.address1}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="address2"
-                                name="address2"
-                                label="Address line 2"
-                                fullWidth
-                                autoComplete="shipping address-line2"
-                                variant="standard"
-                                value={props.state.address2}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -184,18 +136,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="shipping address-city"
                                 variant="standard"
-                                value={props.state.city}
-                                onChange={props.handleChange}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                id="region"
-                                name="region"
-                                label="Region"
-                                fullWidth
-                                variant="standard"
-                                value={props.state.region}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -208,7 +148,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="shipping postal-code"
                                 variant="standard"
-                                value={props.state.postcode}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -221,7 +160,6 @@ export default function AddressForm(props) {
                                 fullWidth
                                 autoComplete="shipping country"
                                 variant="standard"
-                                value={props.state.country}
                                 onChange={props.handleChange}
                             />
                         </Grid>
@@ -240,35 +178,6 @@ export default function AddressForm(props) {
                             fullWidth
                             autoComplete="email"
                             variant="standard"
-                            value={props.state.email}
-                            onChange={props.handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            id="password"
-                            name="password"
-                            label="Password"
-                            type="password"
-                            fullWidth
-                            autoComplete="password"
-                            variant="standard"
-                            value={props.state.password}
-                            onChange={props.handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            id="password2"
-                            name="password2"
-                            label="Password2"
-                            type="password"
-                            fullWidth
-                            autoComplete="password2"
-                            variant="standard"
-                            value={props.state.password2}
                             onChange={props.handleChange}
                         />
                     </Grid>

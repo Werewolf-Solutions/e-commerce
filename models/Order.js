@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
         id: String,
         name: String,
         mobile: String,
+        email: String
     },
     // {
     //     type: mongoose.Schema.Types.ObjectId,

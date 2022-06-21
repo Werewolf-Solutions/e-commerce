@@ -16,45 +16,38 @@ const bull = (
     </Box>
 )
 
-export default function OutlinedCard(props) {
+export default function AddressCard(props) {
     return (
-        <Box sx={{ minWidth: 275 }} className="container">
-            <Card
-                variant="outlined"
-                className="container"
-            >
-                <CardContent className="container">
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" >
-                        Address details
-                    </Typography>
-                    {props.user
-                    ?
-                        <div>
-                            <Typography variant="h5" component="div">
-                                {props.user.address.number}{bull}
-                                {props.user.address.line1}{bull}
-                                {props.user.address.city}{bull}
-                                {props.user.address.region}{bull}
-                                {props.user.address.country}{bull}
-                                {props.user.address.postcode}
-                            </Typography><br/><br/>
-                        </div>
-                    : null
-                    }
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        First and Last name
-                    </Typography>
-                    <Typography variant="body2">
-                        {props.user
-                        ?
-                        <div>
-                            {props.user.firstName}{bull}{props.user.lastName}
-                        </div>
-                        : null
-                        }
-                    </Typography>
-                </CardContent>
-            </Card>
-        </Box>
+        <div>
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" >
+                Address details
+            </Typography>
+            {props.user
+            ?
+                <div>
+                    <Typography variant="h5" component="div">
+                        {props.user.address.number}{bull}
+                        {props.user.address.line1}{bull}
+                        {props.user.address.city}{bull}
+                        {props.user.address.region}{bull}
+                        {props.user.address.country}{bull}
+                        {props.user.address.postcode}
+                    </Typography><br/><br/>
+                </div>
+            : null
+            }
+            {/* <Typography variant="body2">
+            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                First and Last name
+            </Typography>
+                {props.user
+                ?
+                <div>
+                    {props.user.firstName}{bull}{props.user.lastName}
+                </div>
+                : null
+                }
+            </Typography> */}
+        </div>
     )
 }

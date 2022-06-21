@@ -58,11 +58,13 @@ export default function PaymentForm(props) {
       )}
       {props.addPaymentMethod ? (
         <div>
-          <button onClick={props.handleAddPaymentMethod}>
-            close payment form
-          </button>
-          <br />
-          <br />
+          {props.user
+          ?
+            <button onClick={props.handleAddPaymentMethod}>
+              close payment form
+            </button>
+          : null
+          }
           {props.paymentMethod === "card" ? (
             <div>
               <Grid container spacing={3}>
@@ -136,21 +138,23 @@ export default function PaymentForm(props) {
                         exp_month: state.expMonth,
                         exp_year: state.expYear,
                         cvc: state.cvc,
-                      };
-                      createPaymentMethod(props.paymentMethod, card).then(
-                        (paymentMethod) => {
-                          let pm = {
-                            id: paymentMethod.id,
-                            last4: paymentMethod.card.last4,
-                            brand: paymentMethod.card.brand,
-                            exp_month: paymentMethod.card.exp_month,
-                            exp_year: paymentMethod.card.exp_year,
-                          };
-                          props.setCard(pm);
-                          props.update();
-                          props.handleAddPaymentMethod();
-                        }
-                      );
+                      }
+                      if (card.number) {
+                        createPaymentMethod(props.paymentMethod, card).then(
+                          (paymentMethod) => {
+                            let pm = {
+                              id: paymentMethod.id,
+                              last4: paymentMethod.card.last4,
+                              brand: paymentMethod.card.brand,
+                              exp_month: paymentMethod.card.exp_month,
+                              exp_year: paymentMethod.card.exp_year,
+                            }
+                            props.setCard(pm)
+                            props.update()
+                            props.handleAddPaymentMethod()
+                          }
+                        )
+                      }
                     }}
                   >
                     add card
@@ -161,9 +165,12 @@ export default function PaymentForm(props) {
           ) : null}
         </div>
       ) : (
-        <button color="error" onClick={props.handleAddPaymentMethod}>
-          add payment method
-        </button>
+        props.user
+        ?
+          <button color="error" onClick={props.handleAddPaymentMethod}>
+            add payment method
+          </button>
+        : null
       )}
       {props.user &&
       props.paymentMethod === "card" &&

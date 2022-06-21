@@ -10,7 +10,8 @@ import axios from 'axios'
  */
 export async function getOrders(orderedBy) {
     let res = await axios.post('users/orders', {orderedBy})
-    return res.data.orders
+    // console.log(res.data.orders)
+    return {orders: res.data.orders}
 }
 
 /**
@@ -22,9 +23,9 @@ export async function getOrders(orderedBy) {
  * @returns order, msg
  */
 export async function createOrder(new_order) {
-    console.log('create order')
+    // console.log('create order')
     let res = await axios.post('users/create-order', {order: new_order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -38,7 +39,7 @@ export async function createOrder(new_order) {
  */
 export async function deleteOrder(order) {
     let res = await axios.post('users/delete-order', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -52,7 +53,7 @@ export async function deleteOrder(order) {
  */
 export async function acceptOrder(order) {
     let res = await axios.post('users/accept-order', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -66,7 +67,7 @@ export async function acceptOrder(order) {
  */
 export async function declineOrder(order) {
     let res = await axios.post('users/decline-order', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -80,7 +81,7 @@ export async function declineOrder(order) {
  */
 export async function startDelivery(order) {
     let res = await axios.post('users/start-delivery', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -94,7 +95,7 @@ export async function startDelivery(order) {
  */
 export async function endDelivery(order) {
     let res = await axios.post('users/end-delivery', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -108,7 +109,7 @@ export async function endDelivery(order) {
  */
  export async function completeOrder(order) {
     let res = await axios.post('users/complete-order', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
 
@@ -122,6 +123,6 @@ export async function endDelivery(order) {
  */
  export async function orderReady(order) {
     let res = await axios.post('users/order-ready', {order})
-    console.log(res.data)
+    // console.log(res.data)
     return {order:res.data.order, msg: res.data.msg}
 }
