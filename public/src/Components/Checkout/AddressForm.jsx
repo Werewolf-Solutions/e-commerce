@@ -21,8 +21,8 @@ export default function AddressForm(props) {
     }
 
     useEffect(() => {
-        console.log(props.state)
-        console.log(props.user)
+        // console.log(props.state)
+        // console.log(props.user)
     }, [])
     return (
         <div>

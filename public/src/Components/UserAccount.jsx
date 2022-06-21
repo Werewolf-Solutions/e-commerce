@@ -2,7 +2,7 @@ import React from 'react'
 import "../Styles/admin-orders-styles.css"
 
 export default function UserAccount(props) {
-  console.log(props.order)
+  // console.log(props.order)
   return (
     <div class="admin-orders row mt-2">
       <div class="orders-in col-sm-4">

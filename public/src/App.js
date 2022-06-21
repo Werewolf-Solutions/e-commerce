@@ -127,8 +127,8 @@ function App() {
         let completed = []
         let refunded = []
         let active = []
-        console.log('initialize orders')
-        console.log(orders)
+        // console.log('initialize orders')
+        // console.log(orders)
         if (orders) {
             for (let i = 0; i < orders.length; i++) {
                 // console.log(`
@@ -219,16 +219,16 @@ function App() {
         initializeProducts()
 
         socket.on('new_order', ({order}) => {
-            console.log('new order')
-            console.log(order)
+            // console.log('new order')
+            // console.log(order)
             // setNotifications([...notifications, 'new order'])
             // setNewOrders([...newOrders, order])
             update()
         })
 
         socket.on('order_update', ({order}) => {
-            console.log('order update')
-            console.log(order)
+            // console.log('order update')
+            // console.log(order)
             // setNotifications([...notifications, 'order update'])
             // setNewOrders([...newOrders, order])
             update()

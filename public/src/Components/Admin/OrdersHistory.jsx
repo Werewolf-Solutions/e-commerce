@@ -14,7 +14,7 @@ export default function OrdersHistory(props) {
             <OrderBody order={props.order}/>
             <a
                 onClick={() => {
-                    console.log(props.order.payment_intent)
+                    // console.log(props.order.payment_intent)
                     refundPaymentIntent(props.order.payment_intent).then((order) => {
                     props.update()
                     socket.emit('new_order', {order})

@@ -78,7 +78,7 @@ export default function CheckoutForm(props) {
   };
 
   const handleCardSelected = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setCard(e.target.value);
   };
 
@@ -121,7 +121,7 @@ export default function CheckoutForm(props) {
           postcode: state.postcode,
           country: state.country,
         }
-        console.log(shipping_address)
+        // console.log(shipping_address)
         setAddress(shipping_address)
         setActiveStep(activeStep + 1)
         handleAddPaymentMethod()
@@ -151,7 +151,7 @@ export default function CheckoutForm(props) {
       // sign up user
       if (state.email != "" && state.password != "" && state.password2 != "") {
         // console.log("Try sign in and if not existing sign up");
-        console.log(state);
+        // console.log(state);
 
         // sign up && update user
       } else {
@@ -184,9 +184,7 @@ export default function CheckoutForm(props) {
           // if there's no card selected
           if (!card && !addPaymentMethod) {
             // TODO: pop up message
-            console.log(
-              "Please choose an existing payment method or add new one."
-            );
+            console.log("Please choose an existing payment method or add new one.")
           }
           // if there's a card selected
           if (card) {
@@ -255,7 +253,7 @@ export default function CheckoutForm(props) {
         //     items: props.cart,
         //     total_cart: props.cart.total_cart
         // }
-        console.log(order)
+        // console.log(order)
         setNewOrder(order)
         socket.emit('new_order', {order})
       } else if (paymentMethod === "cash") {
@@ -272,7 +270,7 @@ export default function CheckoutForm(props) {
           total_amount: props.totalAmount
         }
         let {order} = await createOrder(new_order);
-        console.log(order)
+        // console.log(order)
         setNewOrder(order)
         socket.emit('new_order', {order})
       }
@@ -282,7 +280,7 @@ export default function CheckoutForm(props) {
     } else if (activeStep === steps.length - 1 && !props.user) {
       // console.log("guest review order => confirm payment intent");
       let {order} = await confirmPaymentIntent(paymentIntent)
-      console.log(order)
+      // console.log(order)
       setNewOrder(order)
       setActiveStep(activeStep + 1);
       props.update();
@@ -346,7 +344,7 @@ export default function CheckoutForm(props) {
   };
 
   useEffect(() => {
-    console.log(state);
+    // console.log(state)
     // socket.on('new_order', ({order}) => {
     //     // setChat([...chat, {order}])
     //     console.log('new order')
