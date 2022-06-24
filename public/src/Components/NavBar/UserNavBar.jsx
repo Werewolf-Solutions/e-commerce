@@ -53,7 +53,7 @@ export default function UserNavBar(props) {
               className="nav-link text checkoutButton"
               onClick={handleCartDialog}
             >
-              Cart {props.cart.length} | £{props.totalAmount}
+              Cart {props.totalItems} | £{props.totalAmount}
             </a>
           </li>
           {/* total price */}

@@ -54,7 +54,7 @@ export default function GuestNavBar(props) {
 						className="nav-link text checkoutButton"
 						onClick={handleCartDialog}
 					>
-						Cart {props.cart.length} | £{props.totalAmount}
+						Cart {props.totalItems} | £{props.totalAmount}
 					</a>
 				</li>
 				{/* total price */}

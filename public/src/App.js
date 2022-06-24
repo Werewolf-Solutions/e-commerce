@@ -25,6 +25,7 @@ import {SocketContext, socket} from "./service/socket"
 function App() {
     const [cart, setCart] = useState([])
     const [totalAmount, setTotalAmount] = useState(0)
+    const [totalItems, setTotalItems] = useState(0)
     const [user, setUser] = useState()
     const [products, setProducts] = useState()
     const [orders, setOrders] = useState([])
@@ -42,6 +43,7 @@ function App() {
     const addToCart = (product) => {
         let new_cart = cart
         let total_amount = 0
+        let total_items = 0
         let new_product = true
         // check if it's in cart
         for (let i = 0; i < new_cart.length; i++) {
@@ -67,12 +69,16 @@ function App() {
         }
         // console.log(new_cart)
         new_cart.forEach((item) => (total_amount += item.quantity * item.price))
+        new_cart.forEach((item) => (total_items += item.quantity))
+        // console.log(total_items)
+        setTotalItems(total_items)
         setCart(new_cart)
         setTotalAmount(total_amount)
     }
 
     const deleteFromCart = (product) => {
         let total_amount = 0
+        let total_items = 0
         let a = cart.slice()
         for (let i = 0; i < a.length; i++) {
             if (a[i]._id === product._id) {
@@ -85,8 +91,10 @@ function App() {
             }
         }
         a.forEach((item) => (total_amount += item.quantity * item.price))
+        a.forEach((item) => (total_items += item.quantity))
         setCart(a)
         setTotalAmount(total_amount)
+        setTotalItems(total_items)
     }
 
     const initializeUser = async () => {
@@ -240,10 +248,11 @@ function App() {
         <div className="App">
             <NavBar
                 user={user}
-                update={update}
                 cart={cart}
-                handleSelected={handleSelected}
                 totalAmount={totalAmount}
+                totalItems={totalItems}
+                update={update}
+                handleSelected={handleSelected}
                 deleteFromCart={deleteFromCart}
                 emptyCart={emptyCart}
             />

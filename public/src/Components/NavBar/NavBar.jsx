@@ -66,7 +66,7 @@ function NavBar(props) {
               className="nav-link cartText text"
               onClick={handleCartDialog}
             >
-              Cart {props.cart.length} | £{props.totalAmount}
+              Cart {props.totalItems} | £{props.totalAmount}
             </a>
           </li>
         }
@@ -139,6 +139,7 @@ function NavBar(props) {
                 totalAmount={props.totalAmount}
                 deleteFromCart={props.deleteFromCart}
                 emptyCart={props.emptyCart}
+                totalItems={props.totalItems}
               />
             )
           ) : (
@@ -150,6 +151,7 @@ function NavBar(props) {
               deleteFromCart={props.deleteFromCart}
               emptyCart={props.emptyCart}
               handleSignInDialog={handleSignInDialog}
+              totalItems={props.totalItems}
             />
           )}
           <div>
