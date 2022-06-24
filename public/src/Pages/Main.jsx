@@ -118,7 +118,7 @@ function Main(props) {
 			}
 		} else if (!props.user) {
 		return(
-			<div className="user-orders orders">
+			<div className="orders">
                 <div className="orders-in">
                     <br/><p className="order-status mt-3 ms-4">Search order</p>
                     <p className="order-status sub ms-4 mb-2">
@@ -126,18 +126,18 @@ function Main(props) {
                     </p>
                     <input onChange={handleChange}></input>
                     <a onClick={getGuestOrders}>search</a>
-                    <div class="row">
-                    {guestOrders.length != 0
-                    ? 
-                        guestOrders.map(order => (
-                        <div class="card mb-3 ms-3 me-3 col-sm">
-                            <div class="card-body">
-                                <OrderBody order={order} />
-                            </div>
-                        </div>
-                        ))
-                    : null
-                    }
+                    <div class="row justify-content-center">
+						{guestOrders.length != 0
+						? 
+							guestOrders.map(order => (
+							<div class="order-card ">
+								<div>
+									<OrderBody order={order} />
+								</div>
+							</div>
+							))
+						: null
+						}
                     </div>
                 </div>
 			</div>

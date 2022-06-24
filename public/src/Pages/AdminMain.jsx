@@ -226,11 +226,11 @@ export default function AdminMain(props) {
             <div className="orders">
                 <p className="order-status mt-3 ms-4">orders history</p>
                 <div className="orders-in">
-                    <div class="row">
+                    <div class="row justify-content-center">
                     {props.orders.map((order) =>
                         order.accepted && order.ready && order.completed ? (
-                            <div class="card mb-3 ms-3 me-3 col-sm">
-                                <div class="card-body">
+                            <div class="order-card">
+                                <div>
                                     <OrdersHistory order={order} update={props.update} />
                                 </div>
                             </div>
