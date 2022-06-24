@@ -14,6 +14,7 @@ import AcceptedOrder from "../Components/Orders/AcceptedOrder"
 import ReadyOrder from "../Components/Orders/ReadyOrder"
 import OrderBody from "../Components/Admin/OrderBody"
 import "../Styles/admin-orders-styles.css"
+import "../Styles/admin-cards.css"
 
 export default function AdminMain(props) {
     const [createProductDialog, setCreateProductDialog] = useState(false)
@@ -52,7 +53,7 @@ export default function AdminMain(props) {
                 update={props.update}
             />
             {props.products.map((category) => (
-                <div>
+                <div className="products">
                     <div className="card-text">
                         <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
                             {category.category}
