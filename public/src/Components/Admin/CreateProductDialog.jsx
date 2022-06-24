@@ -36,16 +36,12 @@ export default function CreateProductDialog(props) {
           <div class="row">
             <img src={img} className="edit-image col-sm ms-2" alt="" />
             <div class="col-sm">
-              <input type="file" id="imgupload" onChange={onFileChange} />
-              <label for="imgupload">
-                {" "}
-                <button
-                  className="mt-1 mb-2 ms-2 btn-sm btn btn-info chooseimagebttn"
-                  id="OpenImgUpload"
-                >
-                  choose
-                </button>
-              </label>
+              <input
+                type="file"
+                id="imgupload"
+                onChange={onFileChange}
+                // className="mt-1 mb-2 ms-2 btn-sm btn btn-info chooseimagebttn"
+              />
 
               {/* <button
                 className="mt-1 mb-2 ms-2 btn-sm btn btn-danger uploadbttn"
