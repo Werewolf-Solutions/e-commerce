@@ -101,7 +101,7 @@ export default function AdminMain(props) {
     if (props.selected === 'orders') {
         if (isMobile) {
             return(
-                <div className="container orders"><br/>
+                <div className="container"><br/>
                     <FormControl>
                         <InputLabel id="demo-simple-select-label">Orders</InputLabel>
                         <Select
@@ -176,7 +176,7 @@ export default function AdminMain(props) {
             )
         } else {
             return (
-                <div class="admin-orders row mt-2">
+                <div class="admin-orders row mt-2 orders">
                     <div class="orders-in column">
                     <p className="order-status mt-3 ms-4">orders in</p>
                     <p className="order-statussub ms-4  mb-2">
