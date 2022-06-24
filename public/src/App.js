@@ -220,6 +220,7 @@ function App() {
     const emptyCart = () => {
         setCart([])
         setTotalAmount(0)
+        setTotalItems(0)
     }
 
     useEffect(() => {
