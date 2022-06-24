@@ -1,7 +1,6 @@
 import React from "react"
 import "../../Styles/nav-bar-styles.css"
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png"
-import cartIcon from "../../Assets/icons8-buying-96.png"
+import logo from "../../Assets/brand.png"
 import CheckoutDialog from "../Checkout/CheckoutDialog"
 
 import AdminNavBar from "./AdminNavBar"

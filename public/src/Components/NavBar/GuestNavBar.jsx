@@ -1,5 +1,5 @@
 import * as React from "react"
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png"
+import logo from "../../Assets/brand.png"
 import CheckoutDialog from "../Checkout/CheckoutDialog"
 import { signOut } from "../../apiCalls/userController"
 import CartDialog from "../CartDialog"

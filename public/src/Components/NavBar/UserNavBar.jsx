@@ -1,25 +1,24 @@
-import * as React from "react";
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
-import CheckoutDialog from "../Checkout/CheckoutDialog";
-import { signOut } from "../../apiCalls/userController";
-import CartDialog from "../CartDialog";
-import cart from "../../Assets/icons8-buying-96.png";
-import "../../Styles/nav-bar-styles.css";
+import * as React from "react"
+import logo from "../../Assets/brand.png"
+import CheckoutDialog from "../Checkout/CheckoutDialog"
+import { signOut } from "../../apiCalls/userController"
+import CartDialog from "../CartDialog"
+import "../../Styles/nav-bar-styles.css"
 
 import {ShoppingCart} from '@mui/icons-material'
 
 export default function UserNavBar(props) {
-  const [checkoutDialog, setCheckoutDialog] = React.useState(false);
+  const [checkoutDialog, setCheckoutDialog] = React.useState(false)
 
-  const [cartDialog, setCartDialog] = React.useState(false);
+  const [cartDialog, setCartDialog] = React.useState(false)
 
   const handleCartDialog = () => {
-    setCartDialog(!cartDialog);
-  };
+    setCartDialog(!cartDialog)
+  }
 
   const handleCheckoutDialog = () => {
-    setCheckoutDialog(!checkoutDialog);
-  };
+    setCheckoutDialog(!checkoutDialog)
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top p-3">
@@ -101,5 +100,5 @@ export default function UserNavBar(props) {
         </div>
       </div>
     </nav>
-  );
+  )
 }
