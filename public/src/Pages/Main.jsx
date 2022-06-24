@@ -11,6 +11,7 @@ import UserOrders from "../Components/Orders/UserOrders"
 import { getOrders } from "../apiCalls/orderController"
 import OrderBody from "../Components/Admin/OrderBody"
 import "../Styles/admin-orders-styles.css"
+import "../Styles/admin-cards.css"
 import "../Styles/card-styles.css"
 
 function Main(props) {
@@ -40,7 +41,7 @@ function Main(props) {
 		if (props.orders && props.user) {
 			if (isMobile) {
 				return(
-					<div class="container orders"><br/>
+					<div class="container"><br/>
 						<FormControl>
                             <InputLabel id="demo-simple-select-label">Orders</InputLabel>
                             <Select
@@ -73,7 +74,7 @@ function Main(props) {
 				)
 			} else {
 				return(
-					<div class="user-orders row mt-2">
+					<div class="user-orders row mt-2 orders">
 					<div class="orders-in column">
 						<p className="order-status mt-3 ms-4">Active orders</p>
 						<p className="order-statussub ms-4 mb-2">
