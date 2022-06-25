@@ -48,7 +48,7 @@ export default function OrderBody(props) {
               ))
             : null
             }
-            <p>Total Price: {props.order.total_amount}</p>
+            <p>Total Price: {props.order.total_amountFormatted}</p>
         </div>
     )
 }

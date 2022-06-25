@@ -64,6 +64,8 @@ const createPaymentIntent = async (req, res, next) => {
                 paymentIntent.card = card.card
                 paymentIntent.card.id = card.id
                 payment_method.type = 'card'
+                total_amount = (total_amount*100).toString()
+                formattedAmount = total_amount.slice(0, total_amount.length-2) + "," + total_amount.slice(total_amount.length-2, total_amount.length)
                 let order = new Order({
                     orderedBy: {
                         id: user._id,
@@ -76,6 +78,7 @@ const createPaymentIntent = async (req, res, next) => {
                     payment_intent: paymentIntent,
                     shipping_method: shipping_method,
                     address: shipping_address,
+                    total_amountFormatted: formattedAmount,
                     total_amount: total_amount,
                     payment_method: payment_method,
                     status: 'to-be-accepted'
@@ -110,6 +113,8 @@ const createPaymentIntent = async (req, res, next) => {
                     payment_method: payment_method.id,
                 })
                 // save new order
+                total_amount = (total_amount*100).toString()
+                formattedAmount = total_amount.slice(0, total_amount.length-2) + "," + total_amount.slice(total_amount.length-2, total_amount.length)
                 order = new Order({
                     orderedBy: {
                         name: `guest${orders_number}`,
@@ -123,7 +128,8 @@ const createPaymentIntent = async (req, res, next) => {
                     items: cart,
                     payment_intent: paymentIntent,
                     payment_method: payment_method,
-                    total_amount: total_amount*100,
+                    total_amountFormatted: formattedAmount,
+                    total_amount: (total_amount).toString(),
                     status: 'to-be-accepted'
                 })
                 // createOrder()
