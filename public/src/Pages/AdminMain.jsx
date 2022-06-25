@@ -45,7 +45,7 @@ export default function AdminMain(props) {
     if (props.selected === 'products') {
         if (props.products) {
         return (
-            <div>
+            <div className="products">
             <CreateProductDialog
                 open={createProductDialog}
                 onClose={handleCreateProductDialog}
@@ -53,7 +53,7 @@ export default function AdminMain(props) {
                 update={props.update}
             />
             {props.products.map((category) => (
-                <div className="products">
+                <div>
                     <div className="card-text">
                         <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
                             {category.category}
@@ -83,12 +83,10 @@ export default function AdminMain(props) {
                             >Edit category</a>
                         }
                     </div>
-                    <div className="container ">
-                        <div className="row justify-content-center">
-                            {category.products.map((prod) => (
-                                <AdminCard product={prod} update={props.update} />
-                            ))}
-                        </div>
+                    <div className="row justify-content-center">
+                        {category.products.map((prod) => (
+                            <AdminCard product={prod} update={props.update} />
+                        ))}
                     </div>
                 </div>
             ))}
