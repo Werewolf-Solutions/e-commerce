@@ -196,7 +196,7 @@ export default function PaymentForm(props) {
             </FormControl>
           </div>
         ) : null
-      ) : props.card ? (
+      ) : props.card && props.paymentMethod === "card" ? (
         <div>
           {`Number: xxxx-xxxx-${props.card.last4}`}
           <br />
