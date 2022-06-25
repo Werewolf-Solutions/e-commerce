@@ -3,6 +3,14 @@
   margin-bottom: 50px;
 }
 
+.order-subtext {
+  font-weight: bolder;
+}
+
+.order-text {
+  font-weight: lighter;
+}
+
 .order-card {
   border: 1px solid #ddd;
   padding: 20px;
