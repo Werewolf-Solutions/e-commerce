@@ -123,7 +123,7 @@ const createPaymentIntent = async (req, res, next) => {
                     items: cart,
                     payment_intent: paymentIntent,
                     payment_method: payment_method,
-                    total_amount: total_amount,
+                    total_amount: total_amount*100,
                     status: 'to-be-accepted'
                 })
                 // createOrder()
