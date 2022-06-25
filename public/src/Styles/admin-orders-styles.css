@@ -1,6 +1,18 @@
 .orders {
-  min-height: 100%;
+  min-height: 1000px;
   margin-bottom: 50px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  transition: box-shadow 1s;
+  box-shadow: 0px 0px 20px 0px #c5c5c5;
+  margin-bottom: 30px;
+  float: left;
+  border-radius: 10px;
+  width: 23rem;
+  height: auto;
 }
 
 .accepted-orders {

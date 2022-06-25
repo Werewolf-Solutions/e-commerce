@@ -1,7 +1,6 @@
 import React from "react"
 import "../../Styles/nav-bar-styles.css"
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png"
-import cartIcon from "../../Assets/icons8-buying-96.png"
+import logo from "../../Assets/brand.png"
 import CheckoutDialog from "../Checkout/CheckoutDialog"
 
 import AdminNavBar from "./AdminNavBar"
@@ -67,7 +66,7 @@ function NavBar(props) {
               className="nav-link cartText text"
               onClick={handleCartDialog}
             >
-              Cart {props.cart.length} | £{props.totalAmount}
+              Cart {props.totalItems} | £{props.totalAmount}
             </a>
           </li>
         }
@@ -140,6 +139,7 @@ function NavBar(props) {
                 totalAmount={props.totalAmount}
                 deleteFromCart={props.deleteFromCart}
                 emptyCart={props.emptyCart}
+                totalItems={props.totalItems}
               />
             )
           ) : (
@@ -151,6 +151,7 @@ function NavBar(props) {
               deleteFromCart={props.deleteFromCart}
               emptyCart={props.emptyCart}
               handleSignInDialog={handleSignInDialog}
+              totalItems={props.totalItems}
             />
           )}
           <div>

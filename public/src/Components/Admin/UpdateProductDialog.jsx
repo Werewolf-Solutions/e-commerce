@@ -50,15 +50,6 @@ export default function UpdateProductDialog(props) {
             />
             <div class="col-sm">
               <input type="file" id="imgupload" onChange={onFileChange} />
-              <label for="imgupload">
-                {" "}
-                <button
-                  className="mt-1 mb-2 ms-1 btn-sm btn btn-info chooseimagebttn"
-                  id="OpenImgUpload"
-                >
-                  choose
-                </button>
-              </label>
 
               {/* <button
                 className="mt-1 mb-2 ms-1  btn-sm btn btn-danger uploadbttn"

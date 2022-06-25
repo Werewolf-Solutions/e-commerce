@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f9942dea.css",
+    "main.js": "/static/js/main.9fb7b451.js",
+    "static/media/pexels-anil-sharma-10580198.jpg": "/static/media/pexels-anil-sharma-10580198.8142aa1663c01ac150af.jpg",
+    "static/media/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png": "/static/media/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.3f1cfab04e561706e47d.png",
+    "index.html": "/index.html",
+    "main.f9942dea.css.map": "/static/css/main.f9942dea.css.map",
+    "main.9fb7b451.js.map": "/static/js/main.9fb7b451.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f9942dea.css",
+    "static/js/main.9fb7b451.js"
+  ]
+}

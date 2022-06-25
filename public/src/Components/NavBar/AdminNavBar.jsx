@@ -1,17 +1,17 @@
-import React from "react";
-import "../../Styles/admin-nav-bar-styles.css";
-import logo from "../../Assets/png-clipart-bakery-roast-chicken-chef-platter-graphy-chef-silhouette-food-retro-thumbnail.png";
-import { signOut } from "../../apiCalls/userController";
+import React from "react"
+import "../../Styles/admin-nav-bar-styles.css"
+import logo from "../../Assets/brand.png"
+import { signOut } from "../../apiCalls/userController"
 
-import CreateProductDialog from "../../Components/Admin/CreateProductDialog";
-import "../../Styles/admin-cards.css";
+import CreateProductDialog from "../../Components/Admin/CreateProductDialog"
+import "../../Styles/admin-cards.css"
 
 export default function AdminNavBar(props) {
-  const [createProductDialog, setCreateProductDialog] = React.useState(false);
+  const [createProductDialog, setCreateProductDialog] = React.useState(false)
 
   const handleCreateProductDialog = () => {
-    setCreateProductDialog(!createProductDialog);
-  };
+    setCreateProductDialog(!createProductDialog)
+  }
 
   return (
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
@@ -39,8 +39,8 @@ export default function AdminNavBar(props) {
           <li className="nav-item">
             <a
               onClick={() => {
-                console.log("createProductDialog");
-                handleCreateProductDialog();
+                console.log("createProductDialog")
+                handleCreateProductDialog()
               }}
               className="nav-link adminNavLinks"
             >
@@ -71,7 +71,7 @@ export default function AdminNavBar(props) {
                 signOut().then(() => {
                   props.update()
                   props.handleSelected("products")
-                });
+                })
               }}
             >
               logout
@@ -81,15 +81,15 @@ export default function AdminNavBar(props) {
         </div>
       </div>
     </nav>
-  );
+  )
 }
 
 {
   /* <button
 class="btn btn-sm ms-2 btn-warning"
 onClick={() => {
-  console.log("createProductDialog");
-  handleCreateProductDialog();
+  console.log("createProductDialog")
+  handleCreateProductDialog()
 }}
 >
 create new product

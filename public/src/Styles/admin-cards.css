@@ -2,6 +2,10 @@
   display: inline-flex;
 }
 
+.products {
+  min-height: 1000px;
+}
+
 .card-box {
   border: 1px solid #ddd;
   padding: 20px;

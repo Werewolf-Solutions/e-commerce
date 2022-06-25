@@ -285,7 +285,7 @@ export default function CheckoutForm(props) {
       setActiveStep(activeStep + 1);
       props.update();
       props.emptyCart()
-      // socket.emit('new_order', {order})
+      socket.emit('new_order', {order})
     }
   };
 

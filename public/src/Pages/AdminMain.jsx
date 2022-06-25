@@ -14,6 +14,7 @@ import AcceptedOrder from "../Components/Orders/AcceptedOrder"
 import ReadyOrder from "../Components/Orders/ReadyOrder"
 import OrderBody from "../Components/Admin/OrderBody"
 import "../Styles/admin-orders-styles.css"
+import "../Styles/admin-cards.css"
 
 export default function AdminMain(props) {
     const [createProductDialog, setCreateProductDialog] = useState(false)
@@ -52,7 +53,7 @@ export default function AdminMain(props) {
                 update={props.update}
             />
             {props.products.map((category) => (
-                <div>
+                <div className="products">
                     <div className="card-text">
                         <h2 id="sideorders" className="cardMenuHeader mt-4 mb-4 ms-4">
                             {category.category}
@@ -101,7 +102,7 @@ export default function AdminMain(props) {
     if (props.selected === 'orders') {
         if (isMobile) {
             return(
-                <div className="container orders"><br/>
+                <div className="container"><br/>
                     <FormControl>
                         <InputLabel id="demo-simple-select-label">Orders</InputLabel>
                         <Select
@@ -176,7 +177,7 @@ export default function AdminMain(props) {
             )
         } else {
             return (
-                <div class="admin-orders row mt-2">
+                <div class="admin-orders row mt-2 orders">
                     <div class="orders-in column">
                     <p className="order-status mt-3 ms-4">orders in</p>
                     <p className="order-statussub ms-4  mb-2">
@@ -226,11 +227,11 @@ export default function AdminMain(props) {
             <div className="orders">
                 <p className="order-status mt-3 ms-4">orders history</p>
                 <div className="orders-in">
-                    <div class="row">
+                    <div class="row justify-content-center">
                     {props.orders.map((order) =>
                         order.accepted && order.ready && order.completed ? (
-                            <div class="card mb-3 ms-3 me-3 col-sm">
-                                <div class="card-body">
+                            <div class="order-card">
+                                <div>
                                     <OrdersHistory order={order} update={props.update} />
                                 </div>
                             </div>
