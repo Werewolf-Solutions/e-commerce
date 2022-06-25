@@ -73,12 +73,14 @@ const createOrder = async (req, res, next) => {
     if (user) {
         let orders_number = addNumber()
         try {
+            order.total_amount = (order.total_amount*100).toString()
+            formattedAmount = order.total_amount.slice(0, order.total_amount.length-2) + "," + order.total_amount.slice(order.total_amount.length-2, order.total_amount.length)
+            order.total_amountFormatted = formattedAmount
             order.orderedBy = {
                 id: user._id,
                 name: 'user.name',
                 mobile: 'user.mobile'
-            },
-            order.total_amount = order.total_amount*100
+            }
             order.number = orders_number
             order.payment_intent = {
                 status: 'succeeded',
