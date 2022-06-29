@@ -1,4 +1,4 @@
-# E-commerce app
+# E-commerce App
 
 ## Requirements
 
@@ -6,180 +6,97 @@
 
 * Node/npm
 
+* Stripe account
+
+---
+
 ## Install
 
-* clone or fork repository
+* production
 
-* install dependecies ```npm install``` or ```npm install``` in e-commerce directory and ```cd public && npm install``` in e-commerce/public directory
+    ```npm install```
 
+* dev
+
+    ```npm run dev-install```
+---
+## Edit .env Variables
+
+* open .env_sample with any text editor
+
+    * ex with nano
+
+        ```nano .env_sample```
+
+* edit the file with your variables and change the name in .env
+
+    * ex with nano
+
+        CTRL+X => Y => delete _sample => ENTER => Y
+
+```
+# Mongo db connection
+
+MONGO_USERNAME='username'
+MONGO_PASSWORD='password'
+MONGO_HOSTNAME='hostname'
+MONGO_DB_NAME='db_name'
+
+# Session / Cookie
+
+SESSION_SECRET='secret'
+SESSION_NAME='session_name'
+
+# Stripe
+STRIPE_API_KEY='stripe_api_key'
+
+# Port
+PORT='your_port'
+
+# Admin email
+ADMIN_EMAIL='admin@email.com'
+```
+---
 ## Scripts
 
-```npm start: run production```
+* run only if .env variables are production ready
 
-```npm test-prod: run test production```
+    ```npm start: run production```
 
-```npm run desktop: run only react app```
+* production test
 
-```npm run build-react: run npm run build for react app to create static files```
+    ```npm test-prod```
 
-```npm run dev: run concurrently back-end + front-end```
+* only frontend (this is not working right now => TODO: missing API comunication/dummy data)
 
-## Log in test
+    ```npm run frontend```
 
-* use ```admin@gmail.com``` with no password to test admin side
+* run only server (use it with insomnia/postman, TODO: give insomnia config)
 
-* use ```foo@gmail.com``` with no password or sign up with only email to test users side
+    ```npm run server```
 
-# How to contribute
+* run concurrently server and  frontend
 
-## new branch
+    ```npm run dev```
 
-* if working on back-end: create new branch with b{trello feature}, ex ```git branch b001```
+* build react for production
 
-* if working on frent-end: create new branch with f{trello feature}, ex ```git branch f001```
+    ```npm run build```
 
-# todo - front-end
+---
+## Sign Up as Admin
 
-* add account section
+* use the email you entered in .env to sign up with any password you want
 
-* add button to upload img
+---
+# How to Contribute
 
-* at checkout add delivery options and select available slot
+TODO: give IDE config
 
-* users have to enter postcode and address in checkout
+## New Branch
 
-# todo - back-end
+* feature/feature-name - for update or create a feature
 
-* add session/cookie
+* docs/doc-name - for update docs
 
-* change from findOne to findById in /add-item-to-products-list etc, OR write a function to retrieve user logged in to call everytime
-
-* edit /sign-up for production
-
-* edit /sign-in for production
-
-* edit /sign-out for production
-
-* add edit/delete account endpoints
-
-* add /upload-img endpoint
-
-* delete add-item-to-cart and others endpoints about cart
-
-* add /save-cart endpoint to store cart in DB
-
-* edit /checkout with stripe
-
-* send notification to user when admin accepts or declines order
-
-* send notification to admin when user makes a new order
-
-# Endpoints
-
-## Both users and admin
-
-1. login
-
-2. logout
-
-3. register
-
-## Users
-
-1. add to cart
-
-2. edit quantity item in cart
-
-3. delete item from cart
-
-4. checkout
-
-5. see order/s
-
-## Admin
-
-1. add item to products list
-
-2. edit item in products list
-
-3. delete item in products list
-
-4. see users orders
-
-5. accept/decline user's order
-
-# MongoDB models
-
-## User
-
-* email
-* password
-* username
-* address
-* payment method
-* cart
-* orders
-* admin: true || false
-
-## ProductsList
-
-* name
-* price
-* currency?
-* description
-* category
-* picture
-
-# Front-end
-
-## Layout
-
-![main-layout](./files/main-layout.png)
-
-## Header
-
-* header out (user and admin are logged off)
-
-![header-out](./files/header-out.png)
-
-* header when user is logged in
-
-![header-user-in](./files/header-user-in.png)
-
-* header when admin is logged in
-
-![header-admin-in](./files/header-admin-in.png)
-
-## Body
-
-* products list is selected
-
-![user-products-list](./files/user-products-list.png)
-
-* cart is selected
-
-![cart](./files/cart.png)
-
-### User is logged in
-
-
-* orders is selected
-
-![user-orders](./files/user-orders.png)
-
-### Admin is logged in
-
-* products list
-
-![admin-products-list](./files/admin-products-list.png)
-
-
-* orders
-
-![admin-users-orders](./files/admin-users-orders.png)
-
-## Footer
-
-* show cart total and when pressed show cart in body
-
-![footer](./files/footer.png)
+TODO: write API docs
