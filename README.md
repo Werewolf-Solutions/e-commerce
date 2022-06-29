@@ -34,9 +34,9 @@
 
 ## new branch
 
-* if working on back-end: create new branch with b{trello feature}, ex ```git branch b001```
+* feature/feature-name - for update or create a feature
 
-* if working on frent-end: create new branch with f{trello feature}, ex ```git branch f001```
+* docs/doc-name - for update docs
 
 # todo - front-end
 
