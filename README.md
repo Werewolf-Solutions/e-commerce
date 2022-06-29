@@ -8,7 +8,6 @@
 
 * Stripe account
 
----
 
 ## Install
 
@@ -19,7 +18,7 @@
 * dev
 
     ```npm run dev-install```
----
+
 ## Edit .env Variables
 
 * open .env_sample with any text editor
@@ -56,7 +55,7 @@ PORT='your_port'
 # Admin email
 ADMIN_EMAIL='admin@email.com'
 ```
----
+
 ## Scripts
 
 * run only if .env variables are production ready
@@ -83,12 +82,10 @@ ADMIN_EMAIL='admin@email.com'
 
     ```npm run build```
 
----
 ## Sign Up as Admin
 
 * use the email you entered in .env to sign up with any password you want
 
----
 # How to Contribute
 
 TODO: give IDE config
