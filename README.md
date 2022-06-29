@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* MongoDB installed on your local machine or enter your cluster credentials in .env
+* MongoDB local or cluster
 
 * Node/npm
 
