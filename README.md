@@ -89,6 +89,9 @@ ADMIN_EMAIL='admin@email.com'
 # How to Contribute
 
 TODO: give IDE config
+TODO: git branch workflow
+TODO: OKRs, TODOs workflow
+TODO: discord, telegram
 
 ## New Branch
 
