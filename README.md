@@ -31,7 +31,7 @@
 
     * ex with nano
 
-        CTRL+X => Y => delete _sample => ENTER => Y
+        change variables => CTRL+X => Y => delete _sample => ENTER => Y
 
 ```
 # Mongo db connection
