@@ -6,11 +6,11 @@
 
 * Node/npm
 
+* Stripe account
+
 ## Install
 
-* clone or fork repository
-
-* install dependecies ```npm install``` or ```npm install``` in e-commerce directory and ```cd public && npm install``` in e-commerce/public directory
+* install dependecies ```npm install```
 
 ## Scripts
 
