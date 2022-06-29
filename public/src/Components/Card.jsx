@@ -9,12 +9,12 @@ export default function Card(props) {
         <img src={props.product.img.path} className="card-image-top" alt="" />
       </div>
       <h3>
-        <a href="*" className="mt-2 text-danger">
+        <a className="mt-2 text-danger">
           {props.product.name}
         </a>
       </h3>
       <p className="text-secondary">{props.product.description}</p>
-      <h3 className="price text-danger">PRICE: {props.product.price}</h3>
+      <h3 className="price text-danger">PRICE: £ {props.product.price}</h3>
 
       <div className="btn-group" role="group" aria-label="Basic example">
         {/* <div className="dropdown">

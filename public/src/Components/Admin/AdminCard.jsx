@@ -63,12 +63,12 @@ export default function AdminCard(props) {
           />
         </div>
         <h3>
-          <a href="*" className="mt-4 text-danger">
+          <a className="mt-4 text-danger">
             {props.product.name}
           </a>
         </h3>
         <p className="text-secondary">{props.product.description}</p>
-        <h3 className="price text-danger">PRICE: {props.product.price}</h3>
+        <h3 className="price text-danger">PRICE: £ {props.product.price}</h3>
       </div>
     </>
   );
