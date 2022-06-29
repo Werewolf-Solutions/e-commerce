@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./bin/www",
     "test-prod": "DEBUG=e-commerce:* cross-env NODE_ENV=production-test nodemon ./bin/www",
-    "dev": "concurrently \"npm:server\" \"npm:desktop\"",
+    "dev": "concurrently \"npm:server\" \"npm:frontend\"",
     "server": "cross-env NODE_ENV=development nodemon ./bin/www",
     "build": "cd public && npm run build",
     "frontend": "cross-env NODE_ENV=development npm start --prefix public",
