@@ -10,7 +10,9 @@
 
 ## Install
 
-* install dependecies ```npm install```
+* production ```npm install```
+
+* dev ```npm run dev-install```
 
 ## Scripts
 
