@@ -2,36 +2,39 @@
 
 ## Requirements
 
-* MongoDB local or cluster
+- [MongoDB local or cluster](https://www.mongodb.com/)
 
-* Node/npm
+- [Node/npm](https://nodejs.org/)
 
-* Stripe account
-
+- [Stripe account](https://stripe.com/): not needed in development if not checking out
 
 ## Install
 
-* production
+- production
 
-    ```npm install```
+  `npm install`
 
-* dev
+- dev
 
-    ```npm run dev-install```
+  `npm run dev-install`
+
+- after that create uploads folder
+
+  `mkdir uploads`
 
 ## Edit .env Variables
 
-* open .env_sample with any text editor
+- open .env_sample with any text editor
 
-    * ex with nano
+  - ex with nano
 
-        ```nano .env_sample```
+    `nano .env_sample`
 
-* edit the file with your variables and change the name in .env
+- edit the file with your variables and change the name in .env
 
-    * ex with nano
+  - ex with nano
 
-        change variables => CTRL+X => Y => delete _sample => ENTER => Y
+    change variables => CTRL+X => Y => delete \_sample => ENTER => Y
 
 ```
 # Mongo db connection
@@ -58,45 +61,266 @@ ADMIN_EMAIL='admin@email.com'
 
 ## Scripts
 
-* run only if .env variables are production ready
+- run only if .env variables are production ready
 
-    ```npm start: run production```
+  `npm start: run production`
 
-* production test
+- production test
 
-    ```npm test-prod```
+  `npm test-prod`
 
-* only frontend (this is not working right now => TODO: missing API comunication/dummy data)
+- only frontend (this is not working right now => TODO: missing API comunication/dummy data)
 
-    ```npm run frontend```
+  `npm run frontend`
 
-* run only server (use it with insomnia/postman, TODO: give insomnia config)
+- run only server (use it with insomnia/postman, TODO: give insomnia config)
 
-    ```npm run server```
+  `npm run server`
 
-* run concurrently server and  frontend
+- run concurrently server and frontend
 
-    ```npm run dev```
+  `npm run dev`
 
-* build react for production
+- build react for production
 
-    ```npm run build```
+  `npm run build`
 
 ## Sign Up as Admin
 
-* use the email you entered in .env to sign up with any password you want
+- use the email you entered in .env to sign up with any password you want
 
-# How to Contribute
+# TODO
 
-TODO: give IDE config
-TODO: git branch workflow
-TODO: OKRs, TODOs workflow
-TODO: discord, telegram
+- [] re write React app folder structure
 
-## New Branch
+  ```
+    src/
+    |-- apiCalls/
+    |   |-- api.js                  # Contains functions for making custom API calls (e.g., to localhost:5000/api)
+    |-- assets/
+    |   |-- images/                 # Store image files
+    |   |-- files/                  # Store other types of files (e.g., PDFs, documents)
+    |   |-- videos/                 # Store video files
+    |-- components/
+    |   |-- Modals                  # Reusable header component
+    |   |-- Buttons                 # Reusable footer component
+    |   |-- ...                     # Other reusable components (Logo, ...)
+    |-- layout/
+    |   |-- Header                  # Reusable header component
+    |   |-- Footer                  # Reusable footer component
+    |-- pages/
+    |   |-- Home                    # Page component for the home page
+    |   |-- AboutUs                 # Page component for the about page
+    |   |-- ContactUs               # Page component for the contact page
+    |   |-- ...                     # Other page components
+    |-- App.js                      # The main application component
+    |-- index.js                    # Entry point for your React app
+    |-- App.css                     # Global styles for the app
+    |-- ...
+  ```
 
-* feature/feature-name - for update or create a feature
+  - apiCalls/: This directory contains modules for making API calls to your custom API. It helps keep your API-related logic organized and separate from your components.
 
-* docs/doc-name - for update docs
+  - assets/: This directory is used to store static assets such as images, files, and videos that your application may need. Keeping them here makes it easier to manage and reference these assets in your code.
 
-TODO: write API docs
+  - components/: This directory holds reusable components that can be used across different pages and layouts in your application. Examples include Header, Footer, Buttons, and Input components.
+
+  - layout/: Layout components define the overall structure of your app, such as the main layout that wraps your pages. You can have multiple layout components if your app has different layouts for different sections.
+
+  - pages/: Page components represent different views or pages of your application. Each page component typically corresponds to a specific route or URL. Examples include Home, About, Contact, and other pages specific to your app.
+
+  - App.js: This is the main application component where you set up routing, global state management, and the overall structure of your app.
+
+    ```jsx
+    import { Outlet } from "react-router-dom";
+    import Header from "./layout/Header/Header";
+    import Footer from "./layout/Footer/Footer";
+
+    import "./app.css";
+
+    function App() {
+      return (
+        <>
+          <div className="background-image" />
+          {/* <PopUp /> */}
+          <Header />
+          <div className="content">
+            <Outlet />
+          </div>
+          <Footer />
+        </>
+      );
+    }
+
+    export default App;
+    ```
+
+  - index.js: The entry point of your React application, where you render the App component and mount it to the DOM.
+
+    ```jsx
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+    import "./index.css";
+    import ContactUs from "./pages/ContactUs.jsx/ContactUs";
+    import AboutUs from "./pages/AboutUs/AboutUs";
+    import { createBrowserRouter, RouterProvider } from "react-router-dom";
+    import ErrorPage from "./layout/ErrorPage/ErrorPage";
+    import App from "./App";
+    import Home from "./pages/Home/Home";
+    import Admin from "./pages/Admin/Admin";
+    import SignIn from "./pages/Auth/SignIn";
+    import SignUp from "./pages/Auth/SignUp";
+
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: <App />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "/",
+            element: <Home />,
+          },
+          {
+            path: "/contact-us",
+            element: <ContactUs />,
+          },
+          {
+            path: "/about-us",
+            element: <AboutUs />,
+          },
+          {
+            path: "/admin",
+            element: <Admin />,
+          },
+          {
+            path: "/sign-in",
+            element: <SignIn />,
+          },
+          {
+            path: "/sign-up",
+            element: <SignUp />,
+          },
+        ],
+      },
+    ]);
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>
+    );
+    ```
+
+  - App.css: Global styles for your app that can be shared across components.
+
+* [] re write backend folder structure
+
+  ```
+    e-commerce/
+    |-- bin/
+    |-- config/
+    |   |-- db.js                       # Database configuration
+    |-- controllers/                    # API Controllers
+    |-- middleware/                     # Middlewares
+    |-- models/                         # Mongoose schema
+    |-- public/                         # React app
+    |-- routes/                         # API routes
+    |   |-- api/
+    |   |   |-- v1/
+    |   |   |   |-- auth.js             # API routes for authentication
+    |   |   |   |-- payments.js         # API routes for payments
+    |   |   |-- index.js                # API routes entry point
+    |-- services/                       # Services
+    |-- utils/                          # Utilities
+    |-- .env_sample                     # Sample environment variables file
+    |-- app.js                          # Express.js application setup
+    |-- package.json                    # Dependencies and scripts
+    |-- README.md                       # Project documentation
+    |-- ...
+  ```
+
+  - controllers/paymentsController.js
+
+  ```javascript
+    const createPaymentIntentController = async () {
+        // If stripe
+        stripeCreatePaymentIntent()
+        // If Paypal
+
+        // If crypto
+
+        // ...
+  }
+  ```
+
+  - services/stripePaymentsService.js
+
+  ```javascript
+    const stripeCreatePaymentIntent = async () {
+        try {
+            let user;
+            if (req.session && req.session.passport && req.session.passport.user) {
+            user = await User.findById(req.session.passport.user);
+            }
+            const { amount, currency, paymentMethod, customer } = req.body;
+
+            const payment_intent = await stripe.paymentIntents.create({
+            amount,
+            currency,
+            payment_method: paymentMethod,
+            customer,
+            });
+
+            if (user) {
+            const existingPaymentIntent = user.payment_intents.find(
+                (intent) => intent.id === payment_intent.id
+            );
+            if (existingPaymentIntent) {
+                return res.json({ error: "Payment intent already exists" });
+            }
+
+            user.payment_intents.push(payment_intent);
+
+            await user.save();
+            }
+
+            res.json({ payment_intent });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error.message });
+        }
+  }
+  ```
+
+  - routes/api/v1/payments.js
+
+  ```javascript
+  router.post("/create-payment-intent", createPaymentIntentController);
+  ```
+
+## **How to contribute?**
+
+**1. Fork the Project**
+
+- Create your Branch
+
+  - New Feature (`git checkout -b feature/AmazingFeature`)
+  - Bug Fix (`git checkout -b bugfix/SomethingToFix`)
+
+- Commit your Changes (`git commit -m 'Add some AmazingFeature'` or `git commit -m 'Fix SomethingToFix'`)
+
+- Push to the Branch (`git push origin feature/AmazingFeature` or `git checkout -b bugfix/SomethingToFix`)
+
+- Open a Pull Request
+
+**2. Work on an existing branch**
+
+- Update all the branches (`git fetch --all`)
+
+- Checkout to that branch (`git checkout branch_name`)
+
+- Update to the latest (`git pull`)
+
+- **contact the dev to see what's the best way to work together**
